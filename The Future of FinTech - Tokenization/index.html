@@ -1,0 +1,2036 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>THE CURATOR | The Architectural Reconfiguration of Global Capital Markets</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Manrope:wght@200..800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#ffffff",
+          "on-primary-container": "#000000",
+          "background": "#131313",
+          "primary-fixed": "#5d5f5f",
+          "tertiary-fixed": "#6a5c52",
+          "on-secondary-fixed": "#1a1c1c",
+          "tertiary": "#f2dfd2",
+          "on-secondary": "#1a1c1c",
+          "error-container": "#93000a",
+          "on-primary-fixed-variant": "#e2e2e2",
+          "surface-bright": "#3a3939",
+          "primary-fixed-dim": "#454747",
+          "primary-container": "#d4d4d4",
+          "on-error-container": "#ffdad6",
+          "on-error": "#690005",
+          "tertiary-fixed-dim": "#51443b",
+          "on-tertiary": "#231a12",
+          "on-background": "#e5e2e1",
+          "secondary-container": "#464747",
+          "inverse-on-surface": "#313030",
+          "on-surface": "#e5e2e1",
+          "on-secondary-fixed-variant": "#3a3c3c",
+          "surface-container-highest": "#353534",
+          "surface-tint": "#c6c6c7",
+          "surface-container-high": "#2a2a2a",
+          "on-tertiary-fixed": "#ffffff",
+          "surface": "#131313",
+          "tertiary-container": "#9e8e82",
+          "surface-container": "#201f1f",
+          "secondary-fixed": "#c7c6c6",
+          "on-primary": "#1a1c1c",
+          "secondary-fixed-dim": "#ababab",
+          "on-secondary-container": "#e3e2e2",
+          "secondary": "#c7c6c6",
+          "on-primary-fixed": "#ffffff",
+          "outline-variant": "#474747",
+          "on-surface-variant": "#c6c6c6",
+          "surface-dim": "#131313",
+          "error": "#ffb4ab",
+          "surface-container-low": "#1c1b1b",
+          "on-tertiary-fixed-variant": "#f2dfd2",
+          "inverse-primary": "#5d5f5f",
+          "inverse-surface": "#e5e2e1",
+          "on-tertiary-container": "#000000",
+          "surface-variant": "#353534",
+          "outline": "#919191",
+          "surface-container-lowest": "#0e0e0e"
+        },
+        borderRadius: {
+          DEFAULT: "0px", lg: "0px", xl: "0px", full: "9999px"
+        },
+        fontFamily: {
+          headline: ["Newsreader", "serif"],
+          body: ["Manrope", "sans-serif"],
+          label: ["Manrope", "sans-serif"]
+        }
+      }
+    }
+  }
+</script>
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+  body {
+    background-color: #131313;
+    color: #e5e2e1;
+    font-family: 'Manrope', sans-serif;
+    overflow-x: hidden;
+  }
+  html { scroll-behavior: smooth; }
+
+  /* Reading Progress Bar */
+  #progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 1px;
+    width: 0%;
+    background: #f2dfd2;
+    z-index: 100;
+    transition: width 0.1s linear;
+  }
+
+  /* Scroll Reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1), transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-left {
+    opacity: 0;
+    transform: translateX(-28px);
+    transition: opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1), transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal-left.visible { opacity: 1; transform: translateX(0); }
+  .reveal-delay-1 { transition-delay: 0.08s; }
+  .reveal-delay-2 { transition-delay: 0.18s; }
+  .reveal-delay-3 { transition-delay: 0.28s; }
+  .reveal-delay-4 { transition-delay: 0.38s; }
+  .reveal-delay-5 { transition-delay: 0.48s; }
+  .reveal-delay-6 { transition-delay: 0.58s; }
+
+  .serif-italic { font-family: 'Newsreader', serif; font-style: italic; }
+
+  /* Timeline */
+  .timeline-track {
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 2rem;
+  }
+  .timeline-track::-webkit-scrollbar { display: none; }
+
+  /* Noise texture overlay */
+  .noise-overlay::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.4;
+  }
+
+  .stat-number { font-family: 'Newsreader', serif; font-style: italic; }
+
+  /* Nav dots */
+  .nav-dot.active .dot-icon { color: white; }
+  .nav-dot .dot-icon { color: #52525b; transition: color 0.3s; }
+
+  /* Pillar card */
+  .pillar-card {
+    position: relative;
+    transition: background-color 0.3s;
+  }
+  .pillar-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 0; height: 1px;
+    background: #f2dfd2;
+    transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .pillar-card:hover::after { width: 100%; }
+
+  /* Asset card */
+  .asset-card {
+    transition: background-color 0.3s, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    cursor: default;
+  }
+  .asset-card:hover {
+    background-color: #1c1b1b;
+    transform: translateY(-3px);
+  }
+
+  /* Architect card */
+  .arch-card {
+    transition: background-color 0.3s, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    cursor: default;
+    border-bottom: 1px solid #27272a;
+  }
+  .arch-card:hover {
+    background-color: #1a1919;
+    transform: translateY(-3px);
+    border-bottom-color: #f2dfd2;
+  }
+
+  /* Timeline item */
+  .timeline-item {
+    min-width: 280px;
+    border-top: 1px solid #27272a;
+    padding-top: 2rem;
+    padding-right: 3rem;
+    transition: border-color 0.3s;
+  }
+  .timeline-item:hover { border-color: #f2dfd2; }
+
+  /* Pull quote */
+  .quote-line {
+    display: inline-block;
+    width: 3rem;
+    height: 1px;
+    background: #f2dfd2;
+    margin-bottom: 3rem;
+  }
+
+  /* Stage step */
+  .stage-step {
+    border-top: 1px solid #27272a;
+    transition: border-color 0.4s;
+  }
+  .stage-step:hover { border-top-color: rgba(242,223,210,0.4); }
+  .stage-number {
+    font-family: 'Newsreader', serif;
+    font-style: italic;
+    color: #27272a;
+    transition: color 0.4s;
+    line-height: 1;
+  }
+  .stage-step:hover .stage-number { color: rgba(242,223,210,0.35); }
+
+  /* Comparison table */
+  .comp-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-bottom: 1px solid #27272a;
+    transition: background-color 0.2s;
+  }
+  .comp-row:hover { background-color: #1a1919; }
+  .comp-cell {
+    padding: 1.5rem 2rem;
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.7;
+  }
+
+  /* Treemap */
+  .treemap-block {
+    transition: opacity 0.25s, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    cursor: default;
+  }
+  .treemap-block:hover { opacity: 0.9; transform: scale(0.995); }
+
+  /* Friction bar */
+  .friction-bar-fill {
+    height: 2px;
+    background: #f2dfd2;
+    width: 0%;
+    transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .friction-bar-fill.animated { /* driven by JS */ }
+
+  /* Button hover */
+  button, .btn {
+    transition: background-color 0.25s, color 0.25s;
+  }
+
+  /* Nav link hover */
+  nav a { transition: color 0.25s; }
+</style>
+</head>
+<body class="bg-surface selection:bg-tertiary selection:text-on-tertiary">
+
+<!-- Reading Progress Bar -->
+<div id="progress-bar"></div>
+
+<!-- NAV -->
+<nav class="fixed top-1 w-full z-50 bg-[#131313]/95 backdrop-blur-sm flex justify-between items-center px-8 py-6 max-w-[1920px] mx-auto" style="left:0;right:0;">
+  <div></div>
+  <div class="hidden md:flex items-center gap-10">
+    <a class="text-zinc-500 font-sans uppercase text-[12px] tracking-widest hover:text-zinc-300" href="#intro">Theory</a>
+    <a class="text-zinc-500 font-sans uppercase text-[12px] tracking-widest hover:text-zinc-300" href="#process">Process</a>
+    <a class="text-zinc-500 font-sans uppercase text-[12px] tracking-widest hover:text-zinc-300" href="#assets">Markets</a>
+    <a class="text-zinc-500 font-sans uppercase text-[12px] tracking-widest hover:text-zinc-300" href="#road-ahead">Outlook</a>
+  </div>
+  <div></div>
+</nav>
+
+<!-- SIDE NAV -->
+<aside class="fixed top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col gap-8 bg-transparent pointer-events-none" style="left:10px;width:20px;">
+  <a href="#intro" class="nav-dot flex items-center justify-center cursor-pointer no-underline pointer-events-auto" data-section="intro">
+    <span class="material-symbols-outlined dot-icon text-white" style="font-variation-settings:'FILL' 1;font-size:14px;">radio_button_checked</span>
+  </a>
+  <a href="#definition" class="nav-dot flex items-center justify-center cursor-pointer no-underline pointer-events-auto" data-section="definition">
+    <span class="material-symbols-outlined dot-icon" style="font-size:14px;">token</span>
+  </a>
+  <a href="#process" class="nav-dot flex items-center justify-center cursor-pointer no-underline pointer-events-auto" data-section="process">
+    <span class="material-symbols-outlined dot-icon" style="font-size:14px;">schema</span>
+  </a>
+  <a href="#assets" class="nav-dot flex items-center justify-center cursor-pointer no-underline pointer-events-auto" data-section="assets">
+    <span class="material-symbols-outlined dot-icon" style="font-size:14px;">grid_view</span>
+  </a>
+  <a href="#milestones" class="nav-dot flex items-center justify-center cursor-pointer no-underline pointer-events-auto" data-section="milestones">
+    <span class="material-symbols-outlined dot-icon" style="font-size:14px;">timeline</span>
+  </a>
+  <a href="#road-ahead" class="nav-dot flex items-center justify-center cursor-pointer no-underline pointer-events-auto" data-section="road-ahead">
+    <span class="material-symbols-outlined dot-icon" style="font-size:14px;">rocket_launch</span>
+  </a>
+</aside>
+
+<main class="pt-24">
+
+  <!-- ══════════════════════════════════════
+       HERO
+  ═══════════════════════════════════════ -->
+  <section id="intro" class="min-h-screen flex flex-col justify-center px-8 md:px-24 lg:px-48 pb-24 relative">
+    <div class="mb-8 reveal">
+      <span class="font-sans text-[11px] font-bold tracking-[0.3em] uppercase text-tertiary">Editorial Series No. 04</span>
+    </div>
+    <h1 class="font-serif italic text-7xl md:text-9xl leading-[0.85] tracking-tighter text-white mb-12 max-w-5xl reveal" style="font-family:'Newsreader',serif;">
+      The Architectural<br/>Reconfiguration<br/><span class="text-zinc-500">of Capital.</span>
+    </h1>
+    <div class="flex flex-col md:flex-row items-end justify-between gap-12">
+      <div class="reveal reveal-delay-2">
+        <p class="font-sans text-sm md:text-base text-zinc-400 max-w-md leading-relaxed mb-6">
+          How tokenization is turning analog assets into programmable value rewriting the rules of ownership, settlement, and access for every asset class on earth.
+        </p>
+        <div class="flex items-center gap-4">
+          <span class="font-sans text-[11px] tracking-[0.2em] uppercase text-zinc-400">By</span>
+          <span class="font-sans text-[12px] tracking-[0.15em] uppercase text-zinc-400">Mohamad Noor-Chowdhury</span>
+          <span class="text-zinc-700">·</span>
+          <span class="font-sans text-[11px] tracking-[0.15em] uppercase text-zinc-400">18 min read</span>
+        </div>
+      </div>
+      <div class="flex flex-col items-end reveal reveal-delay-3">
+        <span class="font-sans text-[12px] tracking-widest text-zinc-500 uppercase mb-2">Scroll to explore</span>
+        <div class="w-px h-24 bg-gradient-to-b from-white to-transparent"></div>
+      </div>
+    </div>
+    <!-- Background grid -->
+    <div class="absolute inset-0 pointer-events-none overflow-hidden" style="z-index:-1;">
+      <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="hero-grid" width="60" height="60" patternUnits="userSpaceOnUse">
+            <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#hero-grid)"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       BLEED Network Canvas
+  ═══════════════════════════════════════ -->
+  <section class="w-full relative overflow-hidden" style="height:640px;">
+    <canvas id="network-canvas" class="absolute inset-0 w-full h-full"></canvas>
+    <div class="absolute inset-0 bg-gradient-to-b from-[#131313]/60 via-transparent to-[#131313]/80 pointer-events-none"></div>
+    <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center px-8">
+      <span class="font-sans text-[12px] tracking-[0.35em] uppercase text-white/60 block mb-6">01</span>
+      <span class="font-serif italic text-white/60 leading-tight" style="font-family:'Newsreader',serif; font-size:clamp(3rem, 8vw, 7rem);">What Is<br/>Tokenization</span>
+    </div>
+    <div class="absolute bottom-12 left-1/2 -translate-x-1/2 text-center pointer-events-none">
+      <span class="font-sans text-[11px] tracking-[0.35em] uppercase text-zinc-400">Distributed Ledger Network Visualization</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       DEFINITION What Is Tokenization
+  ═══════════════════════════════════════ -->
+  <section id="definition" class="py-32 px-8 md:px-24 lg:px-48 bg-surface">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
+      <div class="lg:col-span-5 pt-12">
+        <span class="font-sans text-[12px] tracking-[0.3em] uppercase text-zinc-400 block mb-8 reveal">Definition</span>
+        <h2 class="font-serif italic text-4xl text-white leading-tight mb-8 reveal" style="font-family:'Newsreader',serif;">
+          From rigid assets to programmable primitives.
+        </h2>
+        <p class="font-sans text-base text-zinc-400 leading-relaxed mb-6 reveal reveal-delay-1">
+          Tokenization is the process of recording the rights to a real-world asset onto a decentralized blockchain ledger. The result: assets become as fluid, composable, and instantly transferable as digital data. Think of it this way: a $10 million building is like a whole pizza. Most people can't buy a whole pizza. Tokenization cuts it into 10,000 slices. The blockchain is the receipt system that proves, irrefutably, which slices belong to whom.
+        </p>
+        <p class="font-sans text-base text-zinc-400 leading-relaxed mb-6 reveal reveal-delay-2">
+          Unlike cryptocurrency, which creates entirely new asset classes, tokenization brings existing value real estate, bonds, gold, private equity into the on-chain economy. Real estate that once required a $5M minimum becomes accessible at $1,000 per token. Private credit funds closed to all but institutional desks open to algorithmically-compliant global investors.
+        </p>
+        <p class="font-sans text-base text-zinc-400 leading-relaxed reveal reveal-delay-3">
+          This shift is as transformative to money as the move from DVDs to streaming was for television turning static, clunky assets into liquid, programmable digital streams.
+        </p>
+        <div class="mt-12 border-l-2 border-tertiary pl-6 reveal reveal-delay-4">
+          <span class="font-sans text-[11px] tracking-[0.25em] uppercase text-zinc-400 block mb-2">The Legal Wrapper</span>
+          <p class="font-sans text-sm text-zinc-300 leading-relaxed">The <em>Token</em> is the technical proof of ownership. The <em>Legal Wrapper</em> is the proof recognized by courts. These two must be fused so that a digital transfer is legally binding in the physical world.</p>
+        </div>
+      </div>
+
+      <div class="lg:col-span-7 flex items-center reveal reveal-delay-3">
+        <div class="border-l-2 border-tertiary pl-8">
+          <span class="font-sans font-bold text-[11px] tracking-widest uppercase text-zinc-400 block mb-3">McKinsey Projection</span>
+          <span class="font-serif italic leading-none block mb-4 text-tertiary" style="font-family:'Newsreader',serif; font-size:clamp(4rem,8vw,7rem);">$2T</span>
+          <span class="font-sans text-sm text-zinc-500 leading-relaxed block max-w-xs">Conservative tokenized market estimate by 2030. Upper bound (BCG): $30 trillion.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tokenization Flow Animation -->
+    <div class="mt-20 reveal" style="display:flex; flex-direction:column; align-items:center; gap:0;">
+      <canvas id="tokenization-canvas" style="width:100%; max-width:800px; height:200px; display:block;"></canvas>
+    </div>
+
+    <!-- 3-Panel Flow Diagram -->
+    <div class="mt-20 reveal" style="display:grid; grid-template-columns:1fr 56px 1fr 56px 1fr; align-items:center; gap:0;">
+
+      <!-- Panel 1: The Asset -->
+      <div class="flex flex-col items-center gap-8 p-12 border border-zinc-800" style="background:rgba(255,255,255,0.015);">
+        <svg viewBox="0 0 200 230" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:240px; height:auto;">
+          <polygon points="100,30 148,57 100,84 52,57" fill="rgba(242,223,210,0.07)" stroke="rgba(242,223,210,0.35)" stroke-width="1"/>
+          <polygon points="100,84 148,57 148,170 100,197" fill="rgba(242,223,210,0.04)" stroke="rgba(242,223,210,0.25)" stroke-width="1"/>
+          <polygon points="52,57 100,84 100,197 52,170" fill="rgba(242,223,210,0.02)" stroke="rgba(242,223,210,0.15)" stroke-width="1"/>
+          <line x1="52" y1="170" x2="148" y2="170" stroke="rgba(242,223,210,0.12)" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <circle cx="130" cy="105" r="2" fill="rgba(242,223,210,0.3)"/>
+          <circle cx="130" cy="120" r="2" fill="rgba(242,223,210,0.3)"/>
+          <circle cx="130" cy="135" r="2" fill="rgba(242,223,210,0.3)"/>
+          <circle cx="115" cy="112" r="2" fill="rgba(242,223,210,0.2)"/>
+          <circle cx="115" cy="127" r="2" fill="rgba(242,223,210,0.2)"/>
+          <circle cx="70" cy="105" r="2" fill="rgba(242,223,210,0.15)"/>
+          <circle cx="70" cy="120" r="2" fill="rgba(242,223,210,0.15)"/>
+          <circle cx="85" cy="112" r="2" fill="rgba(242,223,210,0.1)"/>
+          <line x1="148" y1="57" x2="162" y2="50" stroke="rgba(242,223,210,0.15)" stroke-width="0.5"/>
+          <line x1="148" y1="170" x2="162" y2="163" stroke="rgba(242,223,210,0.15)" stroke-width="0.5"/>
+          <line x1="162" y1="50" x2="162" y2="163" stroke="rgba(242,223,210,0.15)" stroke-width="0.5"/>
+          <line x1="158" y1="50" x2="166" y2="50" stroke="rgba(242,223,210,0.15)" stroke-width="0.5"/>
+          <line x1="158" y1="163" x2="166" y2="163" stroke="rgba(242,223,210,0.15)" stroke-width="0.5"/>
+        </svg>
+        <div class="text-center">
+          <span class="font-sans text-[12px] tracking-[0.25em] uppercase text-zinc-500 block mb-2">Step 01</span>
+          <span class="font-serif italic text-2xl text-zinc-200" style="font-family:'Newsreader',serif;">The Asset</span>
+          <p class="font-sans text-sm text-zinc-500 mt-3 leading-relaxed">Real estate, bonds,<br/>gold, art, private credit</p>
+        </div>
+      </div>
+
+      <!-- Arrow 1 -->
+      <div class="flex items-center justify-center">
+        <svg viewBox="0 0 56 24" xmlns="http://www.w3.org/2000/svg" style="width:56px; height:24px;">
+          <line x1="4" y1="12" x2="42" y2="12" stroke="rgba(242,223,210,0.25)" stroke-width="1"/>
+          <polygon points="52,12 40,7 40,17" fill="rgba(242,223,210,0.25)"/>
+        </svg>
+      </div>
+
+      <!-- Panel 2: The Ledger -->
+      <div class="flex flex-col items-center gap-8 p-12 border border-zinc-800" style="background:rgba(255,255,255,0.015);">
+        <svg viewBox="0 0 200 230" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:240px; height:auto;">
+          <rect x="28" y="95" width="38" height="120" fill="rgba(242,223,210,0.03)" stroke="rgba(242,223,210,0.25)" stroke-width="1"/>
+          <rect x="134" y="95" width="38" height="120" fill="rgba(242,223,210,0.03)" stroke="rgba(242,223,210,0.25)" stroke-width="1"/>
+          <path d="M28,95 C28,12 172,12 172,95" fill="none" stroke="rgba(242,223,210,0.35)" stroke-width="1"/>
+          <path d="M46,95 C46,36 154,36 154,95" fill="none" stroke="rgba(242,223,210,0.15)" stroke-width="0.75" stroke-dasharray="4,3"/>
+          <circle cx="47" cy="115" r="3" fill="none" stroke="rgba(242,223,210,0.4)" stroke-width="1"/>
+          <circle cx="47" cy="135" r="3" fill="none" stroke="rgba(242,223,210,0.3)" stroke-width="1"/>
+          <circle cx="47" cy="155" r="3" fill="none" stroke="rgba(242,223,210,0.2)" stroke-width="1"/>
+          <line x1="47" y1="118" x2="47" y2="132" stroke="rgba(242,223,210,0.2)" stroke-width="0.75"/>
+          <line x1="47" y1="138" x2="47" y2="152" stroke="rgba(242,223,210,0.2)" stroke-width="0.75"/>
+          <circle cx="153" cy="115" r="3" fill="none" stroke="rgba(242,223,210,0.4)" stroke-width="1"/>
+          <circle cx="153" cy="135" r="3" fill="none" stroke="rgba(242,223,210,0.3)" stroke-width="1"/>
+          <circle cx="153" cy="155" r="3" fill="none" stroke="rgba(242,223,210,0.2)" stroke-width="1"/>
+          <line x1="153" y1="118" x2="153" y2="132" stroke="rgba(242,223,210,0.2)" stroke-width="0.75"/>
+          <line x1="153" y1="138" x2="153" y2="152" stroke="rgba(242,223,210,0.2)" stroke-width="0.75"/>
+          <line x1="100" y1="62" x2="100" y2="180" stroke="rgba(242,223,210,0.3)" stroke-width="1" stroke-dasharray="5,4"/>
+          <polygon points="100,190 95,178 105,178" fill="rgba(242,223,210,0.3)"/>
+        </svg>
+        <div class="text-center">
+          <span class="font-sans text-[12px] tracking-[0.25em] uppercase text-zinc-500 block mb-2">Step 02</span>
+          <span class="font-serif italic text-2xl text-zinc-200" style="font-family:'Newsreader',serif;">The Ledger</span>
+          <p class="font-sans text-sm text-zinc-500 mt-3 leading-relaxed">Smart contract encodes<br/>rights, compliance, yield</p>
+        </div>
+      </div>
+
+      <!-- Arrow 2 -->
+      <div class="flex items-center justify-center">
+        <svg viewBox="0 0 56 24" xmlns="http://www.w3.org/2000/svg" style="width:56px; height:24px;">
+          <line x1="4" y1="12" x2="42" y2="12" stroke="rgba(242,223,210,0.4)" stroke-width="1"/>
+          <polygon points="52,12 40,7 40,17" fill="rgba(242,223,210,0.4)"/>
+        </svg>
+      </div>
+
+      <!-- Panel 3: The Token -->
+      <div class="flex flex-col items-center gap-8 p-12 border border-zinc-800" style="background:rgba(242,223,210,0.02);">
+        <svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:240px; height:auto;">
+          <!-- (0,0) -->
+          <polygon points="100,51 118,60 100,69 82,60" fill="rgba(242,223,210,0.06)" stroke="rgba(242,223,210,0.2)" stroke-width="0.5"/>
+          <polygon points="100,69 118,60 118,78 100,87" fill="rgba(242,223,210,0.04)" stroke="rgba(242,223,210,0.15)" stroke-width="0.5"/>
+          <polygon points="82,60 100,69 100,87 82,78" fill="rgba(242,223,210,0.02)" stroke="rgba(242,223,210,0.1)" stroke-width="0.5"/>
+          <!-- (0,1) -->
+          <polygon points="82,60 100,69 82,78 64,69" fill="rgba(242,223,210,0.06)" stroke="rgba(242,223,210,0.2)" stroke-width="0.5"/>
+          <polygon points="82,78 100,69 100,87 82,96" fill="rgba(242,223,210,0.04)" stroke="rgba(242,223,210,0.15)" stroke-width="0.5"/>
+          <polygon points="64,69 82,78 82,96 64,87" fill="rgba(242,223,210,0.02)" stroke="rgba(242,223,210,0.1)" stroke-width="0.5"/>
+          <!-- (1,0) -->
+          <polygon points="118,60 136,69 118,78 100,69" fill="rgba(242,223,210,0.06)" stroke="rgba(242,223,210,0.2)" stroke-width="0.5"/>
+          <polygon points="118,78 136,69 136,87 118,96" fill="rgba(242,223,210,0.04)" stroke="rgba(242,223,210,0.15)" stroke-width="0.5"/>
+          <polygon points="100,69 118,78 118,96 100,87" fill="rgba(242,223,210,0.02)" stroke="rgba(242,223,210,0.1)" stroke-width="0.5"/>
+          <!-- (0,2) -->
+          <polygon points="64,69 82,78 64,87 46,78" fill="rgba(242,223,210,0.06)" stroke="rgba(242,223,210,0.2)" stroke-width="0.5"/>
+          <polygon points="64,87 82,78 82,96 64,105" fill="rgba(242,223,210,0.04)" stroke="rgba(242,223,210,0.15)" stroke-width="0.5"/>
+          <polygon points="46,78 64,87 64,105 46,96" fill="rgba(242,223,210,0.02)" stroke="rgba(242,223,210,0.1)" stroke-width="0.5"/>
+          <!-- (1,1) ACCENT -->
+          <polygon points="100,69 118,78 100,87 82,78" fill="rgba(242,223,210,0.13)" stroke="rgba(242,223,210,0.45)" stroke-width="0.75"/>
+          <polygon points="100,87 118,78 118,96 100,105" fill="rgba(242,223,210,0.08)" stroke="rgba(242,223,210,0.35)" stroke-width="0.75"/>
+          <polygon points="82,78 100,87 100,105 82,96" fill="rgba(242,223,210,0.05)" stroke="rgba(242,223,210,0.25)" stroke-width="0.75"/>
+          <!-- (2,0) -->
+          <polygon points="136,69 154,78 136,87 118,78" fill="rgba(242,223,210,0.06)" stroke="rgba(242,223,210,0.2)" stroke-width="0.5"/>
+          <polygon points="136,87 154,78 154,96 136,105" fill="rgba(242,223,210,0.04)" stroke="rgba(242,223,210,0.15)" stroke-width="0.5"/>
+          <polygon points="118,78 136,87 136,105 118,96" fill="rgba(242,223,210,0.02)" stroke="rgba(242,223,210,0.1)" stroke-width="0.5"/>
+          <!-- (0,3) -->
+          <polygon points="46,78 64,87 46,96 28,87" fill="rgba(242,223,210,0.06)" stroke="rgba(242,223,210,0.2)" stroke-width="0.5"/>
+          <polygon points="46,96 64,87 64,105 46,114" fill="rgba(242,223,210,0.04)" stroke="rgba(242,223,210,0.15)" stroke-width="0.5"/>
+          <polygon points="28,87 46,96 46,114 28,105" fill="rgba(242,223,210,0.02)" stroke="rgba(242,223,210,0.1)" stroke-width="0.5"/>
+          <!-- (1,2) -->
+          <polygon points="82,78 100,87 82,96 64,87" fill="rgba(242,223,210,0.06)" stroke="rgba(242,223,210,0.2)" stroke-width="0.5"/>
+          <polygon points="82,96 100,87 100,105 82,114" fill="rgba(242,223,210,0.04)" stroke="rgba(242,223,210,0.15)" stroke-width="0.5"/>
+          <polygon points="64,87 82,96 82,114 64,105" fill="rgba(242,223,210,0.02)" stroke="rgba(242,223,210,0.1)" stroke-width="0.5"/>
+          <!-- (2,1) -->
+          <polygon points="118,78 136,87 118,96 100,87" fill="rgba(242,223,210,0.06)" stroke="rgba(242,223,210,0.2)" stroke-width="0.5"/>
+          <polygon points="118,96 136,87 136,105 118,114" fill="rgba(242,223,210,0.04)" stroke="rgba(242,223,210,0.15)" stroke-width="0.5"/>
+          <polygon points="100,87 118,96 118,114 100,105" fill="rgba(242,223,210,0.02)" stroke="rgba(242,223,210,0.1)" stroke-width="0.5"/>
+          <!-- (3,0) -->
+          <polygon points="154,78 172,87 154,96 136,87" fill="rgba(242,223,210,0.06)" stroke="rgba(242,223,210,0.2)" stroke-width="0.5"/>
+          <polygon points="154,96 172,87 172,105 154,114" fill="rgba(242,223,210,0.04)" stroke="rgba(242,223,210,0.15)" stroke-width="0.5"/>
+          <polygon points="136,87 154,96 154,114 136,105" fill="rgba(242,223,210,0.02)" stroke="rgba(242,223,210,0.1)" stroke-width="0.5"/>
+          <!-- (1,3) -->
+          <polygon points="64,87 82,96 64,105 46,96" fill="rgba(242,223,210,0.06)" stroke="rgba(242,223,210,0.2)" stroke-width="0.5"/>
+          <polygon points="64,105 82,96 82,114 64,123" fill="rgba(242,223,210,0.04)" stroke="rgba(242,223,210,0.15)" stroke-width="0.5"/>
+          <polygon points="46,96 64,105 64,123 46,114" fill="rgba(242,223,210,0.02)" stroke="rgba(242,223,210,0.1)" stroke-width="0.5"/>
+          <!-- (2,2) ACCENT -->
+          <polygon points="100,87 118,96 100,105 82,96" fill="rgba(242,223,210,0.13)" stroke="rgba(242,223,210,0.45)" stroke-width="0.75"/>
+          <polygon points="100,105 118,96 118,114 100,123" fill="rgba(242,223,210,0.08)" stroke="rgba(242,223,210,0.35)" stroke-width="0.75"/>
+          <polygon points="82,96 100,105 100,123 82,114" fill="rgba(242,223,210,0.05)" stroke="rgba(242,223,210,0.25)" stroke-width="0.75"/>
+          <!-- (3,1) -->
+          <polygon points="136,87 154,96 136,105 118,96" fill="rgba(242,223,210,0.06)" stroke="rgba(242,223,210,0.2)" stroke-width="0.5"/>
+          <polygon points="136,105 154,96 154,114 136,123" fill="rgba(242,223,210,0.04)" stroke="rgba(242,223,210,0.15)" stroke-width="0.5"/>
+          <polygon points="118,96 136,105 136,123 118,114" fill="rgba(242,223,210,0.02)" stroke="rgba(242,223,210,0.1)" stroke-width="0.5"/>
+          <!-- (2,3) -->
+          <polygon points="82,96 100,105 82,114 64,105" fill="rgba(242,223,210,0.06)" stroke="rgba(242,223,210,0.2)" stroke-width="0.5"/>
+          <polygon points="82,114 100,105 100,123 82,132" fill="rgba(242,223,210,0.04)" stroke="rgba(242,223,210,0.15)" stroke-width="0.5"/>
+          <polygon points="64,105 82,114 82,132 64,123" fill="rgba(242,223,210,0.02)" stroke="rgba(242,223,210,0.1)" stroke-width="0.5"/>
+          <!-- (3,2) -->
+          <polygon points="118,96 136,105 118,114 100,105" fill="rgba(242,223,210,0.06)" stroke="rgba(242,223,210,0.2)" stroke-width="0.5"/>
+          <polygon points="118,114 136,105 136,123 118,132" fill="rgba(242,223,210,0.04)" stroke="rgba(242,223,210,0.15)" stroke-width="0.5"/>
+          <polygon points="100,105 118,114 118,132 100,123" fill="rgba(242,223,210,0.02)" stroke="rgba(242,223,210,0.1)" stroke-width="0.5"/>
+          <!-- (3,3) ACCENT -->
+          <polygon points="100,105 118,114 100,123 82,114" fill="rgba(242,223,210,0.13)" stroke="rgba(242,223,210,0.45)" stroke-width="0.75"/>
+          <polygon points="100,123 118,114 118,132 100,141" fill="rgba(242,223,210,0.08)" stroke="rgba(242,223,210,0.35)" stroke-width="0.75"/>
+          <polygon points="82,114 100,123 100,141 82,132" fill="rgba(242,223,210,0.05)" stroke="rgba(242,223,210,0.25)" stroke-width="0.75"/>
+        </svg>
+        <div class="text-center">
+          <span class="font-sans text-[12px] tracking-[0.25em] uppercase text-zinc-500 block mb-2">Step 03</span>
+          <span class="font-serif italic text-2xl text-tertiary" style="font-family:'Newsreader',serif;">The Token</span>
+          <p class="font-sans text-sm text-zinc-500 mt-3 leading-relaxed">Fractional, liquid,<br/>24/7 globally tradeable</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       STATS STRIP
+  ═══════════════════════════════════════ -->
+  <section class="border-t border-b border-zinc-800 bg-surface-container-lowest py-0" id="stats-section">
+    <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-zinc-800">
+      <div class="flex flex-col items-center justify-center py-16 px-12 text-center reveal">
+        <span class="stat-number text-6xl text-white mb-3" data-target="30" data-prefix="$" data-suffix="T">$0T</span>
+        <span class="font-sans text-[12px] tracking-[0.2em] uppercase text-zinc-500 leading-loose">Upper-bound tokenized market<br/>projection by 2030</span>
+        <span class="font-sans text-[11px] text-zinc-700 mt-3 uppercase tracking-widest">Source: BCG / McKinsey</span>
+      </div>
+      <div class="flex flex-col items-center justify-center py-16 px-12 text-center reveal reveal-delay-2">
+        <span class="stat-number text-6xl text-white mb-3" data-target="85" data-suffix="%">0%</span>
+        <span class="font-sans text-[12px] tracking-[0.2em] uppercase text-zinc-500 leading-loose">Reduction in settlement time<br/>vs. traditional T+2 systems</span>
+        <span class="font-sans text-[11px] text-zinc-700 mt-3 uppercase tracking-widest">Atomic Settlement Standard</span>
+      </div>
+      <div class="flex flex-col items-center justify-center py-16 px-12 text-center reveal reveal-delay-3">
+        <span class="stat-number text-6xl text-white mb-3" data-target="61" data-suffix="%">0%</span>
+        <span class="font-sans text-[12px] tracking-[0.2em] uppercase text-zinc-500 leading-loose">Of tokenized asset volume<br/>is Private Credit in 2025</span>
+        <span class="font-sans text-[11px] text-zinc-700 mt-3 uppercase tracking-widest">Source: RWA.xyz, 2025</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       COMPARISON TABLE
+  ═══════════════════════════════════════ -->
+  <section class="py-24 px-8 md:px-24 lg:px-48 bg-surface-container-low">
+    <div class="mb-16 reveal">
+      <span class="font-sans text-[11px] font-bold tracking-[0.3em] uppercase text-zinc-500 block mb-4">Side by Side</span>
+      <h2 class="font-serif italic text-4xl text-white" style="font-family:'Newsreader',serif;">The Old World vs. The Agility of the New</h2>
+    </div>
+
+    <div class="border border-zinc-800 reveal">
+      <!-- Header row -->
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; border-bottom:1px solid #27272a;">
+        <div class="comp-cell font-sans text-[11px] tracking-[0.2em] uppercase text-zinc-700"></div>
+        <div class="comp-cell font-sans text-[11px] tracking-[0.2em] uppercase text-zinc-500">Legacy Infrastructure</div>
+        <div class="comp-cell font-sans text-[11px] tracking-[0.2em] uppercase text-tertiary">Tokenized Networks</div>
+      </div>
+      <!-- Rows -->
+      <div class="comp-row">
+        <div class="comp-cell text-zinc-500 font-bold text-[13px] tracking-wider uppercase">Market Hours</div>
+        <div class="comp-cell text-zinc-400">Mon–Fri, 9–5. Trading halts on weekends, holidays, and after hours.</div>
+        <div class="comp-cell text-tertiary font-medium">24/7/365 global availability, no scheduled downtime.</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell text-zinc-500 font-bold text-[13px] tracking-wider uppercase">Settlement Speed</div>
+        <div class="comp-cell text-zinc-400">T+2 to T+5 days. Manual reconciliation, custody chains, correspondent banks.</div>
+        <div class="comp-cell text-tertiary font-medium">Near-instant Atomic Settlement. Payment and asset transfer in one transaction or neither.</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell text-zinc-500 font-bold text-[13px] tracking-wider uppercase">Accessibility</div>
+        <div class="comp-cell text-zinc-400">Institutional-only entry points. A $100M PE fund requires a $1M minimum commitment.</div>
+        <div class="comp-cell text-tertiary font-medium">Democratized & fractional. A $100M asset split into 100,000 tokens at $1,000 each.</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell text-zinc-500 font-bold text-[13px] tracking-wider uppercase">Asset Mobility</div>
+        <div class="comp-cell text-zinc-400">Siloed & fragmented. Assets locked in jurisdiction-specific, custodian-specific silos.</div>
+        <div class="comp-cell text-tertiary font-medium">Composable & interoperable. Use a tokenized gold bar as collateral to borrow a tokenized bond.</div>
+      </div>
+      <div class="comp-row" style="border-bottom:none;">
+        <div class="comp-cell text-zinc-500 font-bold text-[13px] tracking-wider uppercase">Compliance</div>
+        <div class="comp-cell text-zinc-400">Manual & audited after the fact. Compliance failures discovered weeks later.</div>
+        <div class="comp-cell text-tertiary font-medium">Automated via smart contracts. A trade that fails compliance never executes.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       PULL QUOTE Larry Fink
+  ═══════════════════════════════════════ -->
+  <section class="py-48 bg-surface-container-low">
+    <div class="max-w-5xl mx-auto px-8 text-center">
+      <div class="reveal">
+        <div class="quote-line"></div>
+        <blockquote class="font-serif italic text-4xl md:text-6xl text-white leading-tight mb-12" style="font-family:'Newsreader',serif;">
+          "I believe the next generation of markets, the next generation of securities, will be <span class="text-tertiary">tokenized securities</span>. Every asset can be tokenized."
+        </blockquote>
+        <cite class="font-sans text-[11px] font-bold tracking-[0.3em] uppercase text-zinc-500">: Larry Fink, CEO, BlackRock</cite>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       5-STAGE PROCESS
+  ═══════════════════════════════════════ -->
+  <section id="process" class="py-32 px-8 md:px-24 lg:px-48 bg-surface">
+    <div class="mb-24 flex flex-col items-start reveal">
+      <span class="font-sans text-[11px] font-bold tracking-[0.3em] uppercase text-zinc-500 mb-4">Digital Alchemy</span>
+      <h2 class="font-serif italic text-5xl text-white max-w-2xl leading-tight" style="font-family:'Newsreader',serif;">How an Asset Moves from the Physical World to the Digital Ledger</h2>
+    </div>
+
+    <!-- Stage 01 -->
+    <div class="stage-step reveal" style="padding-top:4rem; padding-bottom:0; overflow:hidden;">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 pb-8">
+        <div class="lg:col-span-2">
+          <span class="stage-number text-8xl">01</span>
+        </div>
+        <div class="lg:col-span-4 flex flex-col justify-center">
+          <span class="font-sans text-[11px] tracking-[0.25em] uppercase text-zinc-400 block mb-3">Asset Identification &amp; Selection</span>
+          <h3 class="font-serif italic text-2xl text-white mb-4" style="font-family:'Newsreader',serif;">Choosing What Gets Tokenized</h3>
+          <p class="font-sans text-sm text-zinc-500 leading-relaxed">The journey begins in the physical world. While almost anything with definable ownership can be tokenized, four primary classes currently lead the market each solving a specific liquidity or accessibility problem.</p>
+        </div>
+        <div class="lg:col-span-6 flex flex-col">
+          <p class="font-sans text-[11px] tracking-[0.2em] uppercase text-zinc-600 mb-3">Source: RWA.xyz — Tokenized asset volume breakdown, 2025</p>
+          <div style="display:grid; grid-template-columns:61fr 39fr; gap:2px; flex:1; min-height:220px;">
+            <div class="treemap-block flex flex-col justify-end p-6" style="background:#1a2535;">
+              <span class="font-serif italic text-5xl text-white/80 mb-2 leading-none" style="font-family:'Newsreader',serif;">61%</span>
+              <h3 class="font-sans font-bold text-[11px] tracking-wider uppercase text-zinc-300 mb-1">Private Credit</h3>
+              <p class="font-sans text-sm text-zinc-400 leading-snug">The dominant tokenized asset class, utilizing smart contracts for automated yields and dynamic collateral.</p>
+            </div>
+            <div style="display:grid; grid-template-rows:30fr 9fr; gap:2px;">
+              <div class="treemap-block flex flex-col justify-end p-4" style="background:#1e2d1e;">
+                <span class="font-serif italic text-3xl text-white/80 mb-1 leading-none" style="font-family:'Newsreader',serif;">30%</span>
+                <h3 class="font-sans font-bold text-[11px] tracking-wider uppercase text-zinc-300 mb-1">Treasuries</h3>
+                <p class="font-sans text-sm text-zinc-400 leading-snug">Foundational, yield-bearing liquidity primitives in digital markets.</p>
+              </div>
+              <div style="display:grid; grid-template-columns:7fr 2fr; gap:2px;">
+                <div class="treemap-block flex flex-col justify-end p-3" style="background:#2a1f14;">
+                  <span class="font-serif italic text-lg text-white/80 mb-1 leading-none" style="font-family:'Newsreader',serif;">7%</span>
+                  <h3 class="font-sans font-bold text-[11px] tracking-wider uppercase text-zinc-400 mb-1">Commodities</h3>
+                  <p class="font-sans text-[11px] text-zinc-500 leading-snug">Tokenized gold, $6B+ market cap.</p>
+                </div>
+                <div class="treemap-block flex flex-col justify-end p-3" style="background:#242424;">
+                  <span class="font-serif italic text-base text-white/60 mb-1 leading-none" style="font-family:'Newsreader',serif;">2%</span>
+                  <h3 class="font-sans font-bold text-[10px] tracking-wider uppercase text-zinc-400 mb-1">Funds</h3>
+                  <p class="font-sans text-[10px] text-zinc-500 leading-snug">Institutional</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 02 -->
+    <div class="stage-step py-16 reveal">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-8">
+        <div class="lg:col-span-2">
+          <span class="stage-number text-8xl">02</span>
+        </div>
+        <div class="lg:col-span-4">
+          <span class="font-sans text-[11px] tracking-[0.25em] uppercase text-zinc-400 block mb-3">Digital Representation &amp; Compliance</span>
+          <h3 class="font-serif italic text-2xl text-white mb-4" style="font-family:'Newsreader',serif;">Building the Digital Blueprint</h3>
+          <p class="font-sans text-sm text-zinc-500 leading-relaxed mb-6">This isn't just an entry on a list. The digital blueprint is sophisticated software that acts as a container for the asset's rights. By integrating ISO-20022 messaging standards, tokens speak the same language as traditional banking systems like SWIFT enabling real-time reconciliation across institutional networks.</p>
+          <ul class="space-y-3">
+            <li class="flex gap-3">
+              <span class="text-tertiary mt-0.5 flex-shrink-0">·</span>
+              <p class="font-sans text-sm text-zinc-300 leading-relaxed"><span class="text-white font-medium">ISO-20022</span> is the global language banks use to send payment messages. Think of it as a universal translator that lets blockchain tokens talk directly to the world's banking systems.</p>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-tertiary mt-0.5 flex-shrink-0">·</span>
+              <p class="font-sans text-sm text-zinc-300 leading-relaxed"><span class="text-white font-medium">SWIFT</span> is the network that moves $8 trillion between banks every day. Tokenized assets that speak ISO-20022 can plug directly into it with no manual reconciliation required.</p>
+            </li>
+          </ul>
+        </div>
+        <div class="lg:col-span-6">
+          <div class="space-y-0 border border-zinc-800">
+            <div class="p-5 border-b border-zinc-800 hover:bg-surface-container-high transition-colors cursor-default">
+              <span class="font-sans font-bold text-[12px] tracking-wider uppercase text-zinc-400 block mb-1">Key Information</span>
+              <p class="font-sans text-sm text-zinc-400">Asset type, issuer identity, and unique on-chain identifiers that distinguish this token from all others.</p>
+            </div>
+            <div class="p-5 border-b border-zinc-800 hover:bg-surface-container-high transition-colors cursor-default">
+              <span class="font-sans font-bold text-[12px] tracking-wider uppercase text-zinc-400 block mb-1">Embedded Rights</span>
+              <p class="font-sans text-sm text-zinc-400">Voter participation rights, interest payment schedules, dividend distributions encoded directly into the token's logic.</p>
+            </div>
+            <div class="p-5 border-b border-zinc-800 hover:bg-surface-container-high transition-colors cursor-default">
+              <span class="font-sans font-bold text-[12px] tracking-wider uppercase text-zinc-400 block mb-1">Compliance Rules</span>
+              <p class="font-sans text-sm text-zinc-400">Jurisdiction-specific transfer restrictions e.g., accredited investor requirements automatically enforced at the protocol level.</p>
+            </div>
+            <div class="p-5 hover:bg-surface-container-high transition-colors cursor-default">
+              <span class="font-sans font-bold text-[12px] tracking-wider uppercase text-zinc-400 block mb-1">Provenance</span>
+              <p class="font-sans text-sm text-zinc-400">A complete ownership family tree immutable, tamper-proof, and auditable by any party with ledger access.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 03 -->
+    <div class="stage-step py-16 reveal">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-8">
+        <div class="lg:col-span-2">
+          <span class="stage-number text-8xl">03</span>
+        </div>
+        <div class="lg:col-span-4">
+          <span class="font-sans text-[11px] tracking-[0.25em] uppercase text-zinc-400 block mb-3">The Logic Layer</span>
+          <h3 class="font-serif italic text-2xl text-white mb-4" style="font-family:'Newsreader',serif;">Smart Contracts as Execution Engine</h3>
+          <p class="font-sans text-sm text-zinc-500 leading-relaxed">A smart contract is code that runs automatically when conditions are met, removing the friction of manual approval entirely. Think of tokenized assets like apps on a smartphone. They all run on the same operating system, so they can share data, talk to each other, and combine in ways a single app never could alone. Use your tokenized gold to back a loan, earn yield on a tokenized bond, and settle in a stablecoin, all in one transaction.</p>
+          <div class="mt-6 border-l-2 border-tertiary pl-4">
+            <span class="font-sans text-[11px] tracking-widest uppercase text-zinc-400 block mb-1">Atomic Settlement</span>
+            <p class="font-sans text-sm text-zinc-500">Simultaneous delivery of asset and payment. If the payment isn't there, the asset never moves. Settlement risk: eliminated.</p>
+          </div>
+        </div>
+        <div class="lg:col-span-6">
+          <div class="grid grid-cols-1 gap-0.5 bg-zinc-800">
+            <div class="bg-surface p-8 hover:bg-surface-container-high transition-colors cursor-default flex gap-6 items-start">
+              <span class="material-symbols-outlined text-tertiary" style="font-size:24px; flex-shrink:0;">bolt</span>
+              <div>
+                <h4 class="font-sans font-bold text-[11px] tracking-wider uppercase text-zinc-300 mb-2">Automation of Dividends</h4>
+                <p class="font-sans text-sm text-zinc-400 leading-relaxed">Rent or interest is distributed automatically to token holders the moment it is received no fund administrator required.</p>
+              </div>
+            </div>
+            <div class="bg-surface p-8 hover:bg-surface-container-high transition-colors cursor-default flex gap-6 items-start">
+              <span class="material-symbols-outlined text-tertiary" style="font-size:24px; flex-shrink:0;">balance</span>
+              <div>
+                <h4 class="font-sans font-bold text-[11px] tracking-wider uppercase text-zinc-300 mb-2">Real-Time Reconciliation</h4>
+                <p class="font-sans text-sm text-zinc-400 leading-relaxed">The contract keeps the books balanced every second. No overnight settlement batches, no reconciliation failures at month-end.</p>
+              </div>
+            </div>
+            <div class="bg-surface p-8 hover:bg-surface-container-high transition-colors cursor-default flex gap-6 items-start">
+              <span class="material-symbols-outlined text-tertiary" style="font-size:24px; flex-shrink:0;">shield</span>
+              <div>
+                <h4 class="font-sans font-bold text-[11px] tracking-wider uppercase text-zinc-300 mb-2">Compliance Enforcement</h4>
+                <p class="font-sans text-sm text-zinc-400 leading-relaxed">A trade that violates jurisdiction rules or Know Your Customer and Anti-Money Laundering requirements is rejected at the protocol level before it can execute.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 04 -->
+    <div class="stage-step py-16 reveal">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-8">
+        <div class="lg:col-span-2">
+          <span class="stage-number text-8xl">04</span>
+        </div>
+        <div class="lg:col-span-10">
+          <span class="font-sans text-[11px] tracking-[0.25em] uppercase text-zinc-400 block mb-3">Immobilization &amp; Asset Locking</span>
+          <h3 class="font-serif italic text-2xl text-white mb-6" style="font-family:'Newsreader',serif;">Solving the Double-Spend Problem</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+              <p class="font-sans text-sm text-zinc-500 leading-relaxed">To ensure trust, the physical asset must be secured so it cannot be sold in the real world while simultaneously being traded as a token. Reference-backed tokenization places a gold bar in a secure vault the token becomes the only tradeable digital receipt for that gold.</p>
+            </div>
+            <div>
+              <h4 class="font-sans font-bold text-[12px] tracking-wider uppercase text-zinc-400 mb-3">On-Chain Issuance</h4>
+              <p class="font-sans text-sm text-zinc-500 leading-relaxed">Native digital bonds are born entirely on the blockchain with no physical counterpart no vault required. The ledger <em>is</em> the asset's existence.</p>
+            </div>
+            <div class="border border-zinc-800 p-6">
+              <h4 class="font-sans font-bold text-[12px] tracking-wider uppercase text-tertiary mb-3">Bankruptcy Remoteness</h4>
+              <p class="font-sans text-sm text-zinc-500 leading-relaxed">Critical for investor protection. In jurisdictions without clear digital-asset laws, tokens risk being pooled with a bankrupt issuer's general debts. A bankruptcy-remote structure ensures the physical asset belongs to token holders not the company's creditors.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 05 -->
+    <div class="stage-step py-16 reveal" style="border-bottom:1px solid #27272a;">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-8">
+        <div class="lg:col-span-2">
+          <span class="stage-number text-8xl">05</span>
+        </div>
+        <div class="lg:col-span-5">
+          <span class="font-sans text-[11px] tracking-[0.25em] uppercase text-zinc-400 block mb-3">Minting, Distribution &amp; Lifecycle</span>
+          <h3 class="font-serif italic text-2xl text-white mb-4" style="font-family:'Newsreader',serif;">The Token Goes Live</h3>
+          <p class="font-sans text-sm text-zinc-500 leading-relaxed">Minting is the official creation of tokens on the ledger. They are distributed to investors' digital wallets and enter a lifecycle of 24/7 secondary trading automatically collecting coupons until maturity, when the token is burned in exchange for the underlying physical value. The market is currently split between two competing infrastructure models.</p>
+        </div>
+        <div class="lg:col-span-5">
+          <div class="space-y-0.5">
+            <div class="bg-surface-container p-8 hover:bg-surface-container-high transition-colors cursor-default">
+              <div class="flex items-start justify-between mb-3">
+                <h4 class="font-sans font-bold text-[12px] tracking-wider uppercase text-zinc-300">Permissioned Networks</h4>
+                <span class="font-serif italic text-2xl text-zinc-400" style="font-family:'Newsreader',serif;">50.6%</span>
+              </div>
+              <p class="font-sans text-sm text-zinc-400 leading-relaxed">Private "consortium" ledgers preferred by banks for privacy. JPMorgan Kinexys, Goldman DAP, HSBC Orion operate here.</p>
+            </div>
+            <div class="bg-surface-container p-8 hover:bg-surface-container-high transition-colors cursor-default">
+              <div class="flex items-start justify-between mb-3">
+                <h4 class="font-sans font-bold text-[12px] tracking-wider uppercase text-zinc-300">Permissionless Networks</h4>
+                <span class="font-serif italic text-2xl text-tertiary" style="font-family:'Newsreader',serif;">51.6%</span>
+              </div>
+              <p class="font-sans text-sm text-zinc-400 leading-relaxed">Public networks (Ethereum, Polygon, Avalanche) open to global liquidity. Growth rate (CAGR) now exceeds permissioned rails.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       BENTO GRID Three Pillars
+  ═══════════════════════════════════════ -->
+  <section class="py-32 px-8 md:px-24 lg:px-48 bg-surface-container-low">
+    <div class="mb-24 flex flex-col items-start reveal">
+      <h2 class="font-serif italic text-5xl text-white" style="font-family:'Newsreader',serif;">How It Actually Works</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-0.5 bg-zinc-800">
+      <div class="pillar-card bg-surface-container-low p-12 hover:bg-surface-container-high transition-colors group cursor-default reveal reveal-delay-1">
+        <span class="material-symbols-outlined text-tertiary text-4xl mb-8 group-hover:scale-110 transition-transform inline-block">apartment</span>
+        <h3 class="font-serif italic text-2xl text-white mb-6" style="font-family:'Newsreader',serif;">Fractional Ownership</h3>
+        <p class="font-sans text-sm text-zinc-500 leading-relaxed mb-8">A $100M asset divided into 100,000 programmable tokens at $1,000 each. Lowers the barrier to entry, increases secondary market liquidity by an estimated 30–40%, and broadens investor bases from institutions to individuals.</p>
+        <span class="font-sans text-[11px] tracking-[0.25em] uppercase text-zinc-700">$326T addressable market</span>
+      </div>
+      <div class="pillar-card bg-surface-container-low p-12 hover:bg-surface-container-high transition-colors group cursor-default reveal reveal-delay-2">
+        <span class="material-symbols-outlined text-tertiary text-4xl mb-8 group-hover:scale-110 transition-transform inline-block">contract</span>
+        <h3 class="font-serif italic text-2xl text-white mb-6" style="font-family:'Newsreader',serif;">Smart Contract Logic</h3>
+        <p class="font-sans text-sm text-zinc-500 leading-relaxed mb-8">Self-executing agreements that enforce ownership rules, automate dividend payments, and govern voting rights with no lawyers, no custodians, no delays. Compliance is embedded in the code, not bolted on afterward.</p>
+        <span class="font-sans text-[11px] tracking-[0.25em] uppercase text-zinc-700">T+0 atomic settlement</span>
+      </div>
+      <div class="pillar-card bg-surface-container-low p-12 hover:bg-surface-container-high transition-colors group cursor-default reveal reveal-delay-3">
+        <span class="material-symbols-outlined text-tertiary text-4xl mb-8 group-hover:scale-110 transition-transform inline-block">water_drop</span>
+        <h3 class="font-serif italic text-2xl text-white mb-6" style="font-family:'Newsreader',serif;">Decentralized Liquidity</h3>
+        <p class="font-sans text-sm text-zinc-500 leading-relaxed mb-8">Markets that never close. Permissionless networks open tokenized assets to global capital pools with algorithmic market-makers replacing the floor specialist and DeFi protocols providing on-demand liquidity.</p>
+        <span class="font-sans text-[11px] tracking-[0.25em] uppercase text-zinc-700">24/7 global trading</span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-0.5 bg-zinc-800 mt-0.5">
+      <div class="pillar-card bg-surface-container-low p-12 hover:bg-surface-container-high transition-colors group cursor-default reveal reveal-delay-2">
+        <span class="material-symbols-outlined text-tertiary text-4xl mb-8 group-hover:scale-110 transition-transform inline-block">security</span>
+        <h3 class="font-serif italic text-2xl text-white mb-6" style="font-family:'Newsreader',serif;">ISO-20022 Interoperability</h3>
+        <p class="font-sans text-sm text-zinc-500 leading-relaxed">The universal translator that lets blockchain tokens communicate with traditional banking systems like SWIFT. Real-time reconciliation between on-chain activity and off-chain ledgers the technical bridge that makes institutional adoption possible.</p>
+      </div>
+      <div class="pillar-card bg-surface-container-low p-12 hover:bg-surface-container-high transition-colors group cursor-default reveal reveal-delay-3">
+        <span class="material-symbols-outlined text-tertiary text-4xl mb-8 group-hover:scale-110 transition-transform inline-block">hub</span>
+        <h3 class="font-serif italic text-2xl text-white mb-6" style="font-family:'Newsreader',serif;">Composable Finance</h3>
+        <p class="font-sans text-sm text-zinc-500 leading-relaxed">Think of tokenized assets like apps on a smartphone. They all run on the same operating system, so they can share data, talk to each other, and combine in ways a single app never could alone. Use your tokenized gold to back a loan, earn yield on a tokenized bond, and settle in a stablecoin, all in one transaction.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       BLEED SECTION 02
+  ═══════════════════════════════════════ -->
+  <section class="w-full relative overflow-hidden noise-overlay" style="height:480px; background:#0e0e0e;">
+    <div class="absolute top-0 left-1/4 w-96 h-96 rounded-full opacity-10"
+         style="background:radial-gradient(circle, rgba(242,223,210,0.6) 0%, transparent 70%); filter:blur(60px); transform:translate(-50%,-30%);">
+    </div>
+    <div class="absolute bottom-0 right-1/4 w-64 h-64 rounded-full opacity-8"
+         style="background:radial-gradient(circle, rgba(180,160,140,0.5) 0%, transparent 70%); filter:blur(40px); transform:translate(50%,30%);">
+    </div>
+    <div class="absolute inset-0 opacity-15"
+         style="background-image:radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 1px); background-size:24px 24px;">
+    </div>
+    <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center px-8">
+      <span class="font-sans text-[12px] tracking-[0.35em] uppercase text-white/60 block mb-6">02</span>
+      <span class="font-serif italic text-white/60 leading-tight" style="font-family:'Newsreader',serif; font-size:clamp(3rem, 8vw, 7rem);">Where Capital<br/>Is Flowing</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       ASSET CLASSES
+  ═══════════════════════════════════════ -->
+  <section id="assets" class="py-32 px-8 md:px-24 lg:px-48 bg-surface">
+    <div class="mb-20 flex flex-col md:flex-row md:items-end md:justify-between gap-8">
+      <div class="reveal">
+        <span class="font-sans text-[11px] font-bold tracking-[0.3em] uppercase text-zinc-500 block mb-4">Tokenizable Universe</span>
+        <h2 class="font-serif italic text-5xl text-white" style="font-family:'Newsreader',serif;">Every Asset Class,<br/>On-Chain</h2>
+      </div>
+      <p class="font-sans text-sm text-zinc-500 max-w-xs leading-relaxed reveal reveal-delay-2">
+        The tokenization thesis extends far beyond real estate. Six primary classes are being rewritten by distributed ledger technology each with different drivers, market sizes, and stages of adoption.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0.5 bg-zinc-800">
+
+      <div class="asset-card bg-surface p-10 reveal reveal-delay-1">
+        <div class="flex items-start justify-between mb-6">
+          <span class="material-symbols-outlined text-tertiary" style="font-size:32px;">apartment</span>
+          <span class="font-serif italic text-3xl text-zinc-800" style="font-family:'Newsreader',serif;">01</span>
+        </div>
+        <h3 class="font-serif italic text-xl text-white mb-3" style="font-family:'Newsreader',serif;">Real Estate</h3>
+        <p class="font-sans text-sm text-zinc-400 leading-relaxed mb-6">Commercial towers, residential developments, and REITs fractionalized into micro-shares with automated rental yield distribution. Holds 30.12% of the tokenized asset market solving the "liquidity trap" of property.</p>
+        <div class="flex items-end justify-between border-t border-zinc-800 pt-6 mt-auto">
+          <div><span class="font-sans text-[10px] tracking-widest uppercase text-zinc-700 block mb-1">Global Market</span><span class="font-sans text-sm font-bold text-zinc-300">$326T</span></div>
+          <div class="text-right"><span class="font-sans text-[10px] tracking-widest uppercase text-zinc-700 block mb-1">Token Share</span><span class="font-sans text-sm font-bold text-tertiary">30.12%</span></div>
+        </div>
+      </div>
+
+      <div class="asset-card bg-surface p-10 reveal reveal-delay-2">
+        <div class="flex items-start justify-between mb-6">
+          <span class="material-symbols-outlined text-tertiary" style="font-size:32px;">account_balance</span>
+          <span class="font-serif italic text-3xl text-zinc-800" style="font-family:'Newsreader',serif;">02</span>
+        </div>
+        <h3 class="font-serif italic text-xl text-white mb-3" style="font-family:'Newsreader',serif;">Private Credit</h3>
+        <p class="font-sans text-sm text-zinc-400 leading-relaxed mb-6">The dominant tokenized asset class 61% of total volume. Smart contracts automate yields and enable dynamic collateral management. Centrifuge alone has brought billions of private credit on-chain for institutional DeFi borrowers.</p>
+        <div class="flex items-end justify-between border-t border-zinc-800 pt-6">
+          <div><span class="font-sans text-[10px] tracking-widest uppercase text-zinc-700 block mb-1">Volume Share</span><span class="font-sans text-sm font-bold text-zinc-300">61%</span></div>
+          <div class="text-right"><span class="font-sans text-[10px] tracking-widest uppercase text-zinc-700 block mb-1">Growth</span><span class="font-sans text-sm font-bold text-tertiary">Dominant</span></div>
+        </div>
+      </div>
+
+      <div class="asset-card bg-surface p-10 reveal reveal-delay-3">
+        <div class="flex items-start justify-between mb-6">
+          <span class="material-symbols-outlined text-tertiary" style="font-size:32px;">description</span>
+          <span class="font-serif italic text-3xl text-zinc-800" style="font-family:'Newsreader',serif;">03</span>
+        </div>
+        <h3 class="font-serif italic text-xl text-white mb-3" style="font-family:'Newsreader',serif;">Treasuries &amp; Fixed Income</h3>
+        <p class="font-sans text-sm text-zinc-400 leading-relaxed mb-6">Government and corporate bonds issued on-chain. BlackRock's BUIDL fund tokenized US Treasuries across Ethereum, Polygon, and Avalanche crossed $500M in 40 days. Franklin Templeton and Ondo Finance are collectively issuing billions in yield-bearing digital assets.</p>
+        <div class="flex items-end justify-between border-t border-zinc-800 pt-6">
+          <div><span class="font-sans text-[10px] tracking-widest uppercase text-zinc-700 block mb-1">Market Share</span><span class="font-sans text-sm font-bold text-zinc-300">30%</span></div>
+          <div class="text-right"><span class="font-sans text-[10px] tracking-widest uppercase text-zinc-700 block mb-1">YoY Growth</span><span class="font-sans text-sm font-bold text-tertiary">+782%</span></div>
+        </div>
+      </div>
+
+      <div class="asset-card bg-surface p-10 reveal reveal-delay-1">
+        <div class="flex items-start justify-between mb-6">
+          <span class="material-symbols-outlined text-tertiary" style="font-size:32px;">diamond</span>
+          <span class="font-serif italic text-3xl text-zinc-800" style="font-family:'Newsreader',serif;">04</span>
+        </div>
+        <h3 class="font-serif italic text-xl text-white mb-3" style="font-family:'Newsreader',serif;">Commodities</h3>
+        <p class="font-sans text-sm text-zinc-400 leading-relaxed mb-6">Gold, silver, and carbon credits tokenized for inflation hedging and ESG liability management. Tokenized gold has surpassed a $6 billion market cap enabling fractional ownership of physical bullion with 100% verified custody.</p>
+        <div class="flex items-end justify-between border-t border-zinc-800 pt-6">
+          <div><span class="font-sans text-[10px] tracking-widest uppercase text-zinc-700 block mb-1">Market Share</span><span class="font-sans text-sm font-bold text-zinc-300">7%</span></div>
+          <div class="text-right"><span class="font-sans text-[10px] tracking-widest uppercase text-zinc-700 block mb-1">Gold Market Cap</span><span class="font-sans text-sm font-bold text-tertiary">$6B+</span></div>
+        </div>
+      </div>
+
+      <div class="asset-card bg-surface p-10 reveal reveal-delay-2">
+        <div class="flex items-start justify-between mb-6">
+          <span class="material-symbols-outlined text-tertiary" style="font-size:32px;">palette</span>
+          <span class="font-serif italic text-3xl text-zinc-800" style="font-family:'Newsreader',serif;">05</span>
+        </div>
+        <h3 class="font-serif italic text-xl text-white mb-3" style="font-family:'Newsreader',serif;">Art &amp; Collectibles</h3>
+        <p class="font-sans text-sm text-zinc-400 leading-relaxed mb-6">Blue-chip art fractionally owned by thousands, with provenance permanently encoded on-chain. Blockchain provides an unchangeable ownership history eliminating the forgery risk that plagues traditional art markets. Christie's is paying attention.</p>
+        <div class="flex items-end justify-between border-t border-zinc-800 pt-6">
+          <div><span class="font-sans text-[10px] tracking-widest uppercase text-zinc-700 block mb-1">Global Market</span><span class="font-sans text-sm font-bold text-zinc-300">$1.7T</span></div>
+          <div class="text-right"><span class="font-sans text-[10px] tracking-widest uppercase text-zinc-700 block mb-1">Tokenized</span><span class="font-sans text-sm font-bold text-tertiary">Early Stage</span></div>
+        </div>
+      </div>
+
+      <div class="asset-card bg-surface p-10 reveal reveal-delay-3">
+        <div class="flex items-start justify-between mb-6">
+          <span class="material-symbols-outlined text-tertiary" style="font-size:32px;">settings_input_antenna</span>
+          <span class="font-serif italic text-3xl text-zinc-800" style="font-family:'Newsreader',serif;">06</span>
+        </div>
+        <h3 class="font-serif italic text-xl text-white mb-3" style="font-family:'Newsreader',serif;">Infrastructure &amp; Funds</h3>
+        <p class="font-sans text-sm text-zinc-400 leading-relaxed mb-6">Toll roads, data centers, and institutional funds tokenized for fractional investor access. Institutional funds currently represent 2% of tokenized volume but the infrastructure layer beneath all tokenization (ledgers, custody, compliance) represents the largest long-term opportunity.</p>
+        <div class="flex items-end justify-between border-t border-zinc-800 pt-6">
+          <div><span class="font-sans text-[10px] tracking-widest uppercase text-zinc-700 block mb-1">Fund Share</span><span class="font-sans text-sm font-bold text-zinc-300">2%</span></div>
+          <div class="text-right"><span class="font-sans text-[10px] tracking-widest uppercase text-zinc-700 block mb-1">Trajectory</span><span class="font-sans text-sm font-bold text-tertiary">Accelerating</span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════
+       TIMELINE
+  ═══════════════════════════════════════ -->
+  <section id="milestones" class="py-32 bg-surface-container-low overflow-hidden">
+    <div class="px-8 md:px-24 lg:px-48 mb-20">
+      <span class="font-sans text-[11px] font-bold tracking-[0.3em] uppercase text-zinc-500 block mb-4 reveal">Chronology</span>
+      <h2 class="font-serif italic text-5xl text-white reveal" style="font-family:'Newsreader',serif;">The Tokenization<br/>Timeline</h2>
+    </div>
+
+    <div class="pl-8 md:pl-24 lg:pl-48 reveal">
+      <div class="timeline-track pb-8">
+
+        <div class="timeline-item">
+          <span class="font-sans text-[11px] tracking-[0.3em] uppercase text-tertiary block mb-4">2015</span>
+          <h3 class="font-serif italic text-xl text-white mb-3" style="font-family:'Newsreader',serif;">Ethereum Launches</h3>
+          <p class="font-sans text-sm text-zinc-400 leading-relaxed">Programmable smart contracts make tokenization of real-world assets theoretically possible for the first time.</p>
+        </div>
+
+        <div class="timeline-item">
+          <span class="font-sans text-[11px] tracking-[0.3em] uppercase text-tertiary block mb-4">2017</span>
+          <h3 class="font-serif italic text-xl text-white mb-3" style="font-family:'Newsreader',serif;">First STOs Emerge</h3>
+          <p class="font-sans text-sm text-zinc-400 leading-relaxed">Security Token Offerings provide the first regulatory-compliant framework for tokenizing traditional securities and equity stakes.</p>
+        </div>
+
+        <div class="timeline-item">
+          <span class="font-sans text-[11px] tracking-[0.3em] uppercase text-tertiary block mb-4">2020</span>
+          <h3 class="font-serif italic text-xl text-white mb-3" style="font-family:'Newsreader',serif;">DeFi Summer</h3>
+          <p class="font-sans text-sm text-zinc-400 leading-relaxed">Decentralized Finance protocols prove automated lending and yield distribution at scale. The infrastructure case is proven viable.</p>
+        </div>
+
+        <div class="timeline-item">
+          <span class="font-sans text-[11px] tracking-[0.3em] uppercase text-tertiary block mb-4">2022</span>
+          <h3 class="font-serif italic text-xl text-white mb-3" style="font-family:'Newsreader',serif;">Institutional Entry</h3>
+          <p class="font-sans text-sm text-zinc-400 leading-relaxed">JPMorgan's Onyx and Goldman Sachs' Digital Asset Platform (DAP) launch tokenized repo transactions for institutional clients. The era of experimentation begins.</p>
+        </div>
+
+        <div class="timeline-item">
+          <span class="font-sans text-[11px] tracking-[0.3em] uppercase text-tertiary block mb-4">2023–24</span>
+          <h3 class="font-serif italic text-xl text-white mb-3" style="font-family:'Newsreader',serif;">BlackRock Validates</h3>
+          <p class="font-sans text-sm text-zinc-400 leading-relaxed">BlackRock's Blockchain USD Institutional Digital Liquidity fund (BUIDL) crosses $500M in 40 days. Franklin Templeton, Ondo, and Centrifuge collectively issue billions. Total tokenized Real World Assets surpass $900 billion. Regulatory clarity arrives in the EU, UAE, and Singapore.</p>
+        </div>
+
+        <div class="timeline-item">
+          <span class="font-sans text-[11px] tracking-[0.3em] uppercase text-tertiary block mb-4">2025</span>
+          <h3 class="font-serif italic text-xl text-white mb-3" style="font-family:'Newsreader',serif;">The GENIUS Act</h3>
+          <p class="font-sans text-sm text-zinc-400 leading-relaxed">US legislation establishes long-awaited "rules of the road" for digital assets and stablecoins removing compliance fears that had kept the largest capital pools on the sideline.</p>
+        </div>
+
+        <div class="timeline-item">
+          <span class="font-sans text-[11px] tracking-[0.3em] uppercase text-tertiary block mb-4">2026</span>
+          <h3 class="font-serif italic text-xl text-white mb-3" style="font-family:'Newsreader',serif;">Clarity Act</h3>
+          <p class="font-sans text-sm text-zinc-400 leading-relaxed">Comprehensive digital asset framework cements the interoperability between on-chain and traditional financial systems. Swift begins live cross-chain transfers with BNY Mellon and Citi.</p>
+        </div>
+
+        <div class="timeline-item" style="border-top-color:rgba(242,223,210,0.3);">
+          <span class="font-sans text-[11px] tracking-[0.3em] uppercase text-tertiary block mb-4">2030 ↗</span>
+          <h3 class="font-serif italic text-xl text-white mb-3" style="font-family:'Newsreader',serif;">$16T–$30T Horizon</h3>
+          <p class="font-sans text-sm text-zinc-400 leading-relaxed">BCG projects 10% of global GDP held as on-chain tokens. $27B in annual operational savings for banks. The distinction between TradFi and DeFi effectively dissolves.</p>
+        </div>
+
+        <div class="min-w-32 md:min-w-48"></div>
+      </div>
+
+      <div class="flex items-center gap-3 mt-4 reveal">
+        <span class="material-symbols-outlined text-zinc-400 text-base">arrow_forward</span>
+        <span class="font-sans text-[11px] tracking-[0.2em] uppercase text-zinc-400">Drag or scroll to traverse timeline</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       THE ARCHITECTS
+  ═══════════════════════════════════════ -->
+  <section class="py-32 px-8 md:px-24 lg:px-48 bg-surface">
+    <div class="mb-16 reveal">
+      <span class="font-sans text-[11px] font-bold tracking-[0.3em] uppercase text-zinc-500 block mb-4">The Incumbent Halo Effect</span>
+      <h2 class="font-serif italic text-5xl text-white" style="font-family:'Newsreader',serif;">The Architects of the<br/>New Master Ledger</h2>
+    </div>
+
+    <!-- Isometric Stack Diagram -->
+    <div class="mb-16 reveal" style="display:none;">
+      <svg viewBox="0 0 920 580" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
+
+        <!--
+          Slab geometry: width=(220,50), depth=(-88,42), height=(0,-42)
+          FBL positions: Top=(100,230) Middle=(100,340) Bottom=(100,450)
+          Connector spine at x=378. Annotation dots at x=408.
+        -->
+
+        <!-- ═══ BOTTOM SLAB: Public & Private Ledgers (Centrifuge) — drawn first ═══ -->
+        <!-- Right face -->
+        <polygon points="320,458 232,500 232,534 320,492" fill="#0d1825" stroke="rgba(242,223,210,0.06)" stroke-width="0.5"/>
+        <polygon points="320,492 232,534 232,542 320,500" fill="rgba(132,83,25,0.62)"/>
+        <!-- Front face -->
+        <polygon points="100,408 320,458 320,492 100,442" fill="#112030" stroke="rgba(242,223,210,0.09)" stroke-width="0.5"/>
+        <polygon points="100,442 320,492 320,500 100,450" fill="rgba(136,85,26,0.66)"/>
+        <!-- Top face -->
+        <polygon points="100,408 320,458 232,500 12,450" fill="#182838" stroke="rgba(242,223,210,0.16)" stroke-width="0.75"/>
+        <!-- Label -->
+        <text text-anchor="middle" font-family="Manrope,sans-serif" font-size="8" font-weight="700" letter-spacing="1.8" fill="rgba(242,223,210,0.56)" transform="rotate(12.8 210 452)" x="210" y="452">PUBLIC &amp; PRIVATE LEDGERS</text>
+
+        <!-- ═══ MIDDLE SLAB: Tokenization Platforms (tZERO + Ondo) ═══ -->
+        <!-- Right face -->
+        <polygon points="320,348 232,390 232,424 320,382" fill="#101e30" stroke="rgba(242,223,210,0.07)" stroke-width="0.5"/>
+        <polygon points="320,382 232,424 232,432 320,390" fill="rgba(138,87,27,0.64)"/>
+        <!-- Front face -->
+        <polygon points="100,298 320,348 320,382 100,332" fill="#162840" stroke="rgba(242,223,210,0.10)" stroke-width="0.5"/>
+        <polygon points="100,332 320,382 320,390 100,340" fill="rgba(140,88,28,0.68)"/>
+        <!-- Top face -->
+        <polygon points="100,298 320,348 232,390 12,340" fill="#1e3250" stroke="rgba(242,223,210,0.19)" stroke-width="0.75"/>
+        <!-- Label -->
+        <text text-anchor="middle" font-family="Manrope,sans-serif" font-size="8" font-weight="700" letter-spacing="1.8" fill="rgba(242,223,210,0.63)" transform="rotate(12.8 210 342)" x="210" y="342">TOKENIZATION PLATFORMS</text>
+
+        <!-- ═══ TOP SLAB: Trading & Liquidity (Securitize) ═══ -->
+        <!-- Right face -->
+        <polygon points="320,238 232,280 232,314 320,272" fill="#182840" stroke="rgba(242,223,210,0.09)" stroke-width="0.5"/>
+        <polygon points="320,272 232,314 232,322 320,280" fill="rgba(146,92,30,0.66)"/>
+        <!-- Front face -->
+        <polygon points="100,188 320,238 320,272 100,222" fill="#1e3454" stroke="rgba(242,223,210,0.12)" stroke-width="0.5"/>
+        <polygon points="100,222 320,272 320,280 100,230" fill="rgba(148,94,31,0.70)"/>
+        <!-- Top face -->
+        <polygon points="100,188 320,238 232,280 12,230" fill="#2a4262" stroke="rgba(242,223,210,0.23)" stroke-width="0.75"/>
+        <!-- Label -->
+        <text text-anchor="middle" font-family="Manrope,sans-serif" font-size="8" font-weight="700" letter-spacing="1.8" fill="rgba(242,223,210,0.72)" transform="rotate(12.8 210 232)" x="210" y="232">TRADING &amp; LIQUIDITY</text>
+
+        <!-- ═══ CONNECTOR SYSTEM ═══ -->
+        <!-- Horizontal from each slab's top-right corner (FTR) to spine -->
+        <!-- Top slab FTR = (320, 238) -->
+        <line x1="320" y1="238" x2="378" y2="238" stroke="rgba(242,223,210,0.28)" stroke-width="0.75"/>
+        <!-- Middle slab FTR = (320, 348) -->
+        <line x1="320" y1="348" x2="378" y2="348" stroke="rgba(242,223,210,0.20)" stroke-width="0.75"/>
+        <!-- Bottom slab FTR = (320, 458) -->
+        <line x1="320" y1="458" x2="378" y2="458" stroke="rgba(242,223,210,0.14)" stroke-width="0.75"/>
+
+        <!-- Vertical spine from Securitize (y=200) to Centrifuge (y=468) -->
+        <line x1="378" y1="200" x2="378" y2="468" stroke="rgba(242,223,210,0.15)" stroke-width="0.75"/>
+
+        <!-- Small tick circles where slabs meet the spine -->
+        <circle cx="378" cy="238" r="2" fill="rgba(242,223,210,0.30)"/>
+        <circle cx="378" cy="348" r="2" fill="rgba(242,223,210,0.22)"/>
+        <circle cx="378" cy="458" r="2" fill="rgba(242,223,210,0.16)"/>
+
+        <!-- Horizontal branches from spine to annotation dots -->
+        <line x1="378" y1="200" x2="408" y2="200" stroke="rgba(242,223,210,0.36)" stroke-width="0.75"/>
+        <circle cx="408" cy="200" r="2.5" fill="rgba(242,223,210,0.68)"/>
+
+        <line x1="378" y1="305" x2="408" y2="305" stroke="rgba(242,223,210,0.29)" stroke-width="0.75"/>
+        <circle cx="408" cy="305" r="2.5" fill="rgba(242,223,210,0.56)"/>
+
+        <line x1="378" y1="395" x2="408" y2="395" stroke="rgba(242,223,210,0.23)" stroke-width="0.75"/>
+        <circle cx="408" cy="395" r="2.5" fill="rgba(242,223,210,0.46)"/>
+
+        <line x1="378" y1="468" x2="408" y2="468" stroke="rgba(242,223,210,0.18)" stroke-width="0.75"/>
+        <circle cx="408" cy="468" r="2.5" fill="rgba(242,223,210,0.38)"/>
+
+        <!-- ═══ ANNOTATIONS ═══ -->
+
+        <!-- SECURITIZE — top slab (Trading & Liquidity) -->
+        <text x="422" y="200" font-family="Manrope,sans-serif" font-size="9.5" font-weight="700" letter-spacing="2" fill="rgba(242,223,210,0.92)">SECURITIZE</text>
+        <text font-family="Manrope,sans-serif" font-size="11.5" fill="rgba(242,223,210,0.50)">
+          <tspan x="422" y="218">Leading the institutional charge with $4B+ in tokenized</tspan>
+          <tspan x="422" dy="16">assets and a $1.25B SPAC valuation. Primary issuance</tspan>
+          <tspan x="422" dy="16">infrastructure powering BlackRock's BUIDL fund.</tspan>
+        </text>
+
+        <!-- tZERO TECHNOLOGIES — middle slab -->
+        <text x="422" y="305" font-family="Manrope,sans-serif" font-size="9.5" font-weight="700" letter-spacing="2" fill="rgba(242,223,210,0.84)">tZERO TECHNOLOGIES</text>
+        <text font-family="Manrope,sans-serif" font-size="11.5" fill="rgba(242,223,210,0.46)">
+          <tspan x="422" y="323">FINRA-approved Alternative Trading System for corporate</tspan>
+          <tspan x="422" dy="16">debt — the regulated marketplace where tokenized</tspan>
+          <tspan x="422" dy="16">securities find their secondary liquidity.</tspan>
+        </text>
+
+        <!-- ONDO FINANCE & FRANKLIN TEMPLETON — middle slab -->
+        <text x="422" y="395" font-family="Manrope,sans-serif" font-size="9.5" font-weight="700" letter-spacing="2" fill="rgba(242,223,210,0.78)">ONDO FINANCE &amp; FRANKLIN TEMPLETON</text>
+        <text font-family="Manrope,sans-serif" font-size="11.5" fill="rgba(242,223,210,0.42)">
+          <tspan x="422" y="413">Pioneers in tokenized US Treasuries, issuing billions in</tspan>
+          <tspan x="422" dy="16">yield-bearing digital assets with T+0 settlement and full</tspan>
+          <tspan x="422" dy="16">composability with on-chain DeFi protocols.</tspan>
+        </text>
+
+        <!-- CENTRIFUGE — bottom slab (Public & Private Ledgers) -->
+        <text x="422" y="468" font-family="Manrope,sans-serif" font-size="9.5" font-weight="700" letter-spacing="2" fill="rgba(242,223,210,0.72)">CENTRIFUGE</text>
+        <text font-family="Manrope,sans-serif" font-size="11.5" fill="rgba(242,223,210,0.38)">
+          <tspan x="422" y="486">The infrastructure layer for real-world private credit on-chain.</tspan>
+          <tspan x="422" dy="16">Asset originators borrow from DeFi liquidity pools against</tspan>
+          <tspan x="422" dy="16">tokenized collateral: trade receivables, mortgages, microfinance.</tspan>
+        </text>
+
+      </svg>
+    </div>
+
+    <!-- Architects Reference Diagram -->
+    <div class="mb-16 reveal">
+      <div style="border-radius:4px; overflow:hidden; border:1px solid rgba(255,255,255,0.06); box-shadow:0 24px 64px rgba(0,0,0,0.55);">
+        <img src="masterledger.png" alt="The Architects of the New Master Ledger — layered infrastructure diagram" style="width:100%; height:auto; display:block; filter:brightness(0.92) contrast(1.04);"/>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0.5 bg-zinc-800 mb-0.5">
+
+      <!-- BlackRock -->
+      <div class="arch-card bg-surface p-10 hover:bg-surface-container-high cursor-default reveal reveal-delay-1">
+        <div class="flex items-start justify-between mb-6">
+          <span class="font-sans font-bold text-[12px] tracking-wider uppercase text-zinc-500">BlackRock</span>
+          <span class="font-sans text-[11px] tracking-widest uppercase text-tertiary">BUIDL</span>
+        </div>
+        <blockquote class="font-serif italic text-base text-zinc-300 leading-relaxed mb-6" style="font-family:'Newsreader',serif;">
+          "Every asset can be tokenized."
+        </blockquote>
+        <p class="font-sans text-sm text-zinc-400 leading-relaxed">Launched BUIDL tokenized US Treasuries deployed across Ethereum, Polygon, and Avalanche. Crossed $500M TVL within 40 days. The signal that no other institution could ignore.</p>
+      </div>
+
+      <!-- J.P. Morgan -->
+      <div class="arch-card bg-surface p-10 hover:bg-surface-container-high cursor-default reveal reveal-delay-2">
+        <div class="flex items-start justify-between mb-6">
+          <span class="font-sans font-bold text-[12px] tracking-wider uppercase text-zinc-500">J.P. Morgan</span>
+          <span class="font-sans text-[11px] tracking-widest uppercase text-tertiary">Kinexys</span>
+        </div>
+        <p class="font-sans text-sm text-zinc-400 leading-relaxed">Executing intraday repo transactions via the Kinexys digital asset platform with BNP Paribas settling complex transactions in minutes rather than days. Processes billions in daily cross-border flows.</p>
+        <div class="mt-6 border-t border-zinc-800 pt-4">
+          <span class="font-sans text-[11px] tracking-widest uppercase text-zinc-700">Previously: Onyx Platform</span>
+        </div>
+      </div>
+
+      <!-- Securitize -->
+      <div class="arch-card bg-surface p-10 hover:bg-surface-container-high cursor-default reveal reveal-delay-3">
+        <div class="flex items-start justify-between mb-6">
+          <span class="font-sans font-bold text-[12px] tracking-wider uppercase text-zinc-500">Securitize</span>
+          <span class="font-sans text-[11px] tracking-widest uppercase text-tertiary">Platform</span>
+        </div>
+        <p class="font-sans text-sm text-zinc-400 leading-relaxed">Leading the institutional charge: has tokenized over $4 billion in assets and secured a $1.25 billion valuation via SPAC merger. The primary compliance and issuance infrastructure behind BlackRock's BUIDL fund.</p>
+        <div class="mt-6 border-t border-zinc-800 pt-4">
+          <span class="font-sans text-[11px] tracking-widest uppercase text-zinc-700">$4B+ tokenized</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-0.5 bg-zinc-800">
+
+      <!-- tZERO -->
+      <div class="arch-card bg-surface p-10 hover:bg-surface-container-high cursor-default reveal reveal-delay-1">
+        <div class="flex items-start justify-between mb-6">
+          <span class="font-sans font-bold text-[12px] tracking-wider uppercase text-zinc-500">tZERO</span>
+          <span class="font-sans text-[11px] tracking-widest uppercase text-tertiary">ATS</span>
+        </div>
+        <p class="font-sans text-sm text-zinc-400 leading-relaxed">Expanding compliant secondary trading through its FINRA-approved Alternative Trading System for corporate debt the regulated marketplace where tokenized securities find their secondary liquidity.</p>
+      </div>
+
+      <!-- Ondo Finance -->
+      <div class="arch-card bg-surface p-10 hover:bg-surface-container-high cursor-default reveal reveal-delay-2">
+        <div class="flex items-start justify-between mb-6">
+          <span class="font-sans font-bold text-[12px] tracking-wider uppercase text-zinc-500">Ondo Finance &amp; Franklin Templeton</span>
+          <span class="font-sans text-[11px] tracking-widest uppercase text-tertiary">Treasuries</span>
+        </div>
+        <p class="font-sans text-sm text-zinc-400 leading-relaxed">Pioneers in tokenized US Treasuries collectively issuing billions in yield-bearing digital assets accessible to on-chain investors globally, with T+0 settlement and composability with DeFi protocols.</p>
+      </div>
+
+      <!-- Centrifuge -->
+      <div class="arch-card bg-surface p-10 hover:bg-surface-container-high cursor-default reveal reveal-delay-3">
+        <div class="flex items-start justify-between mb-6">
+          <span class="font-sans font-bold text-[12px] tracking-wider uppercase text-zinc-500">Centrifuge</span>
+          <span class="font-sans text-[11px] tracking-widest uppercase text-tertiary">Private Credit</span>
+        </div>
+        <p class="font-sans text-sm text-zinc-400 leading-relaxed">Providing the infrastructure to bring real-world private credit on-chain enabling asset originators (trade receivables, mortgages, microfinance) to borrow from DeFi liquidity pools against tokenized collateral.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       PULL QUOTE 02
+  ═══════════════════════════════════════ -->
+  <section class="py-48 bg-surface relative overflow-hidden">
+    <div class="absolute inset-0 pointer-events-none"
+         style="background:radial-gradient(ellipse at 50% 50%, rgba(242,223,210,0.04) 0%, transparent 70%);">
+    </div>
+    <div class="max-w-5xl mx-auto px-8 text-center">
+      <div class="reveal">
+        <div class="quote-line"></div>
+        <blockquote class="font-serif italic text-4xl md:text-6xl text-white leading-tight mb-12" style="font-family:'Newsreader',serif;">
+          "Tokenization is not about replacing the global financial system. It is about <span class="text-tertiary">rebuilding it</span> with superior, programmable infrastructure."
+        </blockquote>
+        <cite class="font-sans text-[11px] font-bold tracking-[0.3em] uppercase text-zinc-500">: The Tokenization Research Consensus, 2025</cite>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       ROAD AHEAD
+  ═══════════════════════════════════════ -->
+  <section id="road-ahead" class="py-32 px-8 md:px-24 lg:px-48 bg-surface-container-lowest">
+    <div class="mb-24 reveal">
+      <span class="font-sans text-[11px] font-bold tracking-[0.3em] uppercase text-zinc-500 block mb-4">Outlook</span>
+      <h2 class="font-serif italic text-5xl text-white" style="font-family:'Newsreader',serif;">The Road Ahead</h2>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-24">
+
+      <!-- Friction Points with real data -->
+      <div class="reveal reveal-left">
+        <h3 class="font-serif italic text-2xl text-white mb-10 pb-6 border-b border-zinc-800" style="font-family:'Newsreader',serif;">
+          Friction Remaining in the System
+        </h3>
+
+        <!-- 73% Regulatory -->
+        <div class="mb-10">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-sans text-sm font-bold text-zinc-300 uppercase tracking-wider">Regulatory Uncertainty</h4>
+            <span class="font-serif italic text-xl text-white" style="font-family:'Newsreader',serif;">73%</span>
+          </div>
+          <div class="h-px bg-zinc-800 mb-3">
+            <div class="friction-bar-fill" style="width:0%" data-width="73%"></div>
+          </div>
+          <p class="font-sans text-sm text-zinc-400 leading-relaxed">Cited as the top barrier by financial institutions. A tokenized bond compliant in Singapore may be illegal to sell in Germany. Absent global harmonization, arbitrage opportunity and systemic risk grow simultaneously.</p>
+        </div>
+
+        <!-- 54% Legacy Systems -->
+        <div class="mb-10">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-sans text-sm font-bold text-zinc-300 uppercase tracking-wider">Legacy System Integration</h4>
+            <span class="font-serif italic text-xl text-white" style="font-family:'Newsreader',serif;">54%</span>
+          </div>
+          <div class="h-px bg-zinc-800 mb-3">
+            <div class="friction-bar-fill" style="width:0%" data-width="54%"></div>
+          </div>
+          <p class="font-sans text-sm text-zinc-400 leading-relaxed">The severe technical challenge of linking analog back-office systems to decentralized ledgers. Decades of siloed infrastructure don't upgrade overnight and the cost of the bridge is significant.</p>
+        </div>
+
+        <!-- 49% Smart Contract -->
+        <div class="mb-10">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-sans text-sm font-bold text-zinc-300 uppercase tracking-wider">Smart Contract Vulnerabilities</h4>
+            <span class="font-serif italic text-xl text-white" style="font-family:'Newsreader',serif;">49%</span>
+          </div>
+          <div class="h-px bg-zinc-800 mb-3">
+            <div class="friction-bar-fill" style="width:0%" data-width="49%"></div>
+          </div>
+          <p class="font-sans text-sm text-zinc-400 leading-relaxed">Cybersecurity risks inherent in programmable code. A single exploit in a contract managing $200M in tokenized real estate is not an abstraction it is a systemic failure with physical-world consequences.</p>
+        </div>
+
+        <!-- 44% Adoption Inertia -->
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-sans text-sm font-bold text-zinc-300 uppercase tracking-wider">Market Adoption Inertia</h4>
+            <span class="font-serif italic text-xl text-white" style="font-family:'Newsreader',serif;">44%</span>
+          </div>
+          <div class="h-px bg-zinc-800 mb-3">
+            <div class="friction-bar-fill" style="width:0%" data-width="44%"></div>
+          </div>
+          <p class="font-sans text-sm text-zinc-400 leading-relaxed">Projects trapped in perpetual pilot phases. Many tokens see daily trade volumes below 5% of issued supply the Cold Start Liquidity Paradox: issuers won't tokenize without buyers; buyers won't come without volume.</p>
+        </div>
+      </div>
+
+      <!-- Catalysts -->
+      <div class="reveal">
+        <h3 class="font-serif italic text-2xl text-white mb-10 pb-6 border-b border-zinc-800" style="font-family:'Newsreader',serif;">
+          Catalysts Clearing the Path to Scale
+        </h3>
+        <div class="space-y-10">
+
+          <div class="flex gap-6">
+            <span class="font-sans text-zinc-700 text-lg leading-none mt-1 flex-shrink-0">+</span>
+            <div>
+              <h4 class="font-sans text-sm font-bold text-zinc-300 mb-2 uppercase tracking-wider">Legislative Clarity</h4>
+              <p class="font-sans text-sm text-zinc-400 leading-relaxed">The GENIUS Act (2025) and Clarity Act (2026) establish long-awaited "rules of the road" for digital assets and stablecoins removing compliance fears and unlocking the largest pools of institutional capital.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-6">
+            <span class="font-sans text-zinc-700 text-lg leading-none mt-1 flex-shrink-0">+</span>
+            <div>
+              <h4 class="font-sans text-sm font-bold text-zinc-300 mb-2 uppercase tracking-wider">Cross-Network Interoperability</h4>
+              <p class="font-sans text-sm text-zinc-400 leading-relaxed">Swift is actively testing cross-network asset transfers with Chainlink and major banks BNY Mellon, Citi to connect fragmented blockchains. Network effects are achieved only when external catalysts force the flywheel to turn.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-6">
+            <span class="font-sans text-zinc-700 text-lg leading-none mt-1 flex-shrink-0">+</span>
+            <div>
+              <h4 class="font-sans text-sm font-bold text-zinc-300 mb-2 uppercase tracking-wider">Settlement Infrastructure</h4>
+              <p class="font-sans text-sm text-zinc-400 leading-relaxed">ISO-20022 integration is enabling seamless communication between traditional bank messaging and on-chain activities the universal translator that lets tokenized markets speak to the $8 trillion/day SWIFT network.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-6">
+            <span class="font-sans text-zinc-700 text-lg leading-none mt-1 flex-shrink-0">+</span>
+            <div>
+              <h4 class="font-sans text-sm font-bold text-zinc-300 mb-2 uppercase tracking-wider">The $27B Savings Argument</h4>
+              <p class="font-sans text-sm text-zinc-400 leading-relaxed">Estimated $27 billion in annual operational savings for banks by 2030. At that scale, tokenization is no longer a strategic experiment it is a fiduciary requirement. Institutions that delay face structural cost disadvantages.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Editorial Closing -->
+    <div class="mt-32 pt-16 border-t border-zinc-800 reveal">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div class="lg:col-span-2">
+          <span class="font-sans text-[11px] tracking-[0.3em] uppercase text-zinc-700">Editorial View</span>
+        </div>
+        <div class="lg:col-span-10">
+          <p class="font-serif italic text-2xl text-zinc-300 leading-relaxed" style="font-family:'Newsreader',serif;">
+            The era of siloed, paper-heavy systems is ending. The next decade belongs to institutions that embrace a compliance-first, interoperable approach to make capital as fluid and programmable as the data that defines our modern world. This is not a speculative boom it is the mathematical result of scalable infrastructure, clear legislative frameworks, and incumbent capital finally aligning. The question is not <em>whether</em> it happens. The question is who builds the infrastructure that decides <em>who benefits</em>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+</main>
+
+<!-- FOOTER -->
+<footer class="w-full border-t border-zinc-800 bg-[#0e0e0e] text-zinc-400 font-sans text-[12px] tracking-widest uppercase">
+  <div class="max-w-[1920px] mx-auto px-12 pt-16 pb-12">
+    <div class="flex flex-col gap-4 mb-16 pb-16 border-b border-zinc-900">
+      <span class="text-zinc-700 text-[11px]">Series</span>
+      <div class="flex flex-wrap gap-8">
+        <a class="hover:text-white transition-colors" href="#">The Future of FinTech</a>
+        <a class="hover:text-white transition-colors" href="#">DeFi Architecture</a>
+        <a class="hover:text-white transition-colors" href="#">Central Bank Digital Currencies</a>
+        <a class="hover:text-white transition-colors" href="#">Climate Finance</a>
+      </div>
+    </div>
+    <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="flex flex-wrap gap-8">
+        <a class="hover:text-white transition-colors" href="#">Privacy Policy</a>
+        <a class="hover:text-white transition-colors" href="#">Terms of Service</a>
+      </div>
+      <div class="text-zinc-700">© 2025 Mohamad Noor-Chowdhury. All rights reserved.</div>
+    </div>
+  </div>
+</footer>
+
+<!-- JAVASCRIPT -->
+<script>
+// ── 1. READING PROGRESS BAR ─────────────────────────────────
+const progressBar = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  progressBar.style.width = docHeight > 0 ? (scrollTop / docHeight * 100) + '%' : '0%';
+}, { passive: true });
+
+// ── 2. SCROLL REVEAL ────────────────────────────────────────
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal, .reveal-left').forEach(el => revealObserver.observe(el));
+
+// ── 3. ACTIVE SIDE NAV ──────────────────────────────────────
+const sections = document.querySelectorAll('section[id]');
+const navDots  = document.querySelectorAll('.nav-dot');
+
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.getAttribute('id');
+      navDots.forEach(dot => {
+        const active = dot.getAttribute('data-section') === id;
+        dot.classList.toggle('active', active);
+        const icon = dot.querySelector('.dot-icon');
+        if (icon) icon.style.color = active ? 'white' : '';
+      });
+    }
+  });
+}, { threshold: 0.4 });
+
+sections.forEach(s => sectionObserver.observe(s));
+
+// ── 4. ANIMATED STAT COUNTERS ───────────────────────────────
+function animateCounter(el) {
+  const target   = parseInt(el.getAttribute('data-target'));
+  const prefix   = el.getAttribute('data-prefix') || '';
+  const suffix   = el.getAttribute('data-suffix') || '';
+  const duration = 1800;
+  const start    = performance.now();
+
+  function update(now) {
+    const elapsed  = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased    = 1 - Math.pow(1 - progress, 3);
+    el.textContent = prefix + Math.floor(eased * target) + suffix;
+    if (progress < 1) requestAnimationFrame(update);
+    else el.textContent = prefix + target + suffix;
+  }
+  requestAnimationFrame(update);
+}
+
+const statsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('[data-target]').forEach(animateCounter);
+      statsObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+const statsSection = document.getElementById('stats-section');
+if (statsSection) statsObserver.observe(statsSection);
+
+// ── 5. TIMELINE DRAG + WHEEL SCROLL ─────────────────────────
+const track = document.querySelector('.timeline-track');
+if (track) {
+  // Wheel: convert vertical scroll to horizontal
+  track.addEventListener('wheel', (e) => {
+    if (e.deltaY !== 0) {
+      e.preventDefault();
+      track.scrollLeft += e.deltaY;
+    }
+  }, { passive: false });
+
+  // Drag to scroll
+  let isDragging = false, startX, scrollStart;
+  track.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    startX = e.pageX - track.offsetLeft;
+    scrollStart = track.scrollLeft;
+    track.style.cursor = 'grabbing';
+  });
+  document.addEventListener('mouseup', () => {
+    isDragging = false;
+    track.style.cursor = 'grab';
+  });
+  document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - track.offsetLeft;
+    track.scrollLeft = scrollStart - (x - startX);
+  });
+  track.style.cursor = 'grab';
+}
+
+// ── 5. FRICTION BARS ────────────────────────────────────────
+const frictionObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.friction-bar-fill').forEach(bar => {
+        const w = bar.getAttribute('data-width');
+        requestAnimationFrame(() => {
+          setTimeout(() => { bar.style.width = w; }, 200);
+        });
+      });
+      frictionObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('#road-ahead').forEach(s => frictionObserver.observe(s));
+
+// ── 6. CANVAS NETWORK ANIMATION ─────────────────────────────
+const canvas = document.getElementById('network-canvas');
+if (canvas) {
+  const ctx = canvas.getContext('2d');
+  let W, H, nodes;
+  const NODE_COUNT = 55;
+  const MAX_DIST   = 160;
+  const NODE_SPEED = 0.3;
+
+  function resizeCanvas() {
+    W = canvas.offsetWidth;
+    H = canvas.offsetHeight;
+    canvas.width  = W;
+    canvas.height = H;
+  }
+
+  function createNodes() {
+    nodes = Array.from({ length: NODE_COUNT }, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      vx: (Math.random() - 0.5) * NODE_SPEED,
+      vy: (Math.random() - 0.5) * NODE_SPEED,
+      r:  1 + Math.random() * 2,
+      pulse:     Math.random() * Math.PI * 2,
+      highlight: Math.random() < 0.12,
+    }));
+  }
+
+  function drawNetwork() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#0e0e0e';
+    ctx.fillRect(0, 0, W, H);
+
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const dx   = nodes[i].x - nodes[j].x;
+        const dy   = nodes[i].y - nodes[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < MAX_DIST) {
+          const alpha = (1 - dist / MAX_DIST) * 0.25;
+          ctx.strokeStyle = `rgba(242,223,210,${alpha})`;
+          ctx.lineWidth = 0.5;
+          ctx.beginPath();
+          ctx.moveTo(nodes[i].x, nodes[i].y);
+          ctx.lineTo(nodes[j].x, nodes[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    nodes.forEach(node => {
+      node.pulse += 0.025;
+      const pa = 0.5 + Math.sin(node.pulse) * 0.3;
+
+      if (node.highlight) {
+        const grad = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, node.r * 6);
+        grad.addColorStop(0, `rgba(242,223,210,${pa * 0.4})`);
+        grad.addColorStop(1, 'rgba(242,223,210,0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, node.r * 6, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = `rgba(242,223,210,${pa})`;
+      } else {
+        ctx.fillStyle = `rgba(180,170,160,${pa * 0.5})`;
+      }
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, node.r, 0, Math.PI * 2);
+      ctx.fill();
+
+      node.x += node.vx;
+      node.y += node.vy;
+      if (node.x < -20) node.x = W + 20;
+      if (node.x > W + 20) node.x = -20;
+      if (node.y < -20) node.y = H + 20;
+      if (node.y > H + 20) node.y = -20;
+    });
+  }
+
+  let animFrame;
+  function animate() {
+    drawNetwork();
+    animFrame = requestAnimationFrame(animate);
+  }
+
+  resizeCanvas();
+  createNodes();
+  animate();
+
+  const canvasObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) { if (!animFrame) animate(); }
+      else { cancelAnimationFrame(animFrame); animFrame = null; }
+    });
+  });
+  canvasObserver.observe(canvas);
+
+  window.addEventListener('resize', () => { resizeCanvas(); createNodes(); }, { passive: true });
+}
+</script>
+
+<script>
+// ── Tokenization Flow Animation ──────────────────────────────────────────────
+(function() {
+  const canvas = document.getElementById('tokenization-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  const CREAM = 'rgba(242,223,210,';
+  const TOTAL = 6000; // ms per full loop
+  // Phase durations (ms): asset hold, asset→ledger, ledger hold, ledger→token, token hold, token→reset
+  const PH = [1000, 700, 1000, 700, 1200, 400];
+  const PH_START = PH.reduce((acc, v, i) => { acc.push(i === 0 ? 0 : acc[i-1] + PH[i-1]); return acc; }, []);
+
+  let W, H, cx, cy;
+  let startTime = null;
+  let rafId;
+
+  function resize() {
+    const rect = canvas.parentElement.getBoundingClientRect();
+    W = Math.min(rect.width, 800);
+    H = 200;
+    canvas.width = W * devicePixelRatio;
+    canvas.height = H * devicePixelRatio;
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.scale(devicePixelRatio, devicePixelRatio);
+    cx = W / 2;
+    cy = H / 2;
+  }
+
+  function easeInOut(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  // ── shape drawers ──────────────────────────────────────────────────────────
+
+  function drawAsset(x, y, size, alpha) {
+    // Isometric building cube
+    const s = size;
+    const top = [
+      [x, y - s*0.55],
+      [x + s*0.48, y - s*0.28],
+      [x, y],
+      [x - s*0.48, y - s*0.28]
+    ];
+    const right = [
+      [x + s*0.48, y - s*0.28],
+      [x + s*0.48, y + s*0.42],
+      [x, y + s*0.7],
+      [x, y]
+    ];
+    const left = [
+      [x - s*0.48, y - s*0.28],
+      [x, y],
+      [x, y + s*0.7],
+      [x - s*0.48, y + s*0.42]
+    ];
+
+    ctx.save();
+    ctx.globalAlpha = alpha;
+
+    // top face
+    ctx.beginPath();
+    top.forEach(([px, py], i) => i ? ctx.lineTo(px, py) : ctx.moveTo(px, py));
+    ctx.closePath();
+    ctx.fillStyle = `rgba(242,223,210,0.08)`;
+    ctx.fill();
+    ctx.strokeStyle = `rgba(242,223,210,0.5)`;
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // right face
+    ctx.beginPath();
+    right.forEach(([px, py], i) => i ? ctx.lineTo(px, py) : ctx.moveTo(px, py));
+    ctx.closePath();
+    ctx.fillStyle = `rgba(242,223,210,0.04)`;
+    ctx.fill();
+    ctx.strokeStyle = `rgba(242,223,210,0.3)`;
+    ctx.stroke();
+
+    // left face
+    ctx.beginPath();
+    left.forEach(([px, py], i) => i ? ctx.lineTo(px, py) : ctx.moveTo(px, py));
+    ctx.closePath();
+    ctx.fillStyle = `rgba(242,223,210,0.02)`;
+    ctx.fill();
+    ctx.strokeStyle = `rgba(242,223,210,0.2)`;
+    ctx.stroke();
+
+    // window dots
+    const dots = [
+      [x+s*0.22, y+s*0.02], [x+s*0.22, y+s*0.14], [x+s*0.22, y+s*0.26],
+      [x+s*0.1, y+s*0.08], [x+s*0.1, y+s*0.2],
+      [x-s*0.1, y+s*0.02], [x-s*0.1, y+s*0.14],
+      [x-s*0.22, y+s*0.08]
+    ];
+    ctx.fillStyle = `rgba(242,223,210,0.4)`;
+    dots.forEach(([dx, dy]) => { ctx.beginPath(); ctx.arc(dx, dy, 1.5, 0, Math.PI*2); ctx.fill(); });
+
+    ctx.restore();
+  }
+
+  function drawLedger(x, y, size, alpha) {
+    const s = size;
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.strokeStyle = `rgba(242,223,210,0.5)`;
+    ctx.lineWidth = 1;
+
+    // two pillars
+    const pw = s * 0.22, ph = s * 0.75;
+    const lx = x - s*0.28, rx = x + s*0.28;
+    const top_y = y - ph/2;
+
+    ctx.fillStyle = `rgba(242,223,210,0.04)`;
+    ctx.strokeStyle = `rgba(242,223,210,0.4)`;
+    ctx.beginPath(); ctx.rect(lx - pw/2, top_y, pw, ph); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.rect(rx - pw/2, top_y, pw, ph); ctx.fill(); ctx.stroke();
+
+    // arch
+    ctx.beginPath();
+    ctx.strokeStyle = `rgba(242,223,210,0.5)`;
+    ctx.arc(x, top_y, s*0.28, Math.PI, 0);
+    ctx.stroke();
+
+    // inner arch dashed
+    ctx.setLineDash([4, 3]);
+    ctx.strokeStyle = `rgba(242,223,210,0.2)`;
+    ctx.beginPath();
+    ctx.arc(x, top_y, s*0.18, Math.PI, 0);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // chain dots on left pillar
+    const chain = [top_y + ph*0.2, top_y + ph*0.38, top_y + ph*0.56];
+    chain.forEach(dy => {
+      ctx.beginPath(); ctx.arc(lx, dy, 2.5, 0, Math.PI*2);
+      ctx.strokeStyle = `rgba(242,223,210,0.45)`; ctx.lineWidth = 0.8; ctx.stroke();
+      ctx.beginPath(); ctx.arc(rx, dy, 2.5, 0, Math.PI*2); ctx.stroke();
+    });
+
+    // center dashed line + arrow
+    const lineTop = top_y + ph * 0.05;
+    const lineBot = top_y + ph * 0.88;
+    ctx.setLineDash([5, 4]);
+    ctx.strokeStyle = `rgba(242,223,210,0.35)`;
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x, lineTop); ctx.lineTo(x, lineBot); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = `rgba(242,223,210,0.35)`;
+    ctx.beginPath(); ctx.moveTo(x, lineBot+8); ctx.lineTo(x-4, lineBot); ctx.lineTo(x+4, lineBot); ctx.closePath(); ctx.fill();
+
+    ctx.restore();
+  }
+
+  function drawToken(x, y, size, alpha, shimmerT) {
+    // 4x4 isometric token grid
+    const s = size * 0.38;
+    const cols = 4, rows = 4;
+    ctx.save();
+    ctx.globalAlpha = alpha;
+
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const ox = x + (c - cols/2 + 0.5) * s * 0.96 + (r % 2) * s * 0.48;
+        const oy = y - s*0.6 + r * s * 0.45;
+        const isAccent = (r === 1 && c === 1) || (r === 2 && c === 2);
+        const shimmer = Math.sin(shimmerT * 2 + r * 0.8 + c * 0.6) * 0.5 + 0.5;
+        const baseA = isAccent ? 0.25 : 0.08;
+        const strokeA = isAccent ? 0.55 + shimmer * 0.25 : 0.25 + shimmer * 0.1;
+
+        // top face
+        ctx.beginPath();
+        ctx.moveTo(ox,       oy - s*0.28);
+        ctx.lineTo(ox+s*0.48, oy);
+        ctx.lineTo(ox,       oy + s*0.28);
+        ctx.lineTo(ox-s*0.48, oy);
+        ctx.closePath();
+        ctx.fillStyle = `rgba(242,223,210,${baseA})`;
+        ctx.fill();
+        ctx.strokeStyle = `rgba(242,223,210,${strokeA})`;
+        ctx.lineWidth = 0.6;
+        ctx.stroke();
+
+        // right face
+        ctx.beginPath();
+        ctx.moveTo(ox+s*0.48, oy);
+        ctx.lineTo(ox+s*0.48, oy+s*0.22);
+        ctx.lineTo(ox, oy+s*0.5);
+        ctx.lineTo(ox, oy+s*0.28);
+        ctx.closePath();
+        ctx.fillStyle = `rgba(242,223,210,${baseA*0.5})`;
+        ctx.fill();
+        ctx.strokeStyle = `rgba(242,223,210,${strokeA*0.6})`;
+        ctx.stroke();
+      }
+    }
+
+    ctx.restore();
+  }
+
+  // ── particle system for transition ────────────────────────────────────────
+
+  let particles = [];
+
+  function spawnParticles(fromX, fromY, toX, toY, count) {
+    particles = [];
+    for (let i = 0; i < count; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 0.3 + Math.random() * 0.7;
+      particles.push({
+        x: fromX + (Math.random() - 0.5) * 60,
+        y: fromY + (Math.random() - 0.5) * 80,
+        tx: toX + (Math.random() - 0.5) * 80,
+        ty: toY + (Math.random() - 0.5) * 80,
+        size: 1 + Math.random() * 2.5,
+        delay: Math.random() * 0.4
+      });
+    }
+  }
+
+  function drawParticles(progress) {
+    particles.forEach(p => {
+      const t = Math.max(0, Math.min(1, (progress - p.delay) / (1 - p.delay)));
+      const et = easeInOut(t);
+      const px = lerp(p.x, p.tx, et);
+      const py = lerp(p.y, p.ty, et);
+      const a = t < 0.1 ? t * 10 : t > 0.9 ? (1-t)*10 : 1;
+      ctx.save();
+      ctx.globalAlpha = a * 0.7;
+      ctx.fillStyle = `rgba(242,223,210,0.8)`;
+      ctx.beginPath();
+      ctx.arc(px, py, p.size * 0.5, 0, Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    });
+  }
+
+  // ── arrows ─────────────────────────────────────────────────────────────────
+
+  function drawArrow(x1, y, x2, alpha) {
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.strokeStyle = `rgba(242,223,210,0.5)`;
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x1, y); ctx.lineTo(x2 - 8, y); ctx.stroke();
+    ctx.fillStyle = `rgba(242,223,210,0.5)`;
+    ctx.beginPath(); ctx.moveTo(x2, y); ctx.lineTo(x2-10, y-5); ctx.lineTo(x2-10, y+5); ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+
+  // ── label ──────────────────────────────────────────────────────────────────
+
+  function drawLabel(text, step, x, y, alpha) {
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.font = `11px "Manrope", sans-serif`;
+    ctx.letterSpacing = '0.2em';
+    ctx.fillStyle = `rgba(180,180,180,0.7)`;
+    ctx.textAlign = 'center';
+    ctx.fillText(step.toUpperCase(), x, y + 12);
+    ctx.font = `italic 18px "Newsreader", serif`;
+    ctx.fillStyle = `rgba(242,223,210,0.9)`;
+    ctx.fillText(text, x, y + 32);
+    ctx.restore();
+  }
+
+  // ── main draw loop ─────────────────────────────────────────────────────────
+
+  let prevPhase = -1;
+
+  function draw(ts) {
+    if (!startTime) startTime = ts;
+    const elapsed = (ts - startTime) % TOTAL;
+
+    ctx.clearRect(0, 0, W, H);
+
+    // determine phase
+    let phase = 0;
+    for (let i = PH_START.length - 1; i >= 0; i--) {
+      if (elapsed >= PH_START[i]) { phase = i; break; }
+    }
+    const phaseT = (elapsed - PH_START[phase]) / PH[phase];
+
+    // spawn particles on phase transitions
+    if (phase !== prevPhase) {
+      if (phase === 1) spawnParticles(cx - W*0.22, cy - 20, cx, cy - 20, 28); // asset→ledger
+      if (phase === 3) spawnParticles(cx, cy - 20, cx + W*0.22, cy - 20, 32); // ledger→token
+      prevPhase = phase;
+    }
+
+    const lx = cx - W * 0.26;  // asset center
+    const rx = cx + W * 0.26;  // token center
+    const shapeSize = Math.min(W * 0.12, 55);
+
+    // ── Phase 0: Asset hold ──
+    if (phase === 0) {
+      drawAsset(lx, cy - 10, shapeSize, 1);
+      drawLabel('The Asset', 'Step 01', lx, cy + shapeSize * 0.7, 1);
+      drawArrow(lx + shapeSize * 0.7, cy - 10, cx - shapeSize * 0.7, cy - 10, 0.15);
+      drawLedger(cx, cy - 10, shapeSize, 0.12);
+      drawLabel('The Ledger', 'Step 02', cx, cy + shapeSize * 0.7, 0.12);
+      drawArrow(cx + shapeSize * 0.7, cy - 10, rx - shapeSize * 0.7, cy - 10, 0.08);
+      drawToken(rx, cy - 10, shapeSize, 0.08, 0);
+      drawLabel('The Token', 'Step 03', rx, cy + shapeSize * 0.7, 0.08);
+    }
+
+    // ── Phase 1: Asset → Ledger transition ──
+    else if (phase === 1) {
+      const fade = easeInOut(phaseT);
+      drawAsset(lx, cy - 10, shapeSize, 1 - fade * 0.6);
+      drawLabel('The Asset', 'Step 01', lx, cy + shapeSize * 0.7, 1 - fade * 0.5);
+      drawArrow(lx + shapeSize * 0.7, cy - 10, cx - shapeSize * 0.7, cy - 10, 0.15 + fade * 0.7);
+      drawLedger(cx, cy - 10, shapeSize, fade);
+      drawLabel('The Ledger', 'Step 02', cx, cy + shapeSize * 0.7, fade);
+      drawParticles(phaseT);
+      drawToken(rx, cy - 10, shapeSize, 0.08, 0);
+      drawLabel('The Token', 'Step 03', rx, cy + shapeSize * 0.7, 0.08);
+    }
+
+    // ── Phase 2: Ledger hold ──
+    else if (phase === 2) {
+      drawAsset(lx, cy - 10, shapeSize, 0.15);
+      drawLabel('The Asset', 'Step 01', lx, cy + shapeSize * 0.7, 0.15);
+      drawArrow(lx + shapeSize * 0.7, cy - 10, cx - shapeSize * 0.7, cy - 10, 0.5);
+      drawLedger(cx, cy - 10, shapeSize, 1);
+      drawLabel('The Ledger', 'Step 02', cx, cy + shapeSize * 0.7, 1);
+      drawArrow(cx + shapeSize * 0.7, cy - 10, rx - shapeSize * 0.7, cy - 10, 0.15);
+      drawToken(rx, cy - 10, shapeSize, 0.12, 0);
+      drawLabel('The Token', 'Step 03', rx, cy + shapeSize * 0.7, 0.12);
+    }
+
+    // ── Phase 3: Ledger → Token transition ──
+    else if (phase === 3) {
+      const fade = easeInOut(phaseT);
+      drawAsset(lx, cy - 10, shapeSize, 0.1);
+      drawLabel('The Asset', 'Step 01', lx, cy + shapeSize * 0.7, 0.1);
+      drawArrow(lx + shapeSize * 0.7, cy - 10, cx - shapeSize * 0.7, cy - 10, 0.4);
+      drawLedger(cx, cy - 10, shapeSize, 1 - fade * 0.6);
+      drawLabel('The Ledger', 'Step 02', cx, cy + shapeSize * 0.7, 1 - fade * 0.5);
+      drawArrow(cx + shapeSize * 0.7, cy - 10, rx - shapeSize * 0.7, cy - 10, 0.15 + fade * 0.7);
+      drawToken(rx, cy - 10, shapeSize, fade, phaseT * 3);
+      drawLabel('The Token', 'Step 03', rx, cy + shapeSize * 0.7, fade);
+      drawParticles(phaseT);
+    }
+
+    // ── Phase 4: Token hold (shimmer) ──
+    else if (phase === 4) {
+      drawAsset(lx, cy - 10, shapeSize, 0.1);
+      drawLabel('The Asset', 'Step 01', lx, cy + shapeSize * 0.7, 0.1);
+      drawArrow(lx + shapeSize * 0.7, cy - 10, cx - shapeSize * 0.7, cy - 10, 0.3);
+      drawLedger(cx, cy - 10, shapeSize, 0.15);
+      drawLabel('The Ledger', 'Step 02', cx, cy + shapeSize * 0.7, 0.15);
+      drawArrow(cx + shapeSize * 0.7, cy - 10, rx - shapeSize * 0.7, cy - 10, 0.5);
+      drawToken(rx, cy - 10, shapeSize, 1, phaseT * 4);
+      drawLabel('The Token', 'Step 03', rx, cy + shapeSize * 0.7, 1);
+    }
+
+    // ── Phase 5: Reset fade ──
+    else if (phase === 5) {
+      const fade = easeInOut(phaseT);
+      drawAsset(lx, cy - 10, shapeSize, fade);
+      drawLabel('The Asset', 'Step 01', lx, cy + shapeSize * 0.7, fade);
+      drawArrow(lx + shapeSize * 0.7, cy - 10, cx - shapeSize * 0.7, cy - 10, 0.15 * fade);
+      drawLedger(cx, cy - 10, shapeSize, 0.12 * fade);
+      drawLabel('The Ledger', 'Step 02', cx, cy + shapeSize * 0.7, 0.12 * fade);
+      drawArrow(cx + shapeSize * 0.7, cy - 10, rx - shapeSize * 0.7, cy - 10, 0.08 * fade);
+      drawToken(rx, cy - 10, shapeSize, (1 - fade) * 0.8, 0);
+      drawLabel('The Token', 'Step 03', rx, cy + shapeSize * 0.7, 1 - fade);
+    }
+
+    rafId = requestAnimationFrame(draw);
+  }
+
+  // start when visible
+  const observer = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) {
+      resize();
+      startTime = null;
+      prevPhase = -1;
+      if (!rafId) rafId = requestAnimationFrame(draw);
+    } else {
+      if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+    }
+  }, { threshold: 0.1 });
+
+  resize();
+  observer.observe(canvas);
+  window.addEventListener('resize', () => { resize(); }, { passive: true });
+})();
+</script>
+</body>
+</html>

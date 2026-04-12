@@ -1,0 +1,173 @@
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Reading Progress Bar */
+#progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 1px;
+  width: 0%;
+  background: #f2dfd2;
+  z-index: 100;
+  transition: width 0.1s linear;
+}
+
+/* Scroll Reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1), transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-28px);
+  transition: opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1), transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-left.visible { opacity: 1; transform: translateX(0); }
+.reveal-delay-1 { transition-delay: 0.08s; }
+.reveal-delay-2 { transition-delay: 0.18s; }
+.reveal-delay-3 { transition-delay: 0.28s; }
+.reveal-delay-4 { transition-delay: 0.38s; }
+.reveal-delay-5 { transition-delay: 0.48s; }
+.reveal-delay-6 { transition-delay: 0.58s; }
+
+.serif-italic { font-family: 'Newsreader', serif; font-style: italic; }
+
+/* Timeline */
+.timeline-track {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 2rem;
+}
+.timeline-track::-webkit-scrollbar { display: none; }
+
+/* Noise texture overlay */
+.noise-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.stat-number { font-family: 'Newsreader', serif; font-style: italic; }
+
+/* Nav dots */
+.nav-dot.active .dot-icon { color: white; }
+.nav-dot .dot-icon { color: #52525b; transition: color 0.3s; }
+
+/* Pillar card */
+.pillar-card {
+  position: relative;
+  transition: background-color 0.3s;
+}
+.pillar-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0; height: 1px;
+  background: #f2dfd2;
+  transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.pillar-card:hover::after { width: 100%; }
+
+/* Asset card */
+.asset-card {
+  transition: background-color 0.3s, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  cursor: default;
+}
+.asset-card:hover {
+  background-color: #1c1b1b;
+  transform: translateY(-3px);
+}
+
+/* Architect card */
+.arch-card {
+  transition: background-color 0.3s, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  cursor: default;
+  border-bottom: 1px solid #27272a;
+}
+.arch-card:hover {
+  background-color: #1a1919;
+  transform: translateY(-3px);
+  border-bottom-color: #f2dfd2;
+}
+
+/* Timeline item */
+.timeline-item {
+  min-width: 280px;
+  border-top: 1px solid #27272a;
+  padding-top: 2rem;
+  padding-right: 3rem;
+  transition: border-color 0.3s;
+}
+.timeline-item:hover { border-color: #f2dfd2; }
+
+/* Pull quote */
+.quote-line {
+  display: inline-block;
+  width: 3rem;
+  height: 1px;
+  background: #f2dfd2;
+  margin-bottom: 3rem;
+}
+
+/* Stage step */
+.stage-step {
+  border-top: 1px solid #27272a;
+  transition: border-color 0.4s;
+}
+.stage-step:hover { border-top-color: rgba(242,223,210,0.4); }
+.stage-number {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  color: #27272a;
+  transition: color 0.4s;
+  line-height: 1;
+}
+.stage-step:hover .stage-number { color: rgba(242,223,210,0.35); }
+
+/* Comparison table */
+.comp-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  border-bottom: 1px solid #27272a;
+  transition: background-color 0.2s;
+}
+.comp-row:hover { background-color: #1a1919; }
+.comp-cell {
+  padding: 1.5rem 2rem;
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+/* Treemap */
+.treemap-block {
+  transition: opacity 0.25s, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  cursor: default;
+}
+.treemap-block:hover { opacity: 0.9; transform: scale(0.995); }
+
+/* Friction bar */
+.friction-bar-fill {
+  height: 2px;
+  background: #f2dfd2;
+  width: 0%;
+  transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Button hover */
+button, .btn {
+  transition: background-color 0.25s, color 0.25s;
+}
+
+/* Nav link hover */
+nav a { transition: color 0.25s; }
