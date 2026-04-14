@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demo — Cognitive QA</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+
+    :root {
+      --w-bg:       #0b0804;
+      --w-surface:  #110d07;
+      --w-surface2: #181108;
+      --amber:      #f5a623;
+      --amber-dim:  rgba(245,166,35,0.10);
+      --amber-glow: rgba(245,166,35,0.22);
+      --orange:     #e8682a;
+      --orange-dim: rgba(232,104,42,0.10);
+      --muted-w:    #a8845a;
+      --text-w:     #f0dfc0;
+      --border-w:   rgba(245,166,35,0.22);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--w-bg);
+      color: var(--text-w);
+      font-family: var(--font);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+
+    /* ── TOP BAR ── */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      padding: 0 28px;
+      height: 48px;
+      background: var(--w-surface);
+      border-bottom: 1px solid var(--border-w);
+      flex-shrink: 0;
+    }
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted-w);
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      padding-right: 20px;
+      border-right: 1px solid var(--border-w);
+      margin-right: 20px;
+      transition: color 0.15s;
+      min-height: 44px;
+    }
+    .back-link:hover { color: var(--amber); }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--amber);
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      text-decoration: none;
+    }
+
+    .brand-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 10px var(--amber);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.4; }
+    }
+
+    .top-bar-right {
+      margin-left: auto;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      color: var(--muted-w);
+    }
+
+    /* ── BACKGROUND ── */
+    .scene {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .scene-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(245,166,35,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(245,166,35,0.04) 1px, transparent 1px);
+      background-size: 52px 52px;
+    }
+
+    .scene-glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 55% 50% at 50% 52%, rgba(232,104,42,0.06) 0%, transparent 65%);
+    }
+
+    .scene-vignette {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, rgba(11,8,4,0.85) 100%);
+    }
+
+    .scene-scan {
+      position: absolute;
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(245,166,35,0.06) 20%,
+        rgba(245,166,35,0.18) 50%,
+        rgba(245,166,35,0.06) 80%,
+        transparent 100%);
+      animation: scan 7s ease-in-out infinite;
+    }
+
+    @keyframes scan {
+      0%   { top: 5%;  opacity: 0; }
+      8%   { opacity: 1; }
+      92%  { opacity: 1; }
+      100% { top: 92%; opacity: 0; }
+    }
+
+    /* ── MAIN WRAP ── */
+    .demo-wrap {
+      flex: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .demo-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ── EYEBROW ── */
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.88rem;
+      letter-spacing: 0.32em;
+      color: var(--muted-w);
+      margin-bottom: 22px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease-out 0.1s forwards;
+    }
+
+    .eyebrow-line {
+      width: 36px; height: 1px;
+      background: var(--border-w);
+    }
+
+    /* ── HEADING ── */
+    .demo-title {
+      font-size: clamp(2.4rem, 6vw, 4.8rem);
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      line-height: 1;
+      text-align: center;
+      color: var(--text-w);
+      margin-bottom: 10px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease-out 0.3s forwards;
+    }
+
+    .demo-title .accent {
+      color: var(--amber);
+      text-shadow:
+        0 0 30px rgba(245,166,35,0.4),
+        0 0 80px rgba(245,166,35,0.15);
+      animation: glowBreathe 3s ease-in-out 1.4s infinite;
+    }
+
+    .demo-sub {
+      font-size: 0.88rem;
+      letter-spacing: 0.28em;
+      color: var(--muted-w);
+      margin-bottom: 56px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease-out 0.5s forwards;
+    }
+
+    /* ── DEMO CARDS ── */
+    .card-row {
+      display: flex;
+      gap: 20px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease-out 0.7s forwards;
+    }
+
+    .demo-card {
+      position: relative;
+      width: 300px;
+      background: var(--w-surface);
+      border: 1px solid var(--border-w);
+      text-decoration: none;
+      color: var(--text-w);
+      display: flex;
+      flex-direction: column;
+      padding: 32px 28px 28px;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .demo-card::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 14px; height: 14px;
+      border-top: 1px solid var(--border-w);
+      border-right: 1px solid var(--border-w);
+      transition: border-color 0.2s;
+    }
+
+    .demo-card:hover {
+      border-color: var(--amber);
+      background: var(--w-surface2);
+      transform: translateY(-4px);
+    }
+
+    .demo-card:hover::after { border-color: var(--amber); }
+
+    /* top accent line */
+    .demo-card-bar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--amber), var(--orange));
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .demo-card:hover .demo-card-bar { opacity: 1; }
+
+    /* shimmer */
+    .demo-card-shimmer {
+      position: absolute;
+      top: 0; left: -100%;
+      width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(245,166,35,0.06), transparent);
+      transform: skewX(-15deg);
+      pointer-events: none;
+    }
+
+    .demo-card:hover .demo-card-shimmer {
+      left: 160%;
+      transition: left 0.5s ease-in-out;
+    }
+
+    .demo-card-tag {
+      font-size: 0.65rem;
+      letter-spacing: 0.28em;
+      color: var(--muted-w);
+      margin-bottom: 24px;
+      transition: color 0.2s;
+    }
+
+    .demo-card:hover .demo-card-tag { color: var(--amber); opacity: 0.7; }
+
+    /* SVG icon area */
+    .demo-card-icon {
+      margin-bottom: 28px;
+    }
+
+    .demo-card-icon svg {
+      width: 48px; height: 48px;
+      stroke: var(--amber);
+      opacity: 0.55;
+      transition: opacity 0.2s;
+    }
+
+    .demo-card:hover .demo-card-icon svg { opacity: 1; }
+
+    .demo-card-title {
+      font-size: 1.25rem;
+      letter-spacing: 0.18em;
+      color: var(--text-w);
+      margin-bottom: 12px;
+      transition: color 0.2s;
+    }
+
+    .demo-card:hover .demo-card-title { color: var(--amber); }
+
+    .demo-card-desc {
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      line-height: 1.65;
+      color: var(--muted-w);
+      flex: 1;
+    }
+
+    .demo-card-enter {
+      margin-top: 28px;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      color: var(--muted-w);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.2s, gap 0.2s;
+    }
+
+    .demo-card:hover .demo-card-enter {
+      color: var(--amber);
+      gap: 14px;
+    }
+
+    /* ── STATUS BAR ── */
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 9px 22px;
+      background: var(--w-surface);
+      border-top: 1px solid var(--border-w);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      color: var(--muted-w);
+      flex-shrink: 0;
+    }
+
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 6px var(--amber);
+      animation: pulse 2s infinite;
+    }
+
+    .status-online { color: var(--amber); }
+    .status-right  { margin-left: auto; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes glowBreathe {
+      0%, 100% { text-shadow: 0 0 30px rgba(245,166,35,0.4), 0 0 80px rgba(245,166,35,0.15); }
+      50%       { text-shadow: 0 0 50px rgba(245,166,35,0.7), 0 0 120px rgba(245,166,35,0.28); }
+    }
+
+    @media (max-width: 680px) {
+      .card-row { flex-direction: column; gap: 12px; }
+      .demo-card { width: 100%; max-width: 340px; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <a href="home.html" class="back-link">&#8592; BACK</a>
+    <a href="home.html" class="brand">
+      <div class="brand-dot"></div>
+      COGNITIVE QA
+    </a>
+    <div class="top-bar-right">DEMO</div>
+  </div>
+
+  <div class="demo-wrap">
+    <div class="scene" aria-hidden="true">
+      <div class="scene-grid"></div>
+      <div class="scene-glow"></div>
+      <div class="scene-vignette"></div>
+      <div class="scene-scan"></div>
+    </div>
+
+    <div class="demo-inner">
+
+      <div class="eyebrow">
+        <div class="eyebrow-line"></div>
+        SELECT INSPECTION VIEW
+        <div class="eyebrow-line"></div>
+      </div>
+
+      <h1 class="demo-title">LIVE <span class="accent">DEMO</span></h1>
+      <p class="demo-sub">CHOOSE A ROLE TO ENTER THE SIMULATION</p>
+
+      <div class="card-row">
+
+        <!-- Boeing -->
+        <a href="boeing.html" class="demo-card">
+          <div class="demo-card-bar"></div>
+          <div class="demo-card-shimmer"></div>
+          <div class="demo-card-tag">01 / MANUFACTURER</div>
+          <div class="demo-card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 17l5-10 3 6 2-3 4 7H3z"/>
+              <path d="M17 7l2 2M19 5l-2 2"/>
+              <circle cx="19" cy="5" r="2"/>
+            </svg>
+          </div>
+          <div class="demo-card-title">BOEING INSPECTOR</div>
+          <div class="demo-card-desc">Assembly line quality control. Real-time AI scan of wing components against the digital twin. Defects flagged spatially as they occur.</div>
+          <div class="demo-card-enter">ENTER VIEW &#8594;</div>
+        </a>
+
+        <!-- MRO -->
+        <a href="mro.html" class="demo-card">
+          <div class="demo-card-bar"></div>
+          <div class="demo-card-shimmer"></div>
+          <div class="demo-card-tag">02 / MAINTENANCE</div>
+          <div class="demo-card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/>
+            </svg>
+          </div>
+          <div class="demo-card-title">MRO INSPECTOR</div>
+          <div class="demo-card-desc">In-service maintenance verification. Full inspection history at a glance. Every prior check, every variance, every sign-off in one verified record.</div>
+          <div class="demo-card-enter">ENTER VIEW &#8594;</div>
+        </a>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="status-bar">
+    <div class="status-dot"></div>
+    <span class="status-online">PLATFORM ONLINE</span>
+    <span>COGNITIVE QA / DEMO</span>
+    <span class="status-right">v2.4.1</span>
+  </div>
+
+</body>
+</html>

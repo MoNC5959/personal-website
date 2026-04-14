@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vision — Cognitive QA</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+
+    :root {
+      --w-bg:       #0b0804;
+      --w-surface:  #110d07;
+      --w-surface2: #181108;
+      --amber:      #f5a623;
+      --amber-dim:  rgba(245,166,35,0.10);
+      --amber-glow: rgba(245,166,35,0.22);
+      --orange:     #e8682a;
+      --orange-dim: rgba(232,104,42,0.10);
+      --red:        #ff3c3c;
+      --red-dim:    rgba(255,60,60,0.10);
+      --muted-w:    #a8845a;
+      --text-w:     #f0dfc0;
+      --border-w:   rgba(245,166,35,0.18);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--w-bg);
+      color: var(--text-w);
+      font-family: var(--font);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* READING PROGRESS */
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 0%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--orange), var(--amber));
+      z-index: 200;
+      transition: width 0.1s linear;
+    }
+
+    /* TOP BAR */
+    .top-bar {
+      position: sticky;
+      top: 0;
+      display: flex;
+      align-items: center;
+      padding: 0 28px;
+      height: 48px;
+      background: rgba(11,8,4,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border-w);
+      z-index: 100;
+      flex-shrink: 0;
+    }
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted-w);
+      text-decoration: none;
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      padding-right: 20px;
+      border-right: 1px solid var(--border-w);
+      margin-right: 20px;
+      transition: color 0.15s;
+      min-height: 44px;
+    }
+    .back-link:hover { color: var(--amber); }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--amber);
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-decoration: none;
+    }
+
+    .brand-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 7px var(--amber);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.35; }
+    }
+
+    .top-bar-right {
+      margin-left: auto;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      color: var(--muted-w);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 80px 48px 80px;
+    }
+
+    .hero-bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(245,166,35,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(245,166,35,0.03) 1px, transparent 1px);
+      background-size: 52px 52px;
+      pointer-events: none;
+    }
+
+    .hero-bg-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 30% 50%, rgba(255,60,60,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-content { position: relative; z-index: 1; max-width: 1000px; }
+
+    .hero-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.78rem;
+      letter-spacing: 0.35em;
+      color: var(--muted-w);
+      margin-bottom: 36px;
+    }
+
+    .hero-eyebrow-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 0 6px var(--red);
+      animation: pulse 1.5s infinite;
+    }
+
+    .hero-setup {
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      letter-spacing: 0.12em;
+      color: var(--muted-w);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .hero-broken {
+      font-size: clamp(4rem, 13vw, 10rem);
+      letter-spacing: 0.04em;
+      line-height: 0.9;
+      color: var(--red);
+      text-shadow:
+        0 0 40px rgba(255,60,60,0.5),
+        0 0 100px rgba(255,60,60,0.2);
+      position: relative;
+      display: inline-block;
+      animation: brokenPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes brokenPulse {
+      0%, 100% { text-shadow: 0 0 40px rgba(255,60,60,0.5), 0 0 100px rgba(255,60,60,0.2); }
+      50%       { text-shadow: 0 0 60px rgba(255,60,60,0.8), 0 0 140px rgba(255,60,60,0.35); }
+    }
+
+    /* Glitch layers */
+    .hero-broken::before,
+    .hero-broken::after {
+      content: 'BROKEN.';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      overflow: hidden;
+      color: var(--red);
+    }
+
+    .hero-broken::before {
+      animation: glitch1 4s steps(1) infinite;
+      clip-path: polygon(0 15%, 100% 15%, 100% 35%, 0 35%);
+      opacity: 0.7;
+    }
+
+    .hero-broken::after {
+      animation: glitch2 4s steps(1) infinite;
+      clip-path: polygon(0 60%, 100% 60%, 100% 75%, 0 75%);
+      opacity: 0.5;
+    }
+
+    @keyframes glitch1 {
+      0%, 85%, 100% { transform: none; opacity: 0; }
+      87%  { transform: translate(-3px, 0); opacity: 0.7; color: #ff8080; }
+      89%  { transform: translate(3px, 0);  opacity: 0.7; }
+      91%  { transform: none; opacity: 0; }
+    }
+
+    @keyframes glitch2 {
+      0%, 85%, 100% { transform: none; opacity: 0; }
+      88%  { transform: translate(4px, 0); opacity: 0.5; color: #ffaa40; }
+      90%  { transform: translate(-2px, 0); opacity: 0.5; }
+      92%  { transform: none; opacity: 0; }
+    }
+
+    .hero-suffix {
+      display: block;
+      font-size: clamp(0.9rem, 2.2vw, 1.25rem);
+      letter-spacing: 0.14em;
+      color: var(--muted-w);
+      margin-top: 16px;
+      text-transform: uppercase;
+    }
+
+    .hero-body {
+      margin-top: 40px;
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: var(--text-w);
+      max-width: 680px;
+    }
+
+    .hero-body p + p { margin-top: 16px; }
+
+    .hero-scroll-cue {
+      position: absolute;
+      bottom: 32px;
+      left: 48px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.58rem;
+      letter-spacing: 0.25em;
+      color: var(--muted-w);
+      animation: scrollCue 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollCue {
+      0%, 100% { opacity: 0.4; transform: translateY(0); }
+      50%       { opacity: 0.9; transform: translateY(4px); }
+    }
+
+    /* ── STATS BAND ── */
+    .stats-band {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--border-w);
+      border-bottom: 1px solid var(--border-w);
+    }
+
+    .stat-cell {
+      padding: 40px 28px;
+      border-right: 1px solid var(--border-w);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-cell:last-child { border-right: none; }
+
+    .stat-cell::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--amber-dim);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .stat-cell:hover::before { opacity: 1; }
+
+    .stat-num {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      letter-spacing: 0.02em;
+      color: var(--amber);
+      text-shadow: 0 0 24px rgba(245,166,35,0.35);
+      line-height: 1;
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      color: var(--muted-w);
+      margin-top: 10px;
+      line-height: 1.5;
+    }
+
+    /* ── SECTION WRAPPER ── */
+    .section {
+      padding: 80px 48px;
+      border-bottom: 1px solid var(--border-w);
+      position: relative;
+    }
+
+    .section-inner { max-width: 820px; margin: 0 auto; }
+
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.38em;
+      color: var(--amber);
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-w);
+    }
+
+    .section-heading {
+      font-size: clamp(1.5rem, 3.5vw, 2.4rem);
+      letter-spacing: 0.06em;
+      line-height: 1.15;
+      color: var(--text-w);
+      margin-bottom: 32px;
+    }
+
+    .section-heading .red   { color: var(--red); }
+    .section-heading .amber { color: var(--amber); }
+
+    .body-text {
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: var(--text-w);
+    }
+
+    .body-text p + p { margin-top: 18px; }
+
+    .body-text strong {
+      color: var(--amber);
+      font-weight: normal;
+    }
+
+    /* ── INCIDENT CARDS ── */
+    .incident-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin: 40px 0;
+    }
+
+    .incident-card {
+      background: var(--w-surface);
+      padding: 28px 24px;
+      position: relative;
+      overflow: hidden;
+      cursor: default;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      border-top: 2px solid var(--red);
+    }
+
+    .incident-card.warn { border-top-color: var(--orange); }
+
+    .incident-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(255,60,60,0.18);
+    }
+
+    .incident-card.warn:hover {
+      box-shadow: 0 12px 40px rgba(232,104,42,0.18);
+    }
+
+    .incident-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--red-dim);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .incident-card.warn::before { background: var(--orange-dim); }
+
+    .incident-card:hover::before { opacity: 1; }
+
+    .incident-badge {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      padding: 3px 8px;
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+
+    .badge-crit {
+      background: var(--red-dim);
+      color: var(--red);
+      border: 1px solid rgba(255,60,60,0.3);
+    }
+
+    .badge-warn {
+      background: var(--orange-dim);
+      color: var(--orange);
+      border: 1px solid rgba(232,104,42,0.3);
+    }
+
+    .incident-flight {
+      font-size: 1rem;
+      letter-spacing: 0.12em;
+      color: var(--text-w);
+      margin-bottom: 12px;
+      position: relative;
+    }
+
+    .incident-stat {
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      color: var(--red);
+      letter-spacing: 0.04em;
+      line-height: 1;
+      margin-bottom: 14px;
+      position: relative;
+    }
+
+    .incident-card.warn .incident-stat { color: var(--orange); }
+
+    .incident-desc {
+      font-size: 0.82rem;
+      color: var(--muted-w);
+      line-height: 1.65;
+      letter-spacing: 0.04em;
+      position: relative;
+    }
+
+    /* ── PULL QUOTE ── */
+    .pull-quote {
+      background: var(--w-surface);
+      border-left: 3px solid var(--amber);
+      padding: 32px 36px;
+      margin: 48px 0 0;
+    }
+
+    .pull-quote-text {
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      line-height: 1.55;
+      letter-spacing: 0.04em;
+      color: var(--text-w);
+    }
+
+    .pull-quote-text .hi { color: var(--amber); }
+
+    .pull-quote-tagline {
+      margin-top: 20px;
+      font-size: 0.82rem;
+      letter-spacing: 0.3em;
+      color: var(--amber);
+    }
+
+    /* ── CHAIN DIAGRAM ── */
+    .chain-wrap {
+      margin: 40px 0;
+      overflow-x: auto;
+    }
+
+    .chain-track {
+      display: flex;
+      align-items: center;
+      min-width: 800px;
+    }
+
+    .chain-node {
+      flex: 1;
+      background: var(--w-surface);
+      border: 1px solid var(--border-w);
+      padding: 40px 28px;
+      text-align: center;
+      transition: border-color 0.3s, background 0.3s;
+      position: relative;
+    }
+
+    .chain-node.active {
+      border-color: var(--amber);
+      background: var(--amber-dim);
+    }
+
+    .chain-node-party {
+      font-size: 1.1rem;
+      letter-spacing: 0.22em;
+      color: var(--amber);
+      margin-bottom: 14px;
+    }
+
+    .chain-node-action {
+      font-size: 0.95rem;
+      color: var(--muted-w);
+      line-height: 1.5;
+    }
+
+    .chain-gap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 8px;
+      flex-shrink: 0;
+    }
+
+    .chain-gap-line {
+      width: 52px;
+      height: 2px;
+      background: repeating-linear-gradient(90deg, var(--red) 0, var(--red) 5px, transparent 5px, transparent 10px);
+    }
+
+    .chain-gap-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      color: var(--red);
+      margin-top: 6px;
+      white-space: nowrap;
+    }
+
+    .chain-summary {
+      margin-top: 24px;
+      padding: 16px 20px;
+      background: var(--red-dim);
+      border: 1px solid rgba(255,60,60,0.2);
+      font-size: 1rem;
+      color: var(--text-w);
+      letter-spacing: 0.06em;
+    }
+
+    .chain-summary strong { color: var(--red); font-weight: normal; }
+
+    /* ── HOW IT WORKS TABS ── */
+    .tabs-row {
+      display: flex;
+      gap: 2px;
+      margin-bottom: 2px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 14px 12px;
+      background: var(--w-surface);
+      border: 1px solid var(--border-w);
+      border-bottom: none;
+      color: var(--muted-w);
+      font-family: var(--font);
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      text-align: center;
+      min-height: 44px;
+    }
+
+    .tab-btn:hover { color: var(--amber); background: var(--amber-dim); }
+
+    .tab-btn.active {
+      background: var(--amber-dim);
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+
+    .tab-panel {
+      display: none;
+      background: var(--w-surface);
+      border: 1px solid var(--amber);
+      padding: 32px 28px;
+    }
+
+    .tab-panel.active { display: block; }
+
+    .tab-panel-heading {
+      font-size: 1.05rem;
+      letter-spacing: 0.1em;
+      color: var(--amber);
+      margin-bottom: 20px;
+    }
+
+    .tab-panel-body {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--text-w);
+    }
+
+    .tab-panel-body p + p { margin-top: 14px; }
+
+    .tab-panel-body strong { color: var(--amber); font-weight: normal; }
+
+    /* ── MISSION ── */
+    .mission {
+      padding: 96px 48px;
+      text-align: center;
+      background: var(--w-surface);
+      border-bottom: 1px solid var(--border-w);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mission::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(245,166,35,0.06) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .mission-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.38em;
+      color: var(--muted-w);
+      margin-bottom: 32px;
+    }
+
+    .mission-text {
+      font-size: clamp(1.6rem, 4.5vw, 3.2rem);
+      letter-spacing: 0.06em;
+      line-height: 1.2;
+      color: var(--text-w);
+      position: relative;
+    }
+
+    .mission-text .amber { color: var(--amber); }
+
+    .mission-sub {
+      margin-top: 24px;
+      font-size: 0.85rem;
+      letter-spacing: 0.28em;
+      color: var(--muted-w);
+    }
+
+    .mission-tagline {
+      margin-top: 36px;
+      font-size: clamp(0.85rem, 1.6vw, 1.1rem);
+      letter-spacing: 0.3em;
+      color: var(--amber);
+      text-shadow: 0 0 20px rgba(245,166,35,0.4);
+    }
+
+    /* ── WORLD GRID ── */
+    .world-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+      margin: 32px 0;
+    }
+
+    .world-card {
+      background: var(--w-surface);
+      padding: 28px 24px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      transition: background 0.2s;
+    }
+
+    .world-card:hover { background: var(--w-surface2); }
+
+    .world-card-num {
+      font-size: 1.8rem;
+      letter-spacing: 0.02em;
+      color: var(--amber);
+      opacity: 0.35;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .world-card-text {
+      font-size: 0.95rem;
+      line-height: 1.65;
+      color: var(--text-w);
+      letter-spacing: 0.04em;
+      padding-top: 4px;
+    }
+
+    /* ── WHY NOW ── */
+    .whynow-points {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin: 32px 0;
+    }
+
+    .whynow-point {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      background: var(--w-surface);
+      padding: 20px 24px;
+      transition: background 0.2s;
+    }
+
+    .whynow-point:hover { background: var(--w-surface2); }
+
+    .whynow-tag {
+      font-size: 0.75rem;
+      letter-spacing: 0.22em;
+      color: var(--amber);
+      flex-shrink: 0;
+      padding-top: 3px;
+      min-width: 72px;
+    }
+
+    .whynow-text {
+      font-size: 0.95rem;
+      line-height: 1.65;
+      color: var(--text-w);
+      letter-spacing: 0.04em;
+    }
+
+    .whynow-text strong { color: var(--amber); font-weight: normal; }
+
+    /* ── CLOSING ── */
+    .closing {
+      padding: 96px 48px;
+      text-align: center;
+      position: relative;
+    }
+
+    .closing-lines { display: flex; flex-direction: column; gap: 8px; margin-bottom: 48px; }
+
+    .closing-line {
+      font-size: clamp(1.2rem, 3.2vw, 2rem);
+      letter-spacing: 0.1em;
+      line-height: 1.3;
+      color: var(--muted-w);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .closing-line.lit   { color: var(--text-w); }
+    .closing-line.amber { color: var(--amber); text-shadow: 0 0 30px rgba(245,166,35,0.4); }
+    .closing-line.visible { opacity: 1; transform: translateY(0); }
+
+    .closing-tagline {
+      font-size: clamp(0.85rem, 1.7vw, 1.1rem);
+      letter-spacing: 0.35em;
+      color: var(--amber);
+      text-shadow: 0 0 20px rgba(245,166,35,0.4);
+      opacity: 0;
+      transition: opacity 0.8s ease-out 0.6s;
+    }
+
+    .closing-tagline.visible { opacity: 1; }
+
+    /* ── STATUS BAR ── */
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 8px 20px;
+      background: var(--w-surface);
+      border-top: 1px solid var(--border-w);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      color: var(--muted-w);
+      flex-shrink: 0;
+    }
+
+    .status-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 5px var(--amber);
+      animation: pulse 2s infinite;
+    }
+
+    .status-online { color: var(--amber); }
+    .status-right  { margin-left: auto; }
+
+    /* ── SCROLL REVEALS ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+
+    .reveal-up.visible { opacity: 1; transform: translateY(0); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .reveal-up, .closing-line, .closing-tagline {
+        opacity: 1; transform: none; transition: none;
+      }
+      .hero-broken::before, .hero-broken::after { display: none; }
+    }
+
+    @media (max-width: 768px) {
+      .hero          { padding: 64px 24px; }
+      .section       { padding: 56px 24px; }
+      .stats-band    { grid-template-columns: repeat(2, 1fr); }
+      .incident-grid { grid-template-columns: 1fr; }
+      .world-grid    { grid-template-columns: 1fr; }
+      .mission, .closing { padding: 64px 24px; }
+    }
+
+    @media (max-width: 480px) {
+      .stats-band { grid-template-columns: repeat(2, 1fr); }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar" id="progress" aria-hidden="true"></div>
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <a href="home.html" class="back-link" aria-label="Back to home">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+        <path d="M7 1L3 5L7 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      BACK
+    </a>
+    <a href="home.html" class="brand">
+      <div class="brand-dot"></div>
+      COGNITIVE QA
+    </a>
+    <span class="top-bar-right">VISION BRIEF</span>
+  </div>
+
+  <!-- HERO -->
+  <header class="hero" aria-label="Vision Brief opening">
+    <div class="hero-bg-grid" aria-hidden="true"></div>
+    <div class="hero-bg-glow" aria-hidden="true"></div>
+
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <div class="hero-eyebrow-dot" aria-hidden="true"></div>
+        COGNITIVE QA / VISION BRIEF / 2025
+      </div>
+
+      <p class="hero-setup">The System Isn't Just</p>
+      <h1 class="hero-broken" aria-label="BROKEN.">BROKEN.</h1>
+      <span class="hero-suffix">It Has Been Broken for Years.</span>
+
+      <div class="hero-body">
+        <p>2024 was a difficult year for aviation. A door plug blew out mid-flight over Oregon. A Dreamliner suddenly plunged, injuring 50 passengers. And on December 29th, Jeju Air Flight 2216 crashed in South Korea, killing 179 of 181 people on board.</p>
+        <p>Each incident was different. But each one pointed to the same underlying problem.</p>
+      </div>
+    </div>
+
+    <div class="hero-scroll-cue" aria-hidden="true">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M6 1v10M2 7l4 4 4-4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      SCROLL
+    </div>
+  </header>
+
+  <!-- STATS -->
+  <div class="stats-band" role="region" aria-label="Key statistics">
+    <div class="stat-cell">
+      <span class="stat-num" data-target="1.45" data-suffix="T" data-prefix="$" data-decimals="2" id="s1">$0T</span>
+      <p class="stat-label">U.S. Aviation Economic Output</p>
+    </div>
+    <div class="stat-cell">
+      <span class="stat-num" data-target="10" data-suffix="M" data-prefix="" data-decimals="0" id="s2">0M</span>
+      <p class="stat-label">Jobs Supported</p>
+    </div>
+    <div class="stat-cell">
+      <span class="stat-num" data-target="11.8" data-suffix="B" data-prefix="$" data-decimals="1" id="s3">$0B</span>
+      <p class="stat-label">Boeing Loss in 2024</p>
+    </div>
+    <div class="stat-cell">
+      <span class="stat-num" data-target="487" data-suffix="M" data-prefix="$" data-decimals="0" id="s4">$0M</span>
+      <p class="stat-label">Federal Fraud Fine</p>
+    </div>
+  </div>
+
+  <!-- SCALE OF THE STAKES -->
+  <section class="section reveal">
+    <div class="section-inner">
+      <div class="section-label">Scale of the Stakes</div>
+      <div class="body-text">
+        <p>The U.S. commercial aviation industry represents <strong>$1.45 trillion in economic output</strong> and supports <strong>10 million jobs</strong>. Yet Boeing alone reported a loss of <strong>$11.8 billion in 2024</strong> due to operational failures and quality issues.</p>
+        <p>And in July 2024, Boeing pleaded guilty to federal criminal fraud charges for deliberately deceiving the FAA during the certification of the 737 Max, agreeing to pay up to <strong>$487 million in fines</strong>.</p>
+        <p>These are not isolated events. They are symptoms of a system that has not kept pace with the complexity of modern aircraft manufacturing.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE HUMAN COST -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-label reveal">The Human Cost</div>
+      <h2 class="section-heading reveal">Every defect that leaves a factory floor<br/>is the result of a <span class="red">missed step.</span></h2>
+      <div class="body-text reveal">
+        <p>A bolt not checked. A bracket not verified. A manual inspection process that was never designed to handle the scale and complexity of a modern commercial aircraft.</p>
+      </div>
+
+      <div class="incident-grid" role="list">
+        <div class="incident-card reveal-up" role="listitem" style="transition-delay:0ms">
+          <span class="incident-badge badge-crit">CRITICAL</span>
+          <p class="incident-flight">Alaska Airlines 1282</p>
+          <div class="incident-stat">4 BOLTS</div>
+          <p class="incident-desc">Left the factory missing four critical bolts. A door plug failed at altitude over Oregon.</p>
+        </div>
+        <div class="incident-card warn reveal-up" role="listitem" style="transition-delay:80ms">
+          <span class="incident-badge badge-warn">WARNING</span>
+          <p class="incident-flight">LATAM Dreamliner</p>
+          <div class="incident-stat">50 INJURED</div>
+          <p class="incident-desc">Dropped without warning mid-flight. No alert. No time to react.</p>
+        </div>
+        <div class="incident-card reveal-up" role="listitem" style="transition-delay:160ms">
+          <span class="incident-badge badge-crit">CRITICAL</span>
+          <p class="incident-flight">Jeju Air 2216</p>
+          <div class="incident-stat">179 LIVES</div>
+          <p class="incident-desc">Crashed in South Korea on December 29th, 2024. 179 people did not survive.</p>
+        </div>
+      </div>
+
+      <div class="body-text reveal">
+        <p>These incidents did not happen because people stopped caring. They happened because the process was not built to catch what human eyes can miss.</p>
+      </div>
+
+      <div class="pull-quote reveal">
+        <p class="pull-quote-text">But what if the inspector <span class="hi">never missed a thing?</span> What if every bolt, fastener, and bracket was verified in real time, on the factory floor, before the aircraft ever left the ground?</p>
+        <p class="pull-quote-tagline">WHERE AI MEETS THE GOLD STANDARD OF SAFETY</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- GAPS IN THE CHAIN -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-label reveal">The Gaps in the Chain</div>
+      <h2 class="section-heading reveal">Four handoffs. <span class="red">Four opportunities to miss something.</span></h2>
+      <div class="body-text reveal">
+        <p>Right now, every party in the aviation supply chain has to reverify everything from scratch because they cannot fully trust what came before them.</p>
+      </div>
+
+      <div class="chain-wrap reveal" aria-label="Supply chain handoff diagram">
+        <div class="chain-track" id="chainTrack">
+          <div class="chain-node" id="cn1">
+            <p class="chain-node-party">BOEING</p>
+            <p class="chain-node-action">Inspects during assembly</p>
+          </div>
+          <div class="chain-gap">
+            <div class="chain-gap-line"></div>
+            <span class="chain-gap-label">GAP 1</span>
+          </div>
+          <div class="chain-node" id="cn2">
+            <p class="chain-node-party">FAA</p>
+            <p class="chain-node-action">Audits Boeing</p>
+          </div>
+          <div class="chain-gap">
+            <div class="chain-gap-line"></div>
+            <span class="chain-gap-label">GAP 2</span>
+          </div>
+          <div class="chain-node" id="cn3">
+            <p class="chain-node-party">AIRLINES</p>
+            <p class="chain-node-action">Inspect on delivery</p>
+          </div>
+          <div class="chain-gap">
+            <div class="chain-gap-line"></div>
+            <span class="chain-gap-label">GAP 3</span>
+          </div>
+          <div class="chain-node" id="cn4">
+            <p class="chain-node-party">MRO</p>
+            <p class="chain-node-action">Inspect during service</p>
+          </div>
+        </div>
+        <div class="chain-summary">
+          <strong>Four handoffs. Four gaps.</strong> Each party starts from zero because the last verification cannot be trusted.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-label reveal">How Cognitive QA Works</div>
+      <h2 class="section-heading reveal">The inspector <span class="amber">sees it.</span><br/>In the moment it matters.</h2>
+
+      <div class="reveal">
+        <div class="tabs-row" role="tablist" aria-label="Use case selector">
+          <button class="tab-btn active" role="tab" aria-selected="true"  aria-controls="tab-boeing"    id="btn-boeing"  onclick="switchTab('boeing')">ASSEMBLY LINE</button>
+          <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="tab-mro"       id="btn-mro"     onclick="switchTab('mro')">MRO COMPANIES</button>
+          <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="tab-chain"     id="btn-chain"   onclick="switchTab('chain')">THE CHAIN</button>
+        </div>
+
+        <div class="tab-panel active" id="tab-boeing" role="tabpanel" aria-labelledby="btn-boeing">
+          <p class="tab-panel-heading">Boeing / Assembly Line</p>
+          <div class="tab-panel-body">
+            <p>Cognitive QA puts a HoloLens on the engineer and overlays a live digital twin of the aircraft blueprint onto the physical plane in front of them. The AI scans in real time and flags deviations, damage, and defects spatially anchored to the exact part of the aircraft where the issue exists.</p>
+            <p>The inspector does not have to guess or cross-reference a paper checklist. <strong>They see it.</strong></p>
+            <p>Defects caught before a panel is sealed cost a fraction of what they cost to fix after the fact, and a fraction of a fraction of what they cost if they reach a passenger. Cognitive QA catches those defects in the moment the work is happening, not after a sign-off, not after an audit, not after an incident.</p>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-mro" role="tabpanel" aria-labelledby="btn-mro">
+          <p class="tab-panel-heading">MRO Companies / Maintenance</p>
+          <div class="tab-panel-body">
+            <p>For MRO companies, the value is speed, consistency, and certainty.</p>
+            <p><strong>Every inspector, regardless of experience level, performs at the level of your most senior one.</strong></p>
+            <p>The HoloLens overlay eliminates the gap between a 30-year veteran and a technician on their second year. The AI carries the institutional knowledge. The human executes with full confidence.</p>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-chain" role="tabpanel" aria-labelledby="btn-chain">
+          <p class="tab-panel-heading">The Unbroken Chain</p>
+          <div class="tab-panel-body">
+            <p>Cognitive QA does not just close one of those gaps. It creates a <strong>single, unbroken, tamper-proof chain of verified truth</strong> that every party in that chain can rely on.</p>
+            <p>Boeing's verification travels to the FAA. The FAA's record travels to the airline. The airline's history travels to MRO. For the first time, quality does not have to be rediscovered at every step.</p>
+            <p><strong>It travels with the aircraft.</strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MISSION -->
+  <div class="mission reveal" role="region" aria-label="Mission statement">
+    <p class="mission-kicker">OUR MISSION</p>
+    <p class="mission-text">
+      Cognitive QA exists to make<br/>
+      <span class="amber">defect-free aviation</span><br/>
+      the global standard.
+    </p>
+    <p class="mission-sub">NOT AS AN AMBITION. AS A PROCESS.</p>
+    <p class="mission-tagline">WHERE AI MEETS THE GOLD STANDARD OF SAFETY</p>
+  </div>
+
+  <!-- THE WORLD WE ARE BUILDING -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-label reveal">The World We Are Building</div>
+
+      <div class="world-grid reveal">
+        <div class="world-card">
+          <span class="world-card-num">01</span>
+          <p class="world-card-text">Every aircraft that leaves the factory floor carries a complete, verified record of its assembly.</p>
+        </div>
+        <div class="world-card">
+          <span class="world-card-num">02</span>
+          <p class="world-card-text">Regulators have access to irrefutable proof of quality compliance.</p>
+        </div>
+        <div class="world-card">
+          <span class="world-card-num">03</span>
+          <p class="world-card-text">Airlines can take delivery of an aircraft with full confidence in its history.</p>
+        </div>
+        <div class="world-card">
+          <span class="world-card-num">04</span>
+          <p class="world-card-text">Passengers can board knowing that every component was checked, verified, and documented before the aircraft ever left the ground.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY NOW -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-label reveal">Why Now</div>
+      <h2 class="section-heading reveal">The technology has finally <span class="amber">caught up with the problem.</span></h2>
+
+      <div class="whynow-points reveal">
+        <div class="whynow-point">
+          <span class="whynow-tag">AI</span>
+          <p class="whynow-text"><strong>AI has matured.</strong> The models, the vision processing, the real-time inference — it all exists now in a form that can run on a wearable device on a factory floor.</p>
+        </div>
+        <div class="whynow-point">
+          <span class="whynow-tag">HOLOLENS</span>
+          <p class="whynow-text"><strong>The Microsoft HoloLens 2</strong> has become a proven enterprise platform, already deployed in defense aircraft manufacturing. The hardware is not experimental.</p>
+        </div>
+        <div class="whynow-point">
+          <span class="whynow-tag">PRECEDENT</span>
+          <p class="whynow-text">Boeing's own defense division already uses HoloLens for military aircraft. Airbus is moving toward AR-assisted inspection on the commercial side. <strong>The technology has been proven in adjacent contexts.</strong></p>
+        </div>
+        <div class="whynow-point">
+          <span class="whynow-tag">THE GAP</span>
+          <p class="whynow-text">What does not yet exist is a <strong>purpose-built AI inspection layer for commercial aircraft manufacturing at scale.</strong> That is the gap Cognitive QA fills.</p>
+        </div>
+        <div class="whynow-point">
+          <span class="whynow-tag">THE COST</span>
+          <p class="whynow-text">The cost of doing nothing has become impossible to ignore. The question is not whether this technology will come to commercial aviation. <strong>The question is who builds it first.</strong></p>
+        </div>
+      </div>
+
+      <div class="body-text reveal">
+        <p>This is not about reimagining aviation from scratch. It is about giving the people who build and maintain aircraft the tools they actually need to do their jobs with complete confidence.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSING -->
+  <footer class="closing" aria-label="Closing statement">
+    <div class="closing-lines">
+      <p class="closing-line lit"  id="cl1">The technology is here.</p>
+      <p class="closing-line lit"  id="cl2">The need is clear.</p>
+      <p class="closing-line amber" id="cl3">The time to act is now.</p>
+    </div>
+    <p class="closing-tagline" id="cltag">WHERE AI MEETS THE GOLD STANDARD OF SAFETY</p>
+  </footer>
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <div class="status-dot"></div>
+    <span class="status-online">PLATFORM ONLINE</span>
+    <span>COGNITIVE QA / VISION</span>
+    <span class="status-right">v2.4.1</span>
+  </div>
+
+  <script>
+    // ── READING PROGRESS ──
+    const progressBar = document.getElementById('progress');
+    window.addEventListener('scroll', () => {
+      const doc = document.documentElement;
+      const scrolled = doc.scrollTop / (doc.scrollHeight - doc.clientHeight);
+      progressBar.style.width = (scrolled * 100) + '%';
+    }, { passive: true });
+
+    // ── INTERSECTION OBSERVER (scroll reveals) ──
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          revealObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal, .reveal-up').forEach(el => revealObs.observe(el));
+
+    // ── STAT COUNTERS ──
+    function formatStat(el, value) {
+      const pre  = el.dataset.prefix  || '';
+      const suf  = el.dataset.suffix  || '';
+      const dec  = parseInt(el.dataset.decimals) || 0;
+      return pre + value.toFixed(dec) + suf;
+    }
+
+    function runCounter(el) {
+      const target   = parseFloat(el.dataset.target);
+      const duration = 1800;
+      const start    = performance.now();
+      el.dataset.run = '1';
+
+      function step(now) {
+        const p = Math.min((now - start) / duration, 1);
+        const t = 1 - Math.pow(1 - p, 3);
+        el.textContent = formatStat(el, t * target);
+        if (p < 1) requestAnimationFrame(step);
+        else el.textContent = formatStat(el, target);
+      }
+      requestAnimationFrame(step);
+    }
+
+    const statObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting && !e.target.dataset.run) {
+          runCounter(e.target);
+          statObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.stat-num').forEach(el => statObs.observe(el));
+
+    // ── CHAIN NODE LIGHT-UP ──
+    const chainObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const nodes = ['cn1','cn2','cn3','cn4'];
+          nodes.forEach((id, i) => {
+            setTimeout(() => {
+              document.getElementById(id).classList.add('active');
+            }, i * 220);
+          });
+          chainObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.4 });
+
+    const ct = document.getElementById('chainTrack');
+    if (ct) chainObs.observe(ct);
+
+    // ── CLOSING LINES ──
+    const closingObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          ['cl1','cl2','cl3','cltag'].forEach((id, i) => {
+            setTimeout(() => {
+              const el = document.getElementById(id);
+              if (el) el.classList.add('visible');
+            }, i * 220);
+          });
+          closingObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    const cl = document.getElementById('cl1');
+    if (cl) closingObs.observe(cl);
+
+    // ── TABS ──
+    function switchTab(name) {
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+
+      document.getElementById('btn-'  + name).classList.add('active');
+      document.getElementById('btn-'  + name).setAttribute('aria-selected', 'true');
+      document.getElementById('tab-'  + name).classList.add('active');
+    }
+  </script>
+
+</body>
+</html>

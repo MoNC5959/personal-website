@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Strategy — Cognitive QA</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+
+    :root {
+      --w-bg:       #0b0804;
+      --w-surface:  #110d07;
+      --w-surface2: #181108;
+      --amber:      #f5a623;
+      --amber-dim:  rgba(245,166,35,0.10);
+      --amber-glow: rgba(245,166,35,0.22);
+      --orange:     #e8682a;
+      --orange-dim: rgba(232,104,42,0.10);
+      --red:        #ff3c3c;
+      --red-dim:    rgba(255,60,60,0.10);
+      --green:      #3cff8f;
+      --green-dim:  rgba(60,255,143,0.08);
+      --muted-w:    #a8845a;
+      --text-w:     #f0dfc0;
+      --border-w:   rgba(245,166,35,0.18);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--w-bg);
+      color: var(--text-w);
+      font-family: var(--font);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+
+    /* ── READING PROGRESS ── */
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 0%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--orange), var(--amber));
+      z-index: 200;
+      transition: width 0.1s linear;
+    }
+
+    /* ── TOP BAR ── */
+    .top-bar {
+      position: sticky;
+      top: 0;
+      display: flex;
+      align-items: center;
+      padding: 0 28px;
+      height: 48px;
+      background: rgba(11,8,4,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border-w);
+      z-index: 100;
+      flex-shrink: 0;
+    }
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted-w);
+      text-decoration: none;
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      padding-right: 20px;
+      border-right: 1px solid var(--border-w);
+      margin-right: 20px;
+      transition: color 0.2s;
+      min-height: 44px;
+    }
+    .back-link:hover { color: var(--amber); }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--amber);
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-decoration: none;
+    }
+
+    .brand-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 7px var(--amber);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.35; }
+    }
+
+    .top-bar-right {
+      margin-left: auto;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      color: var(--muted-w);
+    }
+
+    /* ── SCROLL REVEALS ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .reveal-up.visible { opacity: 1; transform: none; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 80px 48px;
+    }
+
+    .hero-bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(245,166,35,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(245,166,35,0.03) 1px, transparent 1px);
+      background-size: 52px 52px;
+      pointer-events: none;
+    }
+
+    .hero-bg-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 35% 50%, rgba(245,166,35,0.05) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .hero-content { position: relative; z-index: 1; max-width: 1000px; }
+
+    .hero-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.78rem;
+      letter-spacing: 0.35em;
+      color: var(--muted-w);
+      margin-bottom: 36px;
+    }
+
+    .hero-eyebrow-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 6px var(--amber);
+      animation: pulse 1.5s infinite;
+    }
+
+    .hero-word {
+      font-size: clamp(4rem, 12vw, 9.5rem);
+      letter-spacing: 0.04em;
+      line-height: 0.9;
+      color: var(--amber);
+      text-shadow:
+        0 0 40px rgba(245,166,35,0.45),
+        0 0 100px rgba(245,166,35,0.18);
+      display: inline-block;
+      animation: amberPulse 3.5s ease-in-out infinite;
+    }
+
+    @keyframes amberPulse {
+      0%, 100% { text-shadow: 0 0 40px rgba(245,166,35,0.45), 0 0 100px rgba(245,166,35,0.18); }
+      50%       { text-shadow: 0 0 60px rgba(245,166,35,0.7),  0 0 140px rgba(245,166,35,0.3); }
+    }
+
+    .hero-subword {
+      display: block;
+      font-size: clamp(0.9rem, 2.2vw, 1.2rem);
+      letter-spacing: 0.16em;
+      color: var(--muted-w);
+      margin-top: 16px;
+      text-transform: uppercase;
+    }
+
+    .hero-statement {
+      margin-top: 48px;
+      max-width: 680px;
+    }
+
+    .hero-statement p {
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: var(--text-w);
+    }
+
+    .hero-statement .hi {
+      color: var(--amber);
+    }
+
+    .hero-tagline {
+      margin-top: 28px;
+      font-size: 0.72rem;
+      letter-spacing: 0.3em;
+      color: var(--muted-w);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-tagline::before {
+      content: '';
+      width: 32px;
+      height: 1px;
+      background: var(--amber);
+      flex-shrink: 0;
+    }
+
+    .hero-scroll-cue {
+      position: absolute;
+      bottom: 32px;
+      left: 48px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.58rem;
+      letter-spacing: 0.25em;
+      color: var(--muted-w);
+      animation: scrollCue 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollCue {
+      0%, 100% { opacity: 0.4; transform: translateY(0); }
+      50%       { opacity: 0.9; transform: translateY(4px); }
+    }
+
+    /* ── STATS BAND ── */
+    .stats-band {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--border-w);
+      border-bottom: 1px solid var(--border-w);
+    }
+
+    .stat-cell {
+      padding: 40px 28px;
+      border-right: 1px solid var(--border-w);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-cell:last-child { border-right: none; }
+
+    .stat-cell::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--amber-dim);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .stat-cell:hover::before { opacity: 1; }
+
+    .stat-num {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      letter-spacing: 0.02em;
+      color: var(--amber);
+      text-shadow: 0 0 24px rgba(245,166,35,0.35);
+      line-height: 1;
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      color: var(--muted-w);
+      margin-top: 10px;
+      line-height: 1.5;
+    }
+
+    /* ── SECTION ── */
+    .section {
+      padding: 80px 48px;
+      border-bottom: 1px solid var(--border-w);
+      position: relative;
+    }
+
+    .section-inner { max-width: 820px; margin: 0 auto; }
+
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.38em;
+      color: var(--amber);
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-w);
+    }
+
+    .section-heading {
+      font-size: clamp(1.5rem, 3.5vw, 2.4rem);
+      letter-spacing: 0.06em;
+      line-height: 1.15;
+      color: var(--text-w);
+      margin-bottom: 32px;
+    }
+
+    .section-heading .red   { color: var(--red); }
+    .section-heading .amber { color: var(--amber); }
+    .section-heading .green { color: var(--green); }
+
+    .body-text {
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: var(--text-w);
+    }
+
+    .body-text p + p { margin-top: 18px; }
+
+    .body-text strong {
+      color: var(--amber);
+      font-weight: normal;
+    }
+
+    /* ── PROBLEM: FOUR GAPS ── */
+    .gap-callout {
+      margin: 40px 0;
+      padding: 28px 32px;
+      border-left: 3px solid var(--red);
+      background: var(--red-dim);
+      border-radius: 0 4px 4px 0;
+    }
+
+    .gap-callout-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      color: var(--red);
+      margin-bottom: 10px;
+    }
+
+    .gap-callout-text {
+      font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+      letter-spacing: 0.08em;
+      color: var(--text-w);
+      line-height: 1.4;
+    }
+
+    .gap-callout-text span { color: var(--red); }
+
+    /* ── INCIDENT ROW ── */
+    .incident-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin: 36px 0;
+    }
+
+    .incident-card {
+      background: var(--w-surface);
+      padding: 24px 20px;
+      border-top: 2px solid var(--red);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .incident-card.warn { border-top-color: var(--orange); }
+
+    .incident-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--red-dim);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .incident-card.warn::before { background: var(--orange-dim); }
+    .incident-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(255,60,60,0.15); }
+    .incident-card:hover::before { opacity: 1; }
+
+    .inc-badge {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      padding: 3px 8px;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    .badge-crit { background: var(--red-dim); color: var(--red); border: 1px solid rgba(255,60,60,0.4); }
+    .badge-warn { background: var(--orange-dim); color: var(--orange); border: 1px solid rgba(232,104,42,0.4); }
+
+    .inc-flight {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      color: var(--muted-w);
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .inc-stat {
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      letter-spacing: 0.06em;
+      color: var(--red);
+      line-height: 1;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .incident-card.warn .inc-stat { color: var(--orange); }
+
+    .inc-desc {
+      font-size: 0.78rem;
+      line-height: 1.6;
+      color: var(--muted-w);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── BEFORE / AFTER ── */
+    .replace-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      margin: 40px 0;
+    }
+
+    .replace-col {
+      padding: 32px 28px;
+      background: var(--w-surface);
+    }
+
+    .replace-col.after { background: var(--w-surface2); border-top: 2px solid var(--amber); }
+    .replace-col.before { border-top: 2px solid rgba(255,60,60,0.4); }
+
+    .replace-col-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: var(--muted-w);
+      margin-bottom: 20px;
+    }
+
+    .replace-col.after .replace-col-label { color: var(--amber); }
+    .replace-col.before .replace-col-label { color: var(--red); opacity: 0.7; }
+
+    .replace-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-w);
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      line-height: 1.5;
+      color: var(--text-w);
+    }
+
+    .replace-item:last-child { border-bottom: none; }
+
+    .replace-icon {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 1px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem;
+    }
+
+    .replace-icon.x { background: var(--red-dim); color: var(--red); border: 1px solid rgba(255,60,60,0.4); }
+    .replace-icon.check { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(245,166,35,0.4); }
+
+    /* ── PLATFORM CARDS ── */
+    .platform-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin: 40px 0;
+    }
+
+    .platform-card {
+      background: var(--w-surface);
+      padding: 32px 24px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease;
+      cursor: default;
+    }
+
+    .platform-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--amber), var(--orange));
+    }
+
+    .platform-card:hover { transform: translateY(-4px); }
+
+    .platform-card-bg {
+      position: absolute;
+      inset: 0;
+      background: var(--amber-dim);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .platform-card:hover .platform-card-bg { opacity: 1; }
+
+    .platform-num {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: var(--muted-w);
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .platform-title {
+      font-size: 0.88rem;
+      letter-spacing: 0.18em;
+      color: var(--amber);
+      margin-bottom: 10px;
+      line-height: 1.3;
+      position: relative;
+      z-index: 1;
+    }
+
+    .platform-tech {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      color: var(--muted-w);
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .platform-body {
+      font-size: 0.82rem;
+      line-height: 1.7;
+      color: var(--text-w);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── GTM PHASES ── */
+    .phases-track {
+      margin: 40px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .phase-row {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 0;
+      position: relative;
+    }
+
+    .phase-number-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 28px;
+    }
+
+    .phase-num {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      border: 2px solid var(--border-w);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      color: var(--muted-w);
+      background: var(--w-bg);
+      transition: border-color 0.4s, color 0.4s, box-shadow 0.4s, background 0.4s;
+      flex-shrink: 0;
+      z-index: 1;
+    }
+
+    .phase-connector {
+      flex: 1;
+      width: 2px;
+      background: var(--border-w);
+      margin-top: 4px;
+      min-height: 32px;
+    }
+
+    .phase-row:last-child .phase-connector { display: none; }
+
+    .phase-content {
+      padding: 20px 0 36px 20px;
+      border-bottom: 1px solid var(--border-w);
+    }
+
+    .phase-row:last-child .phase-content { border-bottom: none; }
+
+    .phase-tag {
+      font-size: 0.62rem;
+      letter-spacing: 0.3em;
+      color: var(--muted-w);
+      margin-bottom: 8px;
+    }
+
+    .phase-heading {
+      font-size: clamp(1rem, 2vw, 1.4rem);
+      letter-spacing: 0.1em;
+      color: var(--text-w);
+      margin-bottom: 12px;
+      transition: color 0.4s;
+    }
+
+    .phase-body {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: var(--muted-w);
+      transition: color 0.4s;
+    }
+
+    .phase-row.active .phase-num {
+      border-color: var(--amber);
+      color: var(--amber);
+      background: rgba(245,166,35,0.08);
+      box-shadow: 0 0 16px rgba(245,166,35,0.25);
+    }
+
+    .phase-row.active .phase-heading { color: var(--amber); }
+    .phase-row.active .phase-body    { color: var(--text-w); }
+
+    /* ── TAM ── */
+    .tam-rows {
+      margin: 40px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .tam-row {
+      display: grid;
+      grid-template-columns: 140px 1fr 120px;
+      align-items: center;
+      gap: 20px;
+      padding: 20px 24px;
+      background: var(--w-surface);
+      position: relative;
+      overflow: hidden;
+      transition: background 0.2s;
+    }
+
+    .tam-row:hover { background: var(--w-surface2); }
+
+    .tam-row.highlight {
+      background: var(--amber-dim);
+      border: 1px solid rgba(245,166,35,0.2);
+    }
+
+    .tam-amount {
+      font-size: clamp(1.1rem, 2vw, 1.6rem);
+      letter-spacing: 0.04em;
+      color: var(--amber);
+      text-shadow: 0 0 16px rgba(245,166,35,0.3);
+      white-space: nowrap;
+    }
+
+    .tam-row.highlight .tam-amount {
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+    }
+
+    .tam-label {
+      font-size: 0.82rem;
+      letter-spacing: 0.1em;
+      color: var(--text-w);
+      line-height: 1.4;
+    }
+
+    .tam-bar-wrap {
+      height: 6px;
+      background: rgba(245,166,35,0.1);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .tam-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--orange), var(--amber));
+      border-radius: 3px;
+      width: 0%;
+      transition: width 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .tam-row.bar-animate .tam-bar { width: var(--bar-w); }
+
+    .tam-insight {
+      margin-top: 28px;
+      padding: 20px 24px;
+      border: 1px solid rgba(245,166,35,0.2);
+      border-radius: 4px;
+      background: var(--amber-dim);
+      font-size: 0.85rem;
+      line-height: 1.7;
+      color: var(--text-w);
+    }
+
+    .tam-insight strong { color: var(--amber); font-weight: normal; }
+
+    /* ── BEYOND AVIATION ── */
+    .beyond-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 2px;
+      margin: 40px 0;
+    }
+
+    .beyond-card {
+      background: var(--w-surface);
+      padding: 28px 16px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: scale(0.92);
+      transition: opacity 0.4s ease, transform 0.4s ease, background 0.2s;
+    }
+
+    .beyond-card.visible { opacity: 1; transform: scale(1); }
+    .beyond-card:hover { background: var(--w-surface2); }
+
+    .beyond-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--amber), var(--orange));
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .beyond-card:hover::after { transform: scaleX(1); }
+
+    .beyond-icon {
+      font-size: 0; /* hide text fallback */
+      margin-bottom: 14px;
+    }
+
+    .beyond-icon svg {
+      width: 28px; height: 28px;
+      stroke: var(--amber);
+      opacity: 0.7;
+    }
+
+    .beyond-card:hover .beyond-icon svg { opacity: 1; }
+
+    .beyond-name {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      color: var(--amber);
+      margin-bottom: 8px;
+    }
+
+    .beyond-desc {
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+      line-height: 1.5;
+      color: var(--muted-w);
+    }
+
+    /* ── WHY NOW ── */
+    .why-items {
+      margin: 32px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .why-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 20px 24px;
+      background: var(--w-surface);
+      transition: background 0.2s;
+    }
+
+    .why-item:hover { background: var(--w-surface2); }
+
+    .why-tag {
+      flex-shrink: 0;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      padding: 4px 8px;
+      border: 1px solid var(--border-w);
+      color: var(--amber);
+      min-width: 80px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .why-tag.danger { border-color: rgba(255,60,60,0.4); color: var(--red); }
+
+    .why-text {
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: var(--text-w);
+    }
+
+    .why-text .red { color: var(--red); }
+
+    /* ── CLOSING ── */
+    .closing {
+      padding: 100px 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0;
+    }
+
+    .closing-lines { display: flex; flex-direction: column; gap: 0; }
+
+    .closing-line {
+      font-size: clamp(1.4rem, 3.5vw, 2.8rem);
+      letter-spacing: 0.08em;
+      color: var(--muted-w);
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease, color 0.5s ease;
+      padding: 4px 0;
+    }
+
+    .closing-line.visible { opacity: 1; transform: none; }
+    .closing-line.amber   { color: var(--amber); }
+
+    .closing-tagline {
+      margin-top: 48px;
+      font-size: 0.72rem;
+      letter-spacing: 0.35em;
+      color: var(--muted-w);
+      opacity: 0;
+      transition: opacity 0.6s ease 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .closing-tagline.visible { opacity: 1; }
+
+    .closing-tagline::before,
+    .closing-tagline::after {
+      content: '';
+      width: 48px; height: 1px;
+      background: var(--border-w);
+    }
+
+    /* ── INFOGRAPHIC ── */
+    .infographic-section {
+      padding: 0 48px 64px;
+      border-bottom: 1px solid var(--border-w);
+    }
+
+    .infographic-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: var(--muted-w);
+      margin-bottom: 14px;
+      text-align: center;
+    }
+
+    .infographic-wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      border: 1px solid var(--border-w);
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow:
+        0 0 60px rgba(245,166,35,0.08),
+        0 0 120px rgba(245,166,35,0.03);
+    }
+
+    .infographic-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .infographic-section { padding: 0 24px 48px; }
+    }
+
+    /* ── STATUS BAR ── */
+    .status-bar {
+      margin-top: auto;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hero { padding: 60px 24px; }
+      .section { padding: 56px 24px; }
+      .stats-band { grid-template-columns: repeat(2, 1fr); }
+      .stat-cell:nth-child(2) { border-right: none; }
+      .platform-grid { grid-template-columns: 1fr; }
+      .replace-grid { grid-template-columns: 1fr; }
+      .incident-row { grid-template-columns: 1fr; }
+      .beyond-grid { grid-template-columns: repeat(3, 1fr); }
+      .tam-row { grid-template-columns: 100px 1fr; }
+      .tam-bar-wrap { display: none; }
+      .closing { padding: 60px 24px; }
+    }
+
+    @media (max-width: 480px) {
+      .beyond-grid { grid-template-columns: repeat(2, 1fr); }
+      .stats-band { grid-template-columns: 1fr 1fr; }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="progress-bar" id="progress"></div>
+
+  <div class="top-bar">
+    <a href="home.html" class="back-link">&#8592; BACK</a>
+    <a href="home.html" class="brand">
+      <div class="brand-dot"></div>
+      COGNITIVE QA
+    </a>
+    <div class="top-bar-right">PRODUCT STRATEGY</div>
+  </div>
+
+  <!-- ── HERO ── -->
+  <section class="hero" aria-label="Strategy overview">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-bg-glow"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <div class="hero-eyebrow-dot"></div>
+        COGNITIVE QA / PRODUCT STRATEGY / 2025
+      </div>
+      <div class="hero-word">THE<br/>STRATEGY.</div>
+      <span class="hero-subword">Built on Proven Technology. Designed for What Comes Next.</span>
+      <div class="hero-statement">
+        <p>Cognitive QA is the first AI-powered inspection platform that creates a <span class="hi">verified, tamper-proof record</span> of aircraft quality at every stage of its life. From the assembly line to the maintenance hangar.</p>
+        <p>For the first time, quality does not have to be rediscovered at every handoff. It travels with the aircraft.</p>
+      </div>
+      <p class="hero-tagline">WHERE AI MEETS THE GOLD STANDARD OF SAFETY</p>
+    </div>
+    <div class="hero-scroll-cue" aria-hidden="true">&#9660; SCROLL</div>
+  </section>
+
+  <!-- ── STATS BAND ── -->
+  <div class="stats-band" role="region" aria-label="Market statistics">
+    <div class="stat-cell">
+      <span class="stat-num" data-target="328" data-prefix="$" data-suffix="B">$328B</span>
+      <div class="stat-label">AIRCRAFT MANUFACTURING MARKET (2024)</div>
+    </div>
+    <div class="stat-cell">
+      <span class="stat-num" data-target="135" data-prefix="$" data-suffix="B">$135B</span>
+      <div class="stat-label">GLOBAL MRO MARKET</div>
+    </div>
+    <div class="stat-cell">
+      <span class="stat-num" data-target="471" data-prefix="$" data-suffix="B">$471B</span>
+      <div class="stat-label">COMBINED ADDRESSABLE OPPORTUNITY</div>
+    </div>
+    <div class="stat-cell">
+      <span class="stat-num" data-target="85" data-suffix="%">85%</span>
+      <div class="stat-label">OF OPERATORS ALREADY INVESTING IN AI</div>
+    </div>
+  </div>
+
+  <!-- ── THE PROBLEM ── -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-label reveal">The Problem We Are Solving</div>
+      <h2 class="section-heading reveal">Aviation does not have a safety<br/><span class="red">ambition problem.</span> It has a process problem.</h2>
+      <div class="body-text reveal">
+        <p>Boeing, MRO companies, airlines, and regulators all want the same outcome. An aircraft that is safe to fly. But each of them has to verify that independently, from scratch, because no shared, trustworthy record of quality has ever existed.</p>
+      </div>
+
+      <div class="gap-callout reveal">
+        <div class="gap-callout-label">THE STRUCTURAL FAILURE</div>
+        <div class="gap-callout-text"><span>Four handoffs.</span> Four gaps. Four opportunities to miss something.</div>
+      </div>
+
+      <div class="incident-row" role="list">
+        <div class="incident-card reveal-up" role="listitem" style="transition-delay:0ms">
+          <span class="inc-badge badge-crit">CRITICAL</span>
+          <p class="inc-flight">Alaska Airlines 1282</p>
+          <div class="inc-stat">4 BOLTS</div>
+          <p class="inc-desc">Left the factory missing four critical bolts. A door plug failed at altitude over Oregon.</p>
+        </div>
+        <div class="incident-card warn reveal-up" role="listitem" style="transition-delay:80ms">
+          <span class="inc-badge badge-warn">WARNING</span>
+          <p class="inc-flight">LATAM Dreamliner</p>
+          <div class="inc-stat">50 INJURED</div>
+          <p class="inc-desc">Dropped without warning mid-flight. No alert. No time to react.</p>
+        </div>
+        <div class="incident-card reveal-up" role="listitem" style="transition-delay:160ms">
+          <span class="inc-badge badge-crit">CRITICAL</span>
+          <p class="inc-flight">Jeju Air 2216</p>
+          <div class="inc-stat">179 LIVES</div>
+          <p class="inc-desc">Crashed on December 29th, 2024. 179 of 181 people on board did not survive.</p>
+        </div>
+      </div>
+
+      <div class="body-text reveal">
+        <p>These incidents did not happen because people stopped caring. They happened because <strong>the process was not built to catch what human eyes can miss.</strong> The current approach to commercial aircraft inspection is built on manual processes, paper checklists, and individual sign-offs. It has no mechanism for creating a continuous, verifiable record of quality across the full lifecycle of an aircraft.</p>
+        <p>That is the gap Cognitive QA was built to close.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── WHAT WE REPLACE ── -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-label reveal">What Cognitive QA Replaces</div>
+      <h2 class="section-heading reveal">Not an upgrade to the old process.<br/><span class="amber">A replacement of it.</span></h2>
+      <div class="body-text reveal">
+        <p>Today, inspectors work from printed or digital checklists, verify components by eye, and sign off based on training and experience. When the aircraft moves from one party to the next, that record does not move with it. Cognitive QA replaces that process entirely.</p>
+      </div>
+
+      <div class="replace-grid reveal">
+        <div class="replace-col before">
+          <div class="replace-col-label">BEFORE: CURRENT STATE</div>
+          <div class="replace-item"><div class="replace-icon x">✕</div>Manual visual checks, no spatial record</div>
+          <div class="replace-item"><div class="replace-icon x">✕</div>Paper and digital checklists</div>
+          <div class="replace-item"><div class="replace-icon x">✕</div>Sign-offs based on experience only</div>
+          <div class="replace-item"><div class="replace-icon x">✕</div>No real-time comparison against blueprint</div>
+          <div class="replace-item"><div class="replace-icon x">✕</div>Record stays behind when aircraft moves</div>
+          <div class="replace-item"><div class="replace-icon x">✕</div>Every party re-verifies from scratch</div>
+        </div>
+        <div class="replace-col after">
+          <div class="replace-col-label">AFTER: COGNITIVE QA</div>
+          <div class="replace-item"><div class="replace-icon check">✓</div>Real-time AI scan against digital twin</div>
+          <div class="replace-item"><div class="replace-icon check">✓</div>Spatially anchored, tamper-proof record</div>
+          <div class="replace-item"><div class="replace-icon check">✓</div>Every inspector performs at senior level</div>
+          <div class="replace-item"><div class="replace-icon check">✓</div>Live deviation flagging during assembly</div>
+          <div class="replace-item"><div class="replace-icon check">✓</div>Verified record travels with the aircraft</div>
+          <div class="replace-item"><div class="replace-icon check">✓</div>One chain of trust across all parties</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── THE PLATFORM ── -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-label reveal">The Platform</div>
+      <h2 class="section-heading reveal">An inspector that never forgets,<br/>never overlooks, <span class="amber">never assumes.</span></h2>
+      <div class="body-text reveal">
+        <p>Cognitive QA is not a standalone application. It is a platform built on two of the most powerful enterprise technologies available today. Together, they create something the aviation industry has never had before.</p>
+      </div>
+
+      <div class="platform-grid reveal">
+        <div class="platform-card">
+          <div class="platform-card-bg"></div>
+          <div class="platform-num">01 / INTELLIGENCE</div>
+          <div class="platform-title">MICROSOFT<br/>COPILOT</div>
+          <div class="platform-tech">AI CORE</div>
+          <div class="platform-body">Pre-loaded with the complete blueprint library of an aircraft before a single inspection begins. Every measurement. Every specification. Every component mapped and understood. During inspection, Copilot reads the aircraft in real time, comparing what it sees against what should be there.</div>
+        </div>
+        <div class="platform-card">
+          <div class="platform-card-bg"></div>
+          <div class="platform-num">02 / DELIVERY</div>
+          <div class="platform-title">MICROSOFT<br/>HOLOLENS 2</div>
+          <div class="platform-tech">AUGMENTED REALITY</div>
+          <div class="platform-body">Purpose-built for industrial quality control. Gives the inspector a live augmented view of the aircraft during assembly. Every deviation flagged. Every variance logged. Every component verified against the digital twin in real time. The inspector sees not just the aircraft, but the truth about the aircraft.</div>
+        </div>
+        <div class="platform-card">
+          <div class="platform-card-bg"></div>
+          <div class="platform-num">03 / THE RECORD</div>
+          <div class="platform-title">VERIFIED<br/>AUDIT TRAIL</div>
+          <div class="platform-tech">TAMPER-PROOF</div>
+          <div class="platform-body">Every inspection generates a tamper-proof digital record, spatially anchored to the exact components checked, verified against original specification, stored in a format every downstream party can trust. Boeing, airlines, MRO, regulators. One record. Irrefutable proof at every stage.</div>
+        </div>
+      </div>
+
+      <div class="body-text reveal">
+        <p>Quality does not have to be rediscovered at every handoff. <strong>It travels with the aircraft.</strong></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── INFOGRAPHIC ── -->
+  <div class="infographic-section reveal">
+    <div class="infographic-label">COGNITIVE QA / REAL-TIME DIAGNOSTIC SCAN</div>
+    <div class="infographic-wrap">
+      <img src="Cognitive QA Inforgraphic.png" alt="Cognitive QA: The Future of Aerospace Inspection — Real-Time Diagnostic Scan" class="infographic-img" />
+    </div>
+  </div>
+
+  <!-- ── PROVEN ── -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-label reveal">Proven Where It Matters Most</div>
+      <h2 class="section-heading reveal">Defense grade.<br/><span class="amber">Commercial scale.</span></h2>
+      <div class="body-text reveal">
+        <p>The Microsoft HoloLens 2 is not untested in aviation. <strong>Boeing has already deployed it in partnership with the government</strong> to improve defense aircraft manufacturing. Airbus is moving toward AR-assisted inspection on the commercial side. The technology has proven itself in the most demanding, high-stakes environments the industry has to offer.</p>
+        <p>But there is a gap. That same proven technology has never been applied to commercial aircraft manufacturing. The aircraft that carry millions of passengers every single day are still being inspected with manual processes that defense aviation left behind years ago.</p>
+        <p>Defense aircraft operate under some of the strictest quality standards in the world. Every component verified. Every system tested. Every deviation documented. Commercial aviation deserves that same standard. Not because regulators require it. Because the public depends on it.</p>
+        <p><strong>Cognitive QA brings the rigor of defense-grade quality control to the commercial manufacturing floor for the first time.</strong></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── GO-TO-MARKET ── -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-label reveal">Go-To-Market</div>
+      <h2 class="section-heading reveal">A deliberately <span class="amber">sequenced</span> strategy.</h2>
+      <div class="body-text reveal">
+        <p>Cognitive QA operates as a B2B enterprise platform. The strategy starts at the source and expands outward.</p>
+      </div>
+
+      <div class="phases-track reveal" id="phasesTrack">
+        <div class="phase-row" id="ph1">
+          <div class="phase-number-col">
+            <div class="phase-num">01</div>
+            <div class="phase-connector"></div>
+          </div>
+          <div class="phase-content">
+            <div class="phase-tag">PHASE ONE / BEACHHEAD</div>
+            <div class="phase-heading">Boeing Assembly Line</div>
+            <div class="phase-body">The primary target and the reference customer that changes every conversation that follows. Defects caught before a panel is sealed cost a fraction of what they cost to fix after the fact, and a fraction of a fraction of what they cost if they reach a passenger. Winning Boeing unlocks every door in the industry.</div>
+          </div>
+        </div>
+        <div class="phase-row" id="ph2">
+          <div class="phase-number-col">
+            <div class="phase-num">02</div>
+            <div class="phase-connector"></div>
+          </div>
+          <div class="phase-content">
+            <div class="phase-tag">PHASE TWO / EXPANSION</div>
+            <div class="phase-heading">MRO Companies</div>
+            <div class="phase-body">The second critical window of quality control. MRO inspectors certify aircraft already in service, under time pressure, working from documentation and experience rather than real-time spatial intelligence. Cognitive QA gives every MRO inspector, regardless of experience level, the capability of the most senior one on the team.</div>
+          </div>
+        </div>
+        <div class="phase-row" id="ph3">
+          <div class="phase-number-col">
+            <div class="phase-num">03</div>
+            <div class="phase-connector"></div>
+          </div>
+          <div class="phase-content">
+            <div class="phase-tag">PHASE THREE / SCALE</div>
+            <div class="phase-heading">Defense and Government</div>
+            <div class="phase-body">Building on the existing relationship between the HoloLens platform and defense procurement workflows. Full audit trail support embedded from day one, meeting the documentation requirements of government contracts from the ground up.</div>
+          </div>
+        </div>
+        <div class="phase-row" id="ph4">
+          <div class="phase-number-col">
+            <div class="phase-num">04</div>
+            <div class="phase-connector"></div>
+          </div>
+          <div class="phase-content">
+            <div class="phase-tag">PHASE FOUR / PLATFORM</div>
+            <div class="phase-heading">Beyond Aviation</div>
+            <div class="phase-body">Aviation is the proof of concept. Once Cognitive QA has established the standard, the platform scales into any industry where a single defect can have catastrophic consequences. Automotive. Maritime. Spacecraft. The foundation built in aviation becomes the entry point into every precision-critical industry that follows.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TAM ── -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-label reveal">Total Addressable Market</div>
+      <h2 class="section-heading reveal">A <span class="amber">$471 billion</span> opportunity<br/>that no one has addressed.</h2>
+      <div class="body-text reveal">
+        <p>The combined opportunity across commercial aircraft manufacturing, global MRO, and MRO software is not theoretical. These are active markets under pressure, with operators already investing in AI and regulators demanding higher standards.</p>
+      </div>
+
+      <div class="tam-rows reveal" id="tamRows">
+        <div class="tam-row" style="--bar-w: 100%">
+          <div class="tam-amount">$328B</div>
+          <div>
+            <div class="tam-label">Commercial Aircraft Manufacturing</div>
+            <div class="tam-bar-wrap"><div class="tam-bar"></div></div>
+          </div>
+          <div style="font-size:0.68rem;letter-spacing:0.12em;color:var(--muted-w);white-space:nowrap;">2024 MARKET</div>
+        </div>
+        <div class="tam-row" style="--bar-w: 41%">
+          <div class="tam-amount">$135B</div>
+          <div>
+            <div class="tam-label">Global MRO Market</div>
+            <div class="tam-bar-wrap"><div class="tam-bar"></div></div>
+          </div>
+          <div style="font-size:0.68rem;letter-spacing:0.12em;color:var(--muted-w);white-space:nowrap;">TOTAL MRO</div>
+        </div>
+        <div class="tam-row" style="--bar-w: 2.3%">
+          <div class="tam-amount">$7.7B</div>
+          <div>
+            <div class="tam-label">MRO Software Segment — projected $11.68B by 2032</div>
+            <div class="tam-bar-wrap"><div class="tam-bar"></div></div>
+          </div>
+          <div style="font-size:0.68rem;letter-spacing:0.12em;color:var(--muted-w);white-space:nowrap;">TO $11.68B</div>
+        </div>
+        <div class="tam-row highlight" style="--bar-w: 100%">
+          <div class="tam-amount">$471B</div>
+          <div>
+            <div class="tam-label">Combined Addressable Opportunity</div>
+            <div class="tam-bar-wrap"><div class="tam-bar" style="background:linear-gradient(90deg,var(--amber),var(--orange));"></div></div>
+          </div>
+          <div style="font-size:0.68rem;letter-spacing:0.12em;color:var(--amber);white-space:nowrap;">TOTAL</div>
+        </div>
+      </div>
+
+      <div class="tam-insight reveal">
+        <strong>85% of operators</strong> and nearly half of all MRO companies are already actively investing in AI. The demand is there. The market is ready. <strong>The solution has not existed until now.</strong>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── BEYOND AVIATION ── -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-label reveal">The Path Beyond Aviation</div>
+      <h2 class="section-heading reveal">Aviation is the proof of concept.<br/><span class="amber">The platform is universal.</span></h2>
+      <div class="body-text reveal">
+        <p>The same framework that verifies a bolt on a 737 can verify a weld on a naval vessel, a component in an armored vehicle, or a part on a spacecraft. The foundation being built in aviation becomes the entry point into every precision-critical industry that follows.</p>
+      </div>
+
+      <div class="beyond-grid" id="beyondGrid" aria-label="Industries beyond aviation">
+        <div class="beyond-card" id="bc1">
+          <div class="beyond-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <div class="beyond-name">AVIATION</div>
+          <div class="beyond-desc">The beachhead. Commercial manufacturing. The proof.</div>
+        </div>
+        <div class="beyond-card" id="bc2">
+          <div class="beyond-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="7" width="20" height="14" rx="2"/>
+              <path d="M16 7V5a2 2 0 00-4 0v2M12 12v4M8 12v2"/>
+            </svg>
+          </div>
+          <div class="beyond-name">AUTOMOTIVE</div>
+          <div class="beyond-desc">Assembly line verification at production scale.</div>
+        </div>
+        <div class="beyond-card" id="bc3">
+          <div class="beyond-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 17l9-14 9 14H3z"/>
+              <path d="M12 17v-5M9 14h6"/>
+            </svg>
+          </div>
+          <div class="beyond-name">MARITIME</div>
+          <div class="beyond-desc">Naval and commercial hull and system inspection.</div>
+        </div>
+        <div class="beyond-card" id="bc4">
+          <div class="beyond-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+            </svg>
+          </div>
+          <div class="beyond-name">DEFENSE</div>
+          <div class="beyond-desc">Where the standard was set. Where the scale now follows.</div>
+        </div>
+        <div class="beyond-card" id="bc5">
+          <div class="beyond-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/>
+            </svg>
+          </div>
+          <div class="beyond-name">SPACECRAFT</div>
+          <div class="beyond-desc">Zero tolerance. Every component. Every time.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── WHY NOW ── -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-label reveal">Why Now</div>
+      <h2 class="section-heading reveal">The question is not <span class="red">whether</span> this comes<br/>to commercial aviation.</h2>
+      <div class="body-text reveal">
+        <p>There is a reason this solution exists now and not ten years ago. The convergence of technology, regulatory pressure, and industry failure has created a window that did not exist before.</p>
+      </div>
+
+      <div class="why-items reveal">
+        <div class="why-item">
+          <span class="why-tag">AI</span>
+          <div class="why-text">Artificial intelligence has matured to the point where real-time spatial inspection against a digital twin is not a research project. It is a deployable enterprise system.</div>
+        </div>
+        <div class="why-item">
+          <span class="why-tag">HOLOLENS</span>
+          <div class="why-text">The Microsoft HoloLens 2 has become a proven enterprise platform. Boeing's own defense division is already using it. Airbus is moving in this direction on the commercial side.</div>
+        </div>
+        <div class="why-item">
+          <span class="why-tag danger">PRECEDENT</span>
+          <div class="why-text">The incidents of 2024 are not flukes. They are the direct outcome of a process that was never designed for the scale and complexity of modern commercial aircraft. Regulators have noticed. The public has noticed.</div>
+        </div>
+        <div class="why-item">
+          <span class="why-tag danger">BOEING</span>
+          <div class="why-text"><span class="red">Boeing reported an $11.8 billion loss in 2024</span> and pleaded guilty to federal criminal fraud charges for deceiving the FAA. The industry is under regulatory, financial, and public pressure that it has never faced at this scale before.</div>
+        </div>
+        <div class="why-item">
+          <span class="why-tag">THE GAP</span>
+          <div class="why-text">The same proven technology used in defense aircraft manufacturing has never been applied to commercial aviation. That gap is the opportunity. And it has a closing window.</div>
+        </div>
+        <div class="why-item">
+          <span class="why-tag">FIRST MOVER</span>
+          <div class="why-text">The question is not whether this comes to commercial aviation. The question is who builds it first. The company that establishes this standard owns the network effect, the data flywheel, and the regulatory relationship that follows.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CLOSING ── -->
+  <footer class="closing" aria-label="Closing statement">
+    <div class="closing-lines">
+      <p class="closing-line" id="cl1">The technology is here.</p>
+      <p class="closing-line" id="cl2">The need is clear.</p>
+      <p class="closing-line amber" id="cl3">The time to act is now.</p>
+    </div>
+    <p class="closing-tagline" id="cltag">WHERE AI MEETS THE GOLD STANDARD OF SAFETY</p>
+  </footer>
+
+  <!-- ── STATUS BAR ── -->
+  <div class="status-bar">
+    <div class="status-dot"></div>
+    <span class="status-online">PLATFORM ONLINE</span>
+    <span>COGNITIVE QA / STRATEGY</span>
+    <span class="status-right">v2.4.1</span>
+  </div>
+
+  <script>
+    // ── READING PROGRESS ──
+    const progressBar = document.getElementById('progress');
+    window.addEventListener('scroll', () => {
+      const doc = document.documentElement;
+      const scrolled = doc.scrollTop / (doc.scrollHeight - doc.clientHeight);
+      progressBar.style.width = (scrolled * 100) + '%';
+    }, { passive: true });
+
+    // ── SCROLL REVEALS ──
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          revealObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal, .reveal-up').forEach(el => revealObs.observe(el));
+
+    // ── STAT COUNTERS ──
+    function formatStat(el, value) {
+      const pre = el.dataset.prefix || '';
+      const suf = el.dataset.suffix || '';
+      const dec = parseInt(el.dataset.decimals) || 0;
+      return pre + value.toFixed(dec) + suf;
+    }
+
+    function runCounter(el) {
+      const target   = parseFloat(el.dataset.target);
+      const duration = 1800;
+      const start    = performance.now();
+      el.dataset.run = '1';
+
+      function step(now) {
+        const p = Math.min((now - start) / duration, 1);
+        const t = 1 - Math.pow(1 - p, 3);
+        el.textContent = formatStat(el, t * target);
+        if (p < 1) requestAnimationFrame(step);
+        else el.textContent = formatStat(el, target);
+      }
+      requestAnimationFrame(step);
+    }
+
+    const statObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting && !e.target.dataset.run) {
+          runCounter(e.target);
+          statObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.stat-num').forEach(el => statObs.observe(el));
+
+    // ── GTM PHASES SEQUENTIAL LIGHT-UP ──
+    const phaseObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          ['ph1','ph2','ph3','ph4'].forEach((id, i) => {
+            setTimeout(() => {
+              const el = document.getElementById(id);
+              if (el) el.classList.add('active');
+            }, i * 260);
+          });
+          phaseObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.25 });
+
+    const pt = document.getElementById('phasesTrack');
+    if (pt) phaseObs.observe(pt);
+
+    // ── TAM BARS ANIMATE ──
+    const tamObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          document.querySelectorAll('.tam-row').forEach((row, i) => {
+            setTimeout(() => row.classList.add('bar-animate'), i * 150);
+          });
+          tamObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    const tr = document.getElementById('tamRows');
+    if (tr) tamObs.observe(tr);
+
+    // ── BEYOND CARDS STAGGER ──
+    const beyondObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          ['bc1','bc2','bc3','bc4','bc5'].forEach((id, i) => {
+            setTimeout(() => {
+              const el = document.getElementById(id);
+              if (el) el.classList.add('visible');
+            }, i * 100);
+          });
+          beyondObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    const bg = document.getElementById('beyondGrid');
+    if (bg) beyondObs.observe(bg);
+
+    // ── CLOSING LINES STAGGER ──
+    const closingObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          ['cl1','cl2','cl3','cltag'].forEach((id, i) => {
+            setTimeout(() => {
+              const el = document.getElementById(id);
+              if (el) el.classList.add('visible');
+            }, i * 220);
+          });
+          closingObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    const cl = document.getElementById('cl1');
+    if (cl) closingObs.observe(cl);
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,1710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>From the Colosseum to the Cloud</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Newsreader:ital,wght@0,300;0,400;1,300;1,400;1,600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cyan:        #00c8ff;
+      --cyan-dim:    #006b8a;
+      --cyan-glow:   rgba(0,200,255,0.15);
+      --blue:        #4d8eff;
+      --bg:          #03050c;
+      --bg-2:        #060b14;
+      --bg-3:        #0a1020;
+      --surface:     rgba(10,18,32,0.7);
+      --border:      rgba(0,200,255,0.1);
+      --border-dim:  rgba(255,255,255,0.06);
+      --text:        #e8f4ff;
+      --text-muted:  #6a8fab;
+      --text-dim:    #3a5570;
+      --red:         #ff4060;
+      --white:       #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── SCROLLBAR ──────────────────────────────── */
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--cyan-dim); border-radius: 2px; }
+
+    /* ─── PROGRESS BAR ───────────────────────────── */
+    #progress {
+      position: fixed; top: 0; left: 0; height: 2px; width: 0%;
+      background: linear-gradient(90deg, var(--blue), var(--cyan));
+      z-index: 300; box-shadow: 0 0 12px var(--cyan);
+      transition: width 0.1s linear;
+    }
+
+    /* ─── NAV ────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 3rem;
+      background: rgba(3,5,12,0.8);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border-dim);
+    }
+    .nav-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--text-dim); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--cyan); }
+    .nav-tag {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--cyan-dim);
+    }
+
+    /* ─── SIDE DOTS ──────────────────────────────── */
+    .side-nav {
+      position: fixed; left: 1rem; top: 50%; transform: translateY(-50%);
+      z-index: 100; display: flex; flex-direction: column; gap: 1.25rem;
+      /* reset inherited nav{} styles */
+      right: auto; padding: 0; background: transparent;
+      backdrop-filter: none; -webkit-backdrop-filter: none;
+      border: none; align-items: flex-start; justify-content: flex-start;
+    }
+    .side-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--text-dim); cursor: pointer;
+      transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+      text-decoration: none; display: block;
+    }
+    .side-dot.active {
+      background: var(--cyan);
+      transform: scale(1.6);
+      box-shadow: 0 0 10px var(--cyan);
+    }
+    @media (max-width: 1024px) { .side-nav { display: none; } }
+
+    /* ─── SCROLL REVEAL ──────────────────────────── */
+    .reveal {
+      opacity: 0; transform: translateY(40px);
+      transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.up { opacity: 1; transform: translateY(0); }
+    .reveal-l {
+      opacity: 0; transform: translateX(-40px);
+      transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal-l.up { opacity: 1; transform: translateX(0); }
+    .reveal-r {
+      opacity: 0; transform: translateX(40px);
+      transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal-r.up { opacity: 1; transform: translateX(0); }
+    .d1{transition-delay:0.05s} .d2{transition-delay:0.12s} .d3{transition-delay:0.2s}
+    .d4{transition-delay:0.28s} .d5{transition-delay:0.36s} .d6{transition-delay:0.44s}
+
+    /* ─── GLASS CARD ─────────────────────────────── */
+    .glass {
+      background: var(--surface);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+    .glass-glow {
+      background: var(--surface);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 0 30px var(--cyan-glow), inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    /* ─── TYPE ───────────────────────────────────── */
+    .h-display {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700; line-height: 1.0;
+      letter-spacing: -0.03em;
+    }
+    .h-section {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600; line-height: 1.1;
+      letter-spacing: -0.025em;
+    }
+    .serif { font-family: 'Newsreader', serif; font-style: italic; }
+    .label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.68rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--cyan-dim);
+    }
+    .cyan { color: var(--cyan); }
+
+    /* Gradient text */
+    .grad-cyan {
+      background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .grad-blue {
+      background: linear-gradient(135deg, var(--cyan) 0%, var(--blue) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    /* ─── SECTIONS ───────────────────────────────── */
+    section { position: relative; }
+    .section-inner { max-width: 1100px; margin: 0 auto; padding: 7rem 3rem; }
+    @media(max-width:768px) { .section-inner { padding: 4rem 1.5rem; } }
+
+    /* ─── HERO ───────────────────────────────────── */
+    #hero {
+      min-height: 100vh; display: flex; align-items: center;
+      overflow: hidden;
+    }
+    #hero-canvas {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      pointer-events: none;
+    }
+    #morph-canvas {
+      position: absolute;
+      right: 3%; top: 50%;
+      transform: translateY(-50%);
+      width: min(420px, 38vw); height: min(400px, 66vh);
+      pointer-events: none; z-index: 1;
+    }
+    @media(max-width: 900px) { #morph-canvas { display: none; } }
+    .hero-inner {
+      max-width: 1100px; margin: 0 auto; padding: 8rem 3rem 4rem;
+      position: relative; z-index: 2; width: 100%;
+    }
+    .hero-kicker {
+      display: inline-flex; align-items: center; gap: 0.75rem;
+      margin-bottom: 2.5rem;
+    }
+    .hero-kicker-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--cyan);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(0,200,255,0.4); }
+      50% { opacity: 0.8; transform: scale(1.3); box-shadow: 0 0 0 8px rgba(0,200,255,0); }
+    }
+    .hero-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700; line-height: 0.95;
+      letter-spacing: -0.04em;
+      font-size: clamp(3.5rem, 8vw, 7.5rem);
+      margin-bottom: 2rem;
+    }
+    .hero-title em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--cyan) 0%, #a0e8ff 60%, var(--white) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-sub {
+      font-size: 1.125rem; color: var(--text-muted); max-width: 560px;
+      line-height: 1.7; margin-bottom: 3.5rem;
+    }
+    .hero-stats {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 1px;
+      background: var(--border-dim); border: 1px solid var(--border-dim);
+      border-radius: 14px; overflow: hidden; max-width: 680px;
+    }
+    .hero-stat {
+      background: var(--bg-2); padding: 1.5rem 1.25rem;
+      transition: background 0.25s;
+    }
+    .hero-stat:hover { background: var(--bg-3); }
+    .hero-stat-num {
+      font-family: 'Newsreader', serif; font-style: italic;
+      font-size: 2rem; color: var(--cyan); display: block; line-height: 1;
+      margin-bottom: 0.35rem;
+    }
+    .hero-stat-label { font-size: 0.7rem; color: var(--text-dim); line-height: 1.4; }
+    .hero-scroll-cue {
+      position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      animation: float-cue 2.5s ease-in-out infinite;
+    }
+    @keyframes float-cue {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(6px); }
+    }
+    .scroll-line {
+      width: 1px; height: 48px;
+      background: linear-gradient(to bottom, var(--cyan), transparent);
+    }
+    .scroll-label { font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-dim); }
+
+    /* ─── CHAPTER LABEL ──────────────────────────── */
+    .chapter-label {
+      display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;
+    }
+    .chapter-line {
+      flex: 1; height: 1px; background: linear-gradient(to right, var(--cyan-dim), transparent);
+      max-width: 60px;
+    }
+
+    /* ─── SECTION TITLE ──────────────────────────── */
+    .section-title { font-size: clamp(2.2rem, 4vw, 3.5rem); margin-bottom: 1rem; }
+    .section-lead { font-size: 1rem; color: var(--text-muted); max-width: 600px; line-height: 1.75; margin-bottom: 4rem; }
+
+    /* ─── ERA TIMELINE ───────────────────────────── */
+    .era-track {
+      display: flex; overflow-x: auto; gap: 0;
+      scrollbar-width: none; -ms-overflow-style: none;
+      cursor: grab;
+    }
+    .era-track:active { cursor: grabbing; }
+    .era-track::-webkit-scrollbar { display: none; }
+    .era-card {
+      min-width: 240px; padding: 2rem 2.5rem 2rem 0;
+      border-top: 1px solid var(--border-dim);
+      transition: border-color 0.3s;
+      flex-shrink: 0;
+    }
+    .era-card:hover { border-top-color: var(--cyan); }
+    .era-num {
+      font-family: 'Newsreader', serif; font-style: italic;
+      font-size: 3rem; color: var(--cyan-dim); line-height: 1; margin-bottom: 0.75rem;
+    }
+    .era-title { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 1.1rem; color: var(--text); margin-bottom: 0.35rem; }
+    .era-tag { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cyan-dim); margin-bottom: 1rem; }
+    .era-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.65; max-width: 210px; }
+
+    /* ─── TWO-COL ────────────────────────────────── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media(max-width:768px) { .two-col { grid-template-columns: 1fr; } .hero-stats { grid-template-columns: 2fr 2fr; } }
+    .benefit-list { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; }
+    .benefit-item { display: flex; gap: 1rem; align-items: flex-start; }
+    .benefit-bar {
+      width: 2px; flex-shrink: 0; height: 100%; min-height: 48px;
+      background: linear-gradient(to bottom, var(--cyan), transparent);
+      border-radius: 2px; margin-top: 2px;
+    }
+    .benefit-title { font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 0.9rem; color: var(--text); margin-bottom: 0.35rem; }
+    .benefit-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* ─── BIG STAT ───────────────────────────────── */
+    .big-stat-block {
+      text-align: center; padding: 3.5rem 2rem;
+      position: relative; overflow: hidden;
+    }
+    .big-stat-block::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 50% 50%, var(--cyan-glow), transparent);
+      pointer-events: none;
+    }
+    .big-num {
+      font-family: 'Newsreader', serif; font-style: italic;
+      font-size: clamp(4rem, 10vw, 7rem);
+      background: linear-gradient(135deg, var(--cyan) 0%, #80e8ff 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      line-height: 1; margin-bottom: 1rem;
+    }
+    .big-stat-text { font-size: 1rem; color: var(--text-muted); max-width: 440px; margin: 0 auto; line-height: 1.7; }
+
+    /* ─── CANVAS CHART ───────────────────────────── */
+    #scurve { width: 100%; height: 300px; display: block; }
+
+    /* ─── 3-CARD STRIP ───────────────────────────── */
+    .card-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border-dim); border: 1px solid var(--border-dim); border-radius: 16px; overflow: hidden; }
+    @media(max-width:768px) { .card-strip { grid-template-columns: 1fr; } }
+    .strip-card { background: var(--bg-2); padding: 2.25rem; transition: background 0.25s; }
+    .strip-card:hover { background: var(--bg-3); }
+    .strip-num { font-family: 'Newsreader', serif; font-style: italic; font-size: 2.75rem; color: var(--cyan-dim); line-height: 1; margin-bottom: 0.5rem; }
+    .strip-title { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 1rem; color: var(--text); margin-bottom: 0.5rem; }
+    .strip-val { font-family: 'Newsreader', serif; font-style: italic; font-size: 1.75rem; color: var(--cyan); margin-bottom: 0.75rem; }
+    .strip-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* ─── DEAL TABLE ─────────────────────────────── */
+    .deal-table { width: 100%; border-collapse: collapse; }
+    .deal-table thead tr { border-bottom: 1px solid var(--border); }
+    .deal-table th { padding: 1rem 1.25rem; text-align: left; font-size: 0.67rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--cyan-dim); font-weight: 400; }
+    .deal-table td { padding: 1.1rem 1.25rem; font-size: 0.875rem; color: var(--text-muted); border-bottom: 1px solid var(--border-dim); }
+    .deal-table td:first-child { color: var(--text); font-weight: 500; }
+    .deal-val { font-family: 'Newsreader', serif; font-style: italic; font-size: 1.25rem; color: var(--cyan); }
+    .deal-table tbody tr { transition: background 0.2s; }
+    .deal-table tbody tr:hover { background: var(--bg-3); }
+
+    /* ─── FLOW CARDS ─────────────────────────────── */
+    .flow-grid { display: grid; grid-template-columns: 1fr 40px 1fr 40px 1fr; align-items: center; gap: 0; }
+    @media(max-width:900px) { .flow-grid { grid-template-columns: 1fr; gap: 0; } .flow-arrow { transform: rotate(90deg); } }
+    .flow-card { padding: 2rem; background: var(--bg-2); border: 1px solid var(--border); border-radius: 12px; transition: border-color 0.3s, background 0.3s; }
+    .flow-card:hover { border-color: var(--cyan); background: var(--bg-3); }
+    .flow-step { font-family: 'Newsreader', serif; font-style: italic; font-size: 2.5rem; color: var(--cyan-dim); line-height: 1; margin-bottom: 0.5rem; }
+    .flow-title { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 1rem; color: var(--text); margin-bottom: 0.35rem; }
+    .flow-amount { font-family: 'Newsreader', serif; font-style: italic; font-size: 1.5rem; color: var(--cyan); margin-bottom: 0.5rem; }
+    .flow-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; }
+    .flow-arrow { display: flex; align-items: center; justify-content: center; }
+    .flow-arrow svg { width: 24px; height: 24px; }
+
+    /* ─── BAR ROWS ───────────────────────────────── */
+    .bar-row { margin-bottom: 2.25rem; }
+    .bar-meta { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.6rem; }
+    .bar-label { font-size: 0.875rem; color: var(--text); }
+    .bar-value { font-family: 'Newsreader', serif; font-style: italic; font-size: 1.4rem; }
+    .bar-track { height: 2px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
+    .bar-fill { height: 100%; width: 0%; border-radius: 2px; transition: width 1.4s cubic-bezier(0.16,1,0.3,1); }
+
+    /* ─── MINI STAT GRID ─────────────────────────── */
+    .mini-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1rem; }
+    .mini-stat { padding: 1.75rem; text-align: center; }
+    .mini-num { font-family: 'Newsreader', serif; font-style: italic; font-size: 2.75rem; color: var(--cyan); line-height: 1; margin-bottom: 0.4rem; }
+    .mini-label { font-size: 0.75rem; color: var(--text-muted); }
+
+    /* ─── PAIN POINTS ────────────────────────────── */
+    .pain-item {
+      padding: 2rem 0; border-bottom: 1px solid var(--border-dim);
+      transition: border-color 0.3s;
+    }
+    .pain-item:hover { border-bottom-color: rgba(0,200,255,0.2); }
+    .pain-inner { display: flex; gap: 2.5rem; align-items: flex-start; }
+    .pain-index { font-family: 'Newsreader', serif; font-style: italic; font-size: 2.5rem; color: var(--cyan-dim); line-height: 1; flex-shrink: 0; width: 2.5rem; }
+    .pain-title { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem; }
+    .pain-body { font-size: 0.875rem; color: var(--text-muted); line-height: 1.75; max-width: 640px; }
+
+    /* ─── BILL CARD ──────────────────────────────── */
+    .bill-card { max-width: 460px; }
+    .bill-header { padding: 1.5rem 2rem; border-bottom: 1px solid var(--border); }
+    .bill-header-label { font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--cyan-dim); margin-bottom: 0.25rem; }
+    .bill-header-title { font-family: 'Space Grotesk', sans-serif; font-weight: 600; color: var(--text); font-size: 0.95rem; }
+    .bill-body { padding: 0.5rem 2rem 1.5rem; }
+    .bill-row { display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 0; border-bottom: 1px solid var(--border-dim); }
+    .bill-service { font-size: 0.85rem; color: var(--text-muted); }
+    .bill-price { font-family: 'Newsreader', serif; font-style: italic; font-size: 1.1rem; color: var(--text); }
+    .bill-footer { padding: 1.25rem 2rem; border-top: 1px solid var(--cyan-dim); display: flex; justify-content: space-between; align-items: center; }
+    .bill-total-label { font-family: 'Space Grotesk', sans-serif; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); }
+    .bill-total-num { font-family: 'Newsreader', serif; font-style: italic; font-size: 2.5rem; color: var(--cyan); }
+
+    /* ─── TRADEOFF ───────────────────────────────── */
+    .tradeoff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media(max-width:768px) { .tradeoff-grid { grid-template-columns: 1fr; } }
+    .tradeoff-card { padding: 2.25rem; border-radius: 14px; }
+    .tradeoff-card.positive { background: rgba(0,200,255,0.04); border: 1px solid rgba(0,200,255,0.15); }
+    .tradeoff-card.negative { background: rgba(255,64,96,0.04); border: 1px solid rgba(255,64,96,0.12); }
+    .tradeoff-head { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1.5rem; }
+    .tradeoff-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .tradeoff-head-label { font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; }
+    .tradeoff-list { list-style: none; display: flex; flex-direction: column; gap: 1.1rem; }
+    .tradeoff-item { display: flex; gap: 0.75rem; }
+    .tradeoff-sign { font-size: 0.9rem; flex-shrink: 0; margin-top: 1px; line-height: 1.5; }
+    .tradeoff-item-title { font-weight: 500; font-size: 0.875rem; color: var(--text); margin-bottom: 0.2rem; }
+    .tradeoff-item-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* ─── TWO PATHS ──────────────────────────────── */
+    .path-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media(max-width:768px) { .path-grid { grid-template-columns: 1fr; } }
+    .path-card {
+      padding: 2.5rem; background: var(--bg-2);
+      border: 1px solid var(--border-dim); border-radius: 14px;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .path-card:hover { border-color: var(--border); background: var(--bg-3); }
+    .path-num { font-size: 0.68rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1.25rem; }
+    .path-title { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 1.5rem; color: var(--text); margin-bottom: 1rem; }
+    .path-body { font-size: 0.875rem; color: var(--text-muted); line-height: 1.75; margin-bottom: 1.5rem; }
+    .path-points { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .path-point { display: flex; gap: 0.65rem; align-items: flex-start; font-size: 0.78rem; color: var(--text-dim); line-height: 1.5; }
+    .path-point::before { content: '→'; color: var(--cyan-dim); flex-shrink: 0; }
+
+    /* ─── CLOSING ────────────────────────────────── */
+    #closing { background: var(--bg-2); }
+    .closing-body { font-size: 1.05rem; color: var(--text-muted); line-height: 1.9; max-width: 700px; margin: 0 auto; }
+    .closing-body p + p { margin-top: 1.5rem; }
+    .closing-byline { margin-top: 4rem; text-align: center; }
+    .byline-divider { width: 1px; height: 3rem; background: linear-gradient(to bottom, var(--cyan), transparent); margin: 0 auto 1.5rem; }
+
+    /* ─── FOOTER ─────────────────────────────────── */
+    footer {
+      padding: 3rem; border-top: 1px solid var(--border-dim);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-series { display: flex; gap: 2rem; flex-wrap: wrap; }
+    .footer-series a { font-size: 0.78rem; color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
+    .footer-series a:hover { color: var(--cyan); }
+    .footer-copy { font-size: 0.72rem; color: var(--text-dim); }
+
+    /* ─── VENU CARD ──────────────────────────────── */
+    .venu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    @media(max-width:768px) { .venu-grid { grid-template-columns: 1fr; } }
+
+    /* ─── CASE STUDY BADGE ───────────────────────── */
+    .blocked-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.3rem 0.75rem; border-radius: 100px;
+      background: rgba(255,64,96,0.1); border: 1px solid rgba(255,64,96,0.25);
+      font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--red);
+    }
+    .blocked-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--red); }
+
+    /* ─── GLOW SECTION DIVIDER ───────────────────── */
+    .glow-divider {
+      height: 1px; max-width: 1100px; margin: 0 auto;
+      background: linear-gradient(to right, transparent, var(--cyan-dim), transparent);
+    }
+
+    /* ─── ANIMATIONS ─────────────────────────────── */
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    /* ─── REDUCE MOTION ──────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Progress bar -->
+  <div id="progress"></div>
+
+  <!-- Nav -->
+  <nav>
+    <span class="nav-logo">Mo NC</span>
+    <ul class="nav-links">
+      <li><a href="#access">Access</a></li>
+      <li><a href="#power">Power Play</a></li>
+      <li><a href="#amazon">Deals</a></li>
+      <li><a href="#victim">The Victim</a></li>
+      <li><a href="#reckoning">Reckoning</a></li>
+    </ul>
+    <span class="nav-tag">Sports Media</span>
+  </nav>
+
+  <!-- Side nav dots -->
+  <nav class="side-nav" aria-label="Section navigation">
+    <a href="#hero"      class="side-dot" data-s="hero"      title="Introduction"></a>
+    <a href="#access"    class="side-dot" data-s="access"    title="The Era Timeline"></a>
+    <a href="#power"     class="side-dot" data-s="power"     title="Power Play"></a>
+    <a href="#covid"     class="side-dot" data-s="covid"     title="COVID Accelerator"></a>
+    <a href="#amazon"    class="side-dot" data-s="amazon"    title="Amazon Blueprint"></a>
+    <a href="#data"      class="side-dot" data-s="data"      title="Data Payoff"></a>
+    <a href="#domino"    class="side-dot" data-s="domino"    title="Domino Effect"></a>
+    <a href="#victim"    class="side-dot" data-s="victim"    title="The Victim"></a>
+    <a href="#reckoning" class="side-dot" data-s="reckoning" title="Reckoning"></a>
+  </nav>
+
+  <main>
+
+    <!-- ═══════════════════════════════════════ HERO -->
+    <section id="hero">
+      <canvas id="hero-canvas" aria-hidden="true"></canvas>
+      <canvas id="morph-canvas" aria-hidden="true"></canvas>
+      <div class="hero-inner">
+        <div class="hero-kicker reveal d1">
+          <span class="hero-kicker-dot"></span>
+          <span style="font-size:0.72rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--text-dim);">Long Read · Sports &amp; Media</span>
+        </div>
+
+        <h1 class="hero-title reveal d2">
+          From the<br/>
+          <em>Colosseum</em><br/>
+          to the Cloud
+        </h1>
+
+        <p class="hero-sub reveal d3">
+          How leagues and streaming giants built a lucrative partnership, and left the fan holding the bill. A reckoning two millennia in the making.
+        </p>
+
+        <div class="hero-stats reveal d4">
+          <div class="hero-stat">
+            <span class="hero-stat-num" data-count="110" data-prefix="$" data-suffix="B+">$0B+</span>
+            <span class="hero-stat-label">Total streaming sports rights deals</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-num" data-count="70" data-suffix="%">0%</span>
+            <span class="hero-stat-label">18–44 yr-olds on streaming</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-num" data-count="137" data-prefix="$">$0</span>
+            <span class="hero-stat-label">Fan's monthly sports bill</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-num" data-count="60" data-suffix="%">0%</span>
+            <span class="hero-stat-label">Subscribe then cancel</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-scroll-cue" aria-hidden="true">
+        <div class="scroll-line"></div>
+        <span class="scroll-label">Scroll</span>
+      </div>
+    </section>
+
+    <div class="glow-divider"></div>
+
+    <!-- ═══════════════════════════ ERA TIMELINE -->
+    <section id="access">
+      <div class="section-inner">
+        <div class="chapter-label reveal">
+          <div class="chapter-line"></div>
+          <span class="label">Chapter I</span>
+        </div>
+        <h2 class="h-section section-title reveal d1">
+          The Unstoppable<br/>
+          <span class="serif" style="font-size:0.9em;color:var(--text-muted);">March of Access</span>
+        </h2>
+        <p class="section-lead reveal d2">Sport has always been inseparable from the dominant medium of its era. Each technological revolution broadened reach and inflated the prize.</p>
+
+        <div class="era-track reveal d3">
+          <div class="era-card">
+            <div class="era-num">I</div>
+            <!-- Colosseum -->
+            <svg viewBox="0 0 120 72" xmlns="http://www.w3.org/2000/svg" style="width:120px;height:72px;display:block;margin-bottom:1.25rem;">
+              <!-- outer wall -->
+              <rect x="4" y="28" width="112" height="40" rx="1" fill="none" stroke="#006b8a" stroke-width="1"/>
+              <!-- elliptical top -->
+              <path d="M4,28 Q60,2 116,28" fill="none" stroke="#00c8ff" stroke-width="1.2"/>
+              <!-- arches row 1 -->
+              <path d="M14,68 L14,44 Q20,36 26,44 L26,68" fill="rgba(0,200,255,0.06)" stroke="#006b8a" stroke-width="0.8"/>
+              <path d="M32,68 L32,44 Q38,36 44,44 L44,68" fill="rgba(0,200,255,0.06)" stroke="#006b8a" stroke-width="0.8"/>
+              <path d="M50,68 L50,44 Q56,36 62,44 L62,68" fill="rgba(0,200,255,0.08)" stroke="#00c8ff" stroke-width="0.8"/>
+              <path d="M68,68 L68,44 Q74,36 80,44 L80,68" fill="rgba(0,200,255,0.06)" stroke="#006b8a" stroke-width="0.8"/>
+              <path d="M86,68 L86,44 Q92,36 98,44 L98,68" fill="rgba(0,200,255,0.06)" stroke="#006b8a" stroke-width="0.8"/>
+              <!-- upper tier arches -->
+              <path d="M20,44 L20,30 Q26,24 32,30 L32,44" fill="none" stroke="#006b8a" stroke-width="0.6" stroke-dasharray="2,2"/>
+              <path d="M44,44 L44,30 Q50,24 56,30 L56,44" fill="none" stroke="#006b8a" stroke-width="0.6" stroke-dasharray="2,2"/>
+              <path d="M62,44 L62,30 Q68,24 74,30 L74,44" fill="none" stroke="#00c8ff" stroke-width="0.7" stroke-dasharray="2,2"/>
+              <path d="M80,44 L80,30 Q86,24 92,30 L92,44" fill="none" stroke="#006b8a" stroke-width="0.6" stroke-dasharray="2,2"/>
+              <!-- ground line -->
+              <line x1="4" y1="68" x2="116" y2="68" stroke="#006b8a" stroke-width="0.5"/>
+            </svg>
+            <div class="era-title">The Arena</div>
+            <div class="era-tag">Physical Presence</div>
+            <p class="era-desc">The Colosseum held 80,000. Access was physical, hierarchical, and local. Your seat was social currency.</p>
+          </div>
+          <div class="era-card">
+            <div class="era-num">II</div>
+            <!-- Radio with sound waves -->
+            <svg viewBox="0 0 120 72" xmlns="http://www.w3.org/2000/svg" style="width:120px;height:72px;display:block;margin-bottom:1.25rem;">
+              <!-- cabinet body -->
+              <rect x="28" y="26" width="44" height="34" rx="3" fill="rgba(0,200,255,0.05)" stroke="#006b8a" stroke-width="1"/>
+              <!-- speaker grille circles -->
+              <circle cx="43" cy="43" r="8" fill="none" stroke="#006b8a" stroke-width="0.8"/>
+              <circle cx="43" cy="43" r="4" fill="none" stroke="#006b8a" stroke-width="0.6"/>
+              <circle cx="43" cy="43" r="1.5" fill="#006b8a"/>
+              <!-- tuner dial -->
+              <rect x="56" y="38" width="10" height="6" rx="1" fill="none" stroke="#006b8a" stroke-width="0.7"/>
+              <line x1="61" y1="38" x2="61" y2="41" stroke="#00c8ff" stroke-width="1"/>
+              <!-- antenna -->
+              <line x1="60" y1="26" x2="54" y2="10" stroke="#006b8a" stroke-width="1" stroke-linecap="round"/>
+              <!-- sound waves right -->
+              <path d="M78,36 Q85,43 78,50" fill="none" stroke="#00c8ff" stroke-width="1.2" stroke-linecap="round" opacity="0.9"/>
+              <path d="M84,30 Q96,43 84,56" fill="none" stroke="#00c8ff" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+              <path d="M90,24 Q107,43 90,62" fill="none" stroke="#00c8ff" stroke-width="0.8" stroke-linecap="round" opacity="0.35"/>
+            </svg>
+            <div class="era-title">Radio</div>
+            <div class="era-tag">Audio Access · 1920s</div>
+            <p class="era-desc">Radio broke geography. Millions heard the fight simultaneously. Attention became the commodity.</p>
+          </div>
+          <div class="era-card">
+            <div class="era-num">III</div>
+            <!-- Television -->
+            <svg viewBox="0 0 120 72" xmlns="http://www.w3.org/2000/svg" style="width:120px;height:72px;display:block;margin-bottom:1.25rem;">
+              <!-- TV body -->
+              <rect x="14" y="10" width="82" height="52" rx="4" fill="rgba(0,200,255,0.05)" stroke="#006b8a" stroke-width="1"/>
+              <!-- screen -->
+              <rect x="22" y="17" width="66" height="38" rx="2" fill="rgba(0,200,255,0.08)" stroke="#00c8ff" stroke-width="0.8"/>
+              <!-- screen glow lines (content) -->
+              <line x1="30" y1="28" x2="60" y2="28" stroke="#00c8ff" stroke-width="0.7" opacity="0.5"/>
+              <line x1="30" y1="33" x2="54" y2="33" stroke="#006b8a" stroke-width="0.7" opacity="0.5"/>
+              <line x1="30" y1="38" x2="58" y2="38" stroke="#006b8a" stroke-width="0.7" opacity="0.5"/>
+              <!-- play/sport silhouette -->
+              <polygon points="66,27 66,45 80,36" fill="rgba(0,200,255,0.2)" stroke="#00c8ff" stroke-width="0.8"/>
+              <!-- legs -->
+              <line x1="40" y1="62" x2="36" y2="70" stroke="#006b8a" stroke-width="1.2" stroke-linecap="round"/>
+              <line x1="70" y1="62" x2="74" y2="70" stroke="#006b8a" stroke-width="1.2" stroke-linecap="round"/>
+              <!-- antenna ears -->
+              <line x1="44" y1="10" x2="36" y2="2" stroke="#006b8a" stroke-width="1" stroke-linecap="round"/>
+              <line x1="66" y1="10" x2="74" y2="2" stroke="#006b8a" stroke-width="1" stroke-linecap="round"/>
+            </svg>
+            <div class="era-title">Television</div>
+            <div class="era-tag">Visual Access · 1950s</div>
+            <p class="era-desc">TV made sport spectacular at home. Rights deals ballooned. The Super Bowl became the most-watched event on Earth.</p>
+          </div>
+          <div class="era-card">
+            <div class="era-num">IV</div>
+            <!-- Streaming / screen + signal -->
+            <svg viewBox="0 0 120 72" xmlns="http://www.w3.org/2000/svg" style="width:120px;height:72px;display:block;margin-bottom:1.25rem;">
+              <!-- device screen -->
+              <rect x="22" y="14" width="60" height="40" rx="3" fill="rgba(0,200,255,0.06)" stroke="#006b8a" stroke-width="1"/>
+              <rect x="28" y="19" width="48" height="30" rx="1.5" fill="rgba(0,200,255,0.1)" stroke="#00c8ff" stroke-width="0.7"/>
+              <!-- play button -->
+              <polygon points="46,28 46,40 58,34" fill="#00c8ff" opacity="0.85"/>
+              <!-- wifi/signal arcs top-right -->
+              <path d="M90,18 Q100,28 90,38" fill="none" stroke="#00c8ff" stroke-width="1.1" stroke-linecap="round" opacity="0.9"/>
+              <path d="M95,12 Q110,28 95,44" fill="none" stroke="#00c8ff" stroke-width="0.9" stroke-linecap="round" opacity="0.55"/>
+              <path d="M100,6 Q120,28 100,50" fill="none" stroke="#00c8ff" stroke-width="0.7" stroke-linecap="round" opacity="0.3"/>
+              <!-- stand -->
+              <line x1="52" y1="54" x2="52" y2="62" stroke="#006b8a" stroke-width="1.2" stroke-linecap="round"/>
+              <line x1="40" y1="62" x2="64" y2="62" stroke="#006b8a" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+            <div class="era-title">Streaming</div>
+            <div class="era-tag">On-Demand · 2020s</div>
+            <p class="era-desc">The internet unbundled everything, then rebundled it at a premium. Live sport anchors subscription growth.</p>
+          </div>
+          <div class="era-card">
+            <div class="era-num">V</div>
+            <!-- AR / AI future -->
+            <svg viewBox="0 0 120 72" xmlns="http://www.w3.org/2000/svg" style="width:120px;height:72px;display:block;margin-bottom:1.25rem;">
+              <!-- AR visor shape -->
+              <path d="M18,32 Q18,22 30,22 L52,22 Q60,22 60,30 Q60,22 68,22 L90,22 Q102,22 102,32 L102,44 Q102,52 94,52 L72,52 Q64,52 60,46 Q56,52 48,52 L26,52 Q18,52 18,44 Z" fill="rgba(0,200,255,0.07)" stroke="#00c8ff" stroke-width="1"/>
+              <!-- left lens -->
+              <ellipse cx="42" cy="37" rx="16" ry="11" fill="rgba(0,200,255,0.1)" stroke="#006b8a" stroke-width="0.8"/>
+              <!-- right lens -->
+              <ellipse cx="78" cy="37" rx="16" ry="11" fill="rgba(0,200,255,0.1)" stroke="#006b8a" stroke-width="0.8"/>
+              <!-- HUD grid lines inside lenses -->
+              <line x1="32" y1="37" x2="52" y2="37" stroke="#00c8ff" stroke-width="0.5" opacity="0.5"/>
+              <line x1="42" y1="28" x2="42" y2="46" stroke="#00c8ff" stroke-width="0.5" opacity="0.5"/>
+              <line x1="68" y1="37" x2="88" y2="37" stroke="#00c8ff" stroke-width="0.5" opacity="0.5"/>
+              <line x1="78" y1="28" x2="78" y2="46" stroke="#00c8ff" stroke-width="0.5" opacity="0.5"/>
+              <!-- circuit nodes -->
+              <circle cx="42" cy="37" r="2.5" fill="#00c8ff" opacity="0.8"/>
+              <circle cx="78" cy="37" r="2.5" fill="#00c8ff" opacity="0.8"/>
+              <!-- data sparks -->
+              <circle cx="20" cy="18" r="1.5" fill="#00c8ff" opacity="0.5"/>
+              <line x1="20" y1="18" x2="30" y2="22" stroke="#00c8ff" stroke-width="0.6" opacity="0.4"/>
+              <circle cx="100" cy="18" r="1.5" fill="#00c8ff" opacity="0.5"/>
+              <line x1="100" y1="18" x2="90" y2="22" stroke="#00c8ff" stroke-width="0.6" opacity="0.4"/>
+              <circle cx="60" cy="62" r="1.5" fill="#00c8ff" opacity="0.5"/>
+              <line x1="60" y1="62" x2="60" y2="52" stroke="#00c8ff" stroke-width="0.6" opacity="0.4"/>
+            </svg>
+            <div class="era-title">What's Next</div>
+            <div class="era-tag">Commerce + AI · 2030s</div>
+            <p class="era-desc">Shoppable moments. Personalized feeds. Integrated betting. Sport as commerce infrastructure.</p>
+          </div>
+        </div>
+
+        <div class="glass reveal d4" style="padding:2rem;margin-top:2rem;">
+          <p style="font-size:0.875rem;color:var(--text-muted);line-height:1.75;">
+            <span class="label" style="display:block;margin-bottom:0.75rem;">The pattern</span>
+            Each era multiplied viewership and revenue. The transition is never smooth: incumbents resist, consumers adapt slowly, but the shift is always irreversible. We are mid-transition now.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="glow-divider"></div>
+
+    <!-- ═══════════════════════════ POWER PLAY -->
+    <section id="power" style="background:var(--bg-2);">
+      <div class="section-inner">
+        <div class="chapter-label reveal">
+          <div class="chapter-line"></div>
+          <span class="label">Chapter II</span>
+        </div>
+        <h2 class="h-section section-title reveal d1">
+          A Mutually Beneficial<br/>
+          <span class="serif" style="font-size:0.9em;color:var(--text-muted);">Power Play</span>
+        </h2>
+        <p class="section-lead reveal d2">The marriage between sports leagues and streaming platforms wasn't accidental. Each party held exactly what the other desperately needed.</p>
+
+        <div class="two-col" style="margin-bottom:3rem;">
+          <div class="glass reveal reveal-l d2" style="padding:2.25rem;">
+            <div class="label" style="margin-bottom:1.5rem;">What Leagues Gained</div>
+            <ul class="benefit-list">
+              <li class="benefit-item"><div class="benefit-bar"></div><div><div class="benefit-title">Massive Rights Fees</div><div class="benefit-desc">Tech giants, flush with cash, bid higher than legacy broadcasters ever could or would.</div></div></li>
+              <li class="benefit-item"><div class="benefit-bar"></div><div><div class="benefit-title">Global Distribution</div><div class="benefit-desc">Streaming platforms reach audiences throughout the world. A single deal is a global audience deal.</div></div></li>
+              <li class="benefit-item"><div class="benefit-bar"></div><div><div class="benefit-title">Younger Demographics</div><div class="benefit-desc">Streaming reaches the 18–34 cohort that has abandoned linear TV.</div></div></li>
+              <li class="benefit-item"><div class="benefit-bar"></div><div><div class="benefit-title">Production Innovation</div><div class="benefit-desc">Multi-angle cameras, real-time stats overlays, integrated betting odds.</div></div></li>
+            </ul>
+          </div>
+          <div class="glass reveal reveal-r d2" style="padding:2.25rem;">
+            <div class="label" style="margin-bottom:1.5rem;color:var(--blue);">What Streamers Gained</div>
+            <ul class="benefit-list">
+              <li class="benefit-item"><div class="benefit-bar" style="background:linear-gradient(to bottom,var(--blue),transparent)"></div><div><div class="benefit-title">Subscriber Magnets</div><div class="benefit-desc">Live sport drives sign-ups on event nights and keeps churn low during the season.</div></div></li>
+              <li class="benefit-item"><div class="benefit-bar" style="background:linear-gradient(to bottom,var(--blue),transparent)"></div><div><div class="benefit-title">Legitimate Premium Brand</div><div class="benefit-desc">Owning the rights to a major sports league signals that a streamer is a serious media company.</div></div></li>
+              <li class="benefit-item"><div class="benefit-bar" style="background:linear-gradient(to bottom,var(--blue),transparent)"></div><div><div class="benefit-title">First-Party Data</div><div class="benefit-desc">Authenticated viewers reveal household income, purchase behavior, and preferences.</div></div></li>
+              <li class="benefit-item"><div class="benefit-bar" style="background:linear-gradient(to bottom,var(--blue),transparent)"></div><div><div class="benefit-title">Commerce Integration</div><div class="benefit-desc">By following Amazon's lead, every ad slot is a shoppable moment. Sport is a purchase funnel.</div></div></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="glass-glow reveal">
+          <div class="big-stat-block">
+            <div class="big-num" data-count-big="70" data-suffix="%">0%</div>
+            <p class="big-stat-text">of adults aged 18–44 subscribe to at least one streaming service, with an average of <strong style="color:var(--text);">8 active subscriptions</strong> per household. The audience has already moved.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="glow-divider"></div>
+
+    <!-- ═══════════════════════════ COVID -->
+    <section id="covid">
+      <div class="section-inner">
+        <div class="chapter-label reveal">
+          <div class="chapter-line"></div>
+          <span class="label">Chapter III</span>
+        </div>
+        <h2 class="h-section section-title reveal d1">
+          The COVID<br/>
+          <span class="serif" style="font-size:0.9em;color:var(--text-muted);">Accelerator</span>
+        </h2>
+        <p class="section-lead reveal d2">The pandemic compressed a decade of change into eighteen months. Empty stadiums forced every stakeholder's hand.</p>
+
+        <!-- S-Curve Chart -->
+        <div class="glass reveal d3" style="padding:2.25rem;margin-bottom:2rem;">
+          <div class="label" style="margin-bottom:1.5rem;">Streaming vs Traditional TV: Viewership Index 2015–2025</div>
+          <canvas id="scurve" height="300" aria-label="Chart showing streaming rising and linear TV falling with a crossover at 2020"></canvas>
+          <div style="display:flex;gap:2rem;margin-top:1.5rem;flex-wrap:wrap;">
+            <div style="display:flex;align-items:center;gap:0.6rem;"><div style="width:2rem;height:2px;background:var(--cyan);"></div><span style="font-size:0.75rem;color:var(--text-muted);">Streaming</span></div>
+            <div style="display:flex;align-items:center;gap:0.6rem;"><div style="width:2rem;height:2px;background:var(--text-dim);"></div><span style="font-size:0.75rem;color:var(--text-muted);">Linear TV</span></div>
+            <div style="display:flex;align-items:center;gap:0.6rem;"><div style="width:10px;height:10px;border-radius:50%;background:rgba(0,200,255,0.3);border:1px solid var(--cyan);"></div><span style="font-size:0.75rem;color:var(--text-muted);">2020 COVID inflection</span></div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
+          <div class="glass reveal d1" style="padding:1.75rem;">
+            <div style="font-family:'Newsreader',serif;font-style:italic;font-size:2rem;color:var(--cyan);margin-bottom:0.5rem;">+26M</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.85rem;color:var(--text);margin-bottom:0.4rem;">New US streaming subscribers in 2020</div>
+            <div style="font-size:0.78rem;color:var(--text-muted);line-height:1.6;">Added in a single year as lockdowns made streaming the only live entertainment.</div>
+          </div>
+          <div class="glass reveal d2" style="padding:1.75rem;">
+            <div style="font-family:'Newsreader',serif;font-style:italic;font-size:2rem;color:var(--cyan);margin-bottom:0.5rem;">–12%</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.85rem;color:var(--text);margin-bottom:0.4rem;">Linear TV viewership decline 2020–22</div>
+            <div style="font-size:0.78rem;color:var(--text-muted);line-height:1.6;">Cord-cutting accelerated permanently. Households that cancelled rarely returned.</div>
+          </div>
+          <div class="glass reveal d3" style="padding:1.75rem;">
+            <div style="font-family:'Newsreader',serif;font-style:italic;font-size:2rem;color:var(--cyan);margin-bottom:0.5rem;">2021</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.85rem;color:var(--text);margin-bottom:0.4rem;">First major sports rights shift to streaming</div>
+            <div style="font-size:0.78rem;color:var(--text-muted);line-height:1.6;">Amazon had previously aired NFL games, but in 2021 signed the first exclusive streaming rights deal for Thursday Night Football, a watershed moment for the industry.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="glow-divider"></div>
+
+    <!-- ═══════════════════════════ AMAZON -->
+    <section id="amazon" style="background:var(--bg-2);">
+      <div class="section-inner">
+        <div class="chapter-label reveal">
+          <div class="chapter-line"></div>
+          <span class="label">Case Study</span>
+        </div>
+        <h2 class="h-section section-title reveal d1">
+          The Amazon / NFL<br/>
+          <span class="serif" style="font-size:0.9em;color:var(--text-muted);">Blueprint</span>
+        </h2>
+        <p class="section-lead reveal d2">When Amazon secured exclusive NFL Thursday Night Football rights in 2021, it didn't buy a broadcast slot; it bought a proof-of-concept for the entire industry.</p>
+
+        <!-- Deal table -->
+        <div class="glass reveal d2" style="overflow:hidden;margin-bottom:2.5rem;">
+          <table class="deal-table" style="width:100%;">
+            <thead>
+              <tr>
+                <th>Partner</th>
+                <th>Asset</th>
+                <th>Duration</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Amazon Prime Video</td>
+                <td>Thursday Night Football (excl.)</td>
+                <td>11 years</td>
+                <td><span class="deal-val">~$1B/yr</span></td>
+              </tr>
+              <tr>
+                <td style="color:var(--text-muted);font-size:0.8rem;">Per-game cost</td>
+                <td style="color:var(--text-muted);font-size:0.8rem;">15–17 games/season</td>
+                <td style="color:var(--text-muted);font-size:0.8rem;">2022–2032</td>
+                <td><span class="deal-val" style="font-size:1rem;color:var(--text-muted);">$58.8M/game</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Black Friday intro -->
+        <div class="glass reveal d1" style="padding:2.25rem;margin-bottom:2.5rem;">
+          <div class="label" style="margin-bottom:1rem;color:var(--cyan);">2023: The Black Friday Game</div>
+          <p style="font-size:1.05rem;line-height:1.8;color:var(--text);margin-bottom:1rem;">Building on the success of exclusive Thursday Night Football, Amazon paid $100M for the exclusive rights to a single NFL game on Black Friday 2023. But this was never just about football.</p>
+          <p style="font-size:1rem;line-height:1.8;color:var(--text-muted);margin-bottom:1rem;">The move was a deliberate attempt to create a new commercial holiday tradition, one that lived entirely within a digital ecosystem. Instead of heading out to stores on Black Friday, Amazon wanted the shopping experience to come to viewers, while they watched the most-watched sport in the United States.</p>
+          <p style="font-size:1rem;line-height:1.8;color:var(--text-muted);">By pairing targeted ads with live football, Amazon turned a single game into a shoppable event, redefining what Black Friday could look like for a streaming-first generation.</p>
+        </div>
+
+        <!-- Black Friday flow -->
+        <div class="label reveal" style="margin-bottom:1.25rem;">The Black Friday Experiment: Acquire → Monetize → Integrate</div>
+        <div class="flow-grid reveal d2">
+          <div class="flow-card">
+            <div class="flow-step">01</div>
+            <div class="flow-title">Acquire</div>
+            <div class="flow-amount">$100M</div>
+            <p class="flow-desc">Amazon paid ~$100M for exclusive Black Friday rights, a calculated loss-leader to prove the model.</p>
+          </div>
+          <div class="flow-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan-dim)" stroke-width="1.5">
+              <path d="M5 12h14M13 6l6 6-6 6"/>
+            </svg>
+          </div>
+          <div class="flow-card">
+            <div class="flow-step">02</div>
+            <div class="flow-title">Monetize</div>
+            <div class="flow-amount">$880K</div>
+            <p class="flow-desc">The only publicly available data covers 58 thirty-second ad slots, which alone generated approximately $51M. Shorter formats like 15-second ads were not disclosed, meaning the true ad revenue was almost certainly higher, and Amazon likely recouped well over half its $100M investment from ads before a single item was sold.</p>
+          </div>
+          <div class="flow-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan-dim)" stroke-width="1.5">
+              <path d="M5 12h14M13 6l6 6-6 6"/>
+            </svg>
+          </div>
+          <div class="flow-card">
+            <div class="flow-step">03</div>
+            <div class="flow-title">Integrate</div>
+            <div class="flow-amount">Shop</div>
+            <p class="flow-desc">Instead of going out and battling crowds, the shopping experience was brought directly to the customer's living room. Amazon converted its first-party data into a targeted ad experience tailored to each viewer. Many ads featured QR codes directing users straight to product pages. But every QR code scan sent behavioral data back to Amazon, giving the tech giant even richer targeting signals for future campaigns. The game was not just a commercial event, it was a data collection exercise at scale.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="glow-divider"></div>
+
+    <!-- ═══════════════════════════ DATA PAYOFF -->
+    <section id="data">
+      <div class="section-inner">
+        <div class="chapter-label reveal">
+          <div class="chapter-line"></div>
+          <span class="label">Chapter IV</span>
+        </div>
+        <h2 class="h-section section-title reveal d1">
+          The Real Payoff<br/>
+          <span class="serif" style="font-size:0.9em;color:var(--text-muted);">Is Data</span>
+        </h2>
+        <p class="section-lead reveal d2">The ad revenue is visible. The commerce integration is trackable. But the real prize, why tech companies outbid legacy broadcasters, is first-party data from authenticated viewers.</p>
+
+        <div class="glass reveal d2" style="padding:2.5rem;margin-bottom:2rem;" id="data-bars">
+          <div class="label" style="margin-bottom:2rem;">Black Friday Game: Revenue Analysis</div>
+          <div class="bar-row">
+            <div class="bar-meta"><span class="bar-label">Rights Investment</span><span class="bar-value" style="color:#ff6080;">−$100M</span></div>
+            <div class="bar-track"><div class="bar-fill" style="background:linear-gradient(90deg,#7f1d2a,#ff4060);" data-w="100"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-meta"><span class="bar-label">Known Direct Ad Revenue (from 30 sec ads, 58 × $880K)</span><span class="bar-value" style="color:var(--cyan);">+$51.04M</span></div>
+            <div class="bar-track"><div class="bar-fill" style="background:linear-gradient(90deg,var(--cyan-dim),var(--cyan));" data-w="51"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-meta"><span class="bar-label">Commerce / Shoppable Ads / Unknown Ad Revenue</span><span class="bar-value" style="color:var(--cyan);">+Unmeasured</span></div>
+            <div class="bar-track"><div class="bar-fill" style="background:linear-gradient(90deg,var(--cyan-dim),var(--blue));" data-w="38"></div></div>
+          </div>
+          <div class="bar-row" style="margin-bottom:0;">
+            <div class="bar-meta"><span class="bar-label">First-Party Data Value (modelled)</span><span class="bar-value" style="color:#80e8ff;">+Strategic</span></div>
+            <div class="bar-track"><div class="bar-fill" style="background:linear-gradient(90deg,var(--blue),var(--cyan),#a0f0ff);" data-w="82"></div></div>
+          </div>
+          <p style="font-size:0.75rem;color:var(--text-dim);margin-top:1.75rem;font-style:italic;">* 58 slots. Only accounts for 30 sec ads.</p>
+        </div>
+
+        <div class="mini-grid">
+          <div class="glass reveal d1"><div class="mini-stat"><div class="mini-num">58</div><div class="mini-label">30 sec ad slots per game (publicly known)</div></div></div>
+          <div class="glass reveal d2"><div class="mini-stat"><div class="mini-num">$880K</div><div class="mini-label">Per 30-second unit</div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="glow-divider"></div>
+
+    <!-- ═══════════════════════════ DOMINO -->
+    <section id="domino" style="background:var(--bg-2);">
+      <div class="section-inner">
+        <div class="chapter-label reveal">
+          <div class="chapter-line"></div>
+          <span class="label">Chapter V</span>
+        </div>
+        <h2 class="h-section section-title reveal d1">
+          The Domino<br/>
+          <span class="serif" style="font-size:0.9em;color:var(--text-muted);">Effect</span>
+        </h2>
+        <p class="section-lead reveal d2">Once Amazon proved the model, every major league renegotiated. The deals that followed rewired the entire rights landscape.</p>
+
+        <!-- NFL table -->
+        <div class="label reveal" style="margin-bottom:1rem;">NFL: $26B Total Streaming Portfolio</div>
+        <div class="glass reveal d1" style="overflow:hidden;margin-bottom:2.5rem;">
+          <table class="deal-table" style="width:100%;">
+            <thead><tr><th>Platform</th><th>Package</th><th>Deal Signed</th><th>Term</th><th>Value</th></tr></thead>
+            <tbody>
+              <tr><td>Amazon Prime</td><td>Thursday Night (excl.)</td><td>2021</td><td>11 yr</td><td><span class="deal-val">$1.0B/yr</span></td></tr>
+              <tr><td>YouTube TV</td><td>Sunday Ticket</td><td>2024</td><td>7 yr</td><td><span class="deal-val">$2.5B/yr</span></td></tr>
+              <tr><td>Peacock (NBC)</td><td>Exclusive Playoff Game</td><td>2023</td><td>Ongoing</td><td><span class="deal-val">$110M</span></td></tr>
+              <tr><td>Netflix</td><td>Christmas Day Games</td><td>2024</td><td>3 yr</td><td><span class="deal-val">$150M/yr</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- NBA table -->
+        <div class="label reveal" style="margin-bottom:1rem;">NBA: $76B Total Streaming Portfolio</div>
+        <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:1rem;font-style:italic;" class="reveal d1">All deals below were signed as part of the NBA's new media rights agreement, covering the 2025-2026 season onwards.</p>
+        <div class="glass reveal d2" style="overflow:hidden;margin-bottom:2.5rem;">
+          <table class="deal-table" style="width:100%;">
+            <thead><tr><th>Platform</th><th>Package</th><th>Term</th><th>Value</th></tr></thead>
+            <tbody>
+              <tr><td>Amazon Prime</td><td>Package C (excl. streaming)</td><td>11 yr</td><td><span class="deal-val">$1.8B/yr</span></td></tr>
+              <tr><td>NBC / Peacock</td><td>Package A</td><td>11 yr</td><td><span class="deal-val">$2.5B/yr</span></td></tr>
+              <tr><td>ESPN / ABC</td><td>Package B</td><td>11 yr</td><td><span class="deal-val">$2.6B/yr</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;" class="reveal d3">
+          <div class="glass" style="padding:1.75rem;">
+            <div class="label" style="margin-bottom:0.75rem;">MLS</div>
+            <div style="font-family:'Newsreader',serif;font-style:italic;font-size:2rem;color:var(--cyan);margin-bottom:0.5rem;">$2.5B</div>
+            <div style="font-size:0.8rem;color:var(--text-muted);">Apple TV+, 10-year exclusive. Full league package. Global rights.</div>
+          </div>
+          <div class="glass" style="padding:1.75rem;">
+            <div class="label" style="margin-bottom:0.75rem;">MLB</div>
+            <div style="font-family:'Newsreader',serif;font-style:italic;font-size:2rem;color:var(--cyan);margin-bottom:0.5rem;">$85M/yr</div>
+            <div style="font-size:0.8rem;color:var(--text-muted);">Apple TV+ Friday games. First major broadcast-to-streaming shift in baseball.</div>
+          </div>
+          <div class="glass" style="padding:1.75rem;">
+            <div class="label" style="margin-bottom:0.75rem;">WWE / Netflix</div>
+            <div style="font-family:'Newsreader',serif;font-style:italic;font-size:2rem;color:var(--cyan);margin-bottom:0.5rem;">$5B</div>
+            <div style="font-size:0.8rem;color:var(--text-muted);">10-year deal. RAW exclusively on Netflix. Combat sport goes mainstream streaming.</div>
+          </div>
+        </div>
+
+        <!-- Total committed -->
+        <div class="reveal d4" style="margin-top:2.5rem;border:1px solid var(--cyan-dim);border-radius:16px;padding:2.5rem 3rem;background:linear-gradient(135deg,rgba(0,200,255,0.04) 0%,rgba(0,200,255,0.01) 100%);display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;">
+          <div>
+            <div class="label" style="margin-bottom:0.6rem;color:var(--cyan-dim);">Total Capital Committed to Streaming Rights</div>
+            <div style="font-family:'Newsreader',serif;font-style:italic;line-height:1;color:var(--cyan);font-size:clamp(3.5rem,7vw,6rem);">
+              <span data-count="110" data-prefix="$" data-suffix="B+">$0B+</span>
+            </div>
+            <div style="font-size:0.75rem;color:var(--text-dim);margin-top:0.6rem;letter-spacing:0.15em;text-transform:uppercase;">NFL · NBA · MLS · MLB · WWE and counting</div>
+          </div>
+          <div style="flex-shrink:0;max-width:320px;">
+            <p style="font-size:0.875rem;color:var(--text-muted);line-height:1.75;">In just a few years, the four major American sports leagues collectively signed over <strong style="color:var(--text);">$110 billion</strong> in streaming rights contracts. Television's century-long monopoly on live sport ended not with a whimper, but with a wire transfer.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="glow-divider"></div>
+
+    <!-- ═══════════════════════════ THE VICTIM -->
+    <section id="victim">
+      <div class="section-inner">
+        <div class="chapter-label reveal">
+          <div class="chapter-line"></div>
+          <span class="label">Chapter VI</span>
+        </div>
+        <h2 class="h-section section-title reveal d1">
+          The Victim<br/>
+          <span class="serif" style="font-size:0.9em;color:var(--text-muted);">in the Room</span>
+        </h2>
+        <p class="section-lead reveal d2">As leagues and platforms negotiated their mutual prosperity, one stakeholder was absent from the table: the fan.</p>
+
+        <div style="margin-bottom:3.5rem;">
+          <div class="pain-item reveal d1">
+            <div class="pain-inner">
+              <div class="pain-index">01</div>
+              <div>
+                <div class="pain-title">À La Carte Chaos</div>
+                <p class="pain-body">To watch a complete NFL season, a fan must now subscribe to YouTube TV, Amazon Prime, Peacock, ESPN+, and Netflix, each carrying a different package of games. No single service provides full coverage. The consumer must reconstruct the bundle they once had, at three times the price.</p>
+              </div>
+            </div>
+          </div>
+          <div class="pain-item reveal d2">
+            <div class="pain-inner">
+              <div class="pain-index">02</div>
+              <div>
+                <div class="pain-title">Subscription Fatigue</div>
+                <div style="display:flex;align-items:baseline;gap:0.75rem;margin-bottom:0.6rem;">
+                  <span style="font-family:'Newsreader',serif;font-style:italic;font-size:2rem;color:var(--cyan);">60%</span>
+                  <span style="font-size:0.85rem;color:var(--text-muted);">of subscribers cancel within 3 months of a major sporting event</span>
+                </div>
+                <p class="pain-body">The subscribe-and-cancel cycle is now a documented consumer pattern. Fans sign up for the Super Bowl or the Finals, cancel after, and platforms spend the off-season buying them back with discounts. The economics are unstable.</p>
+              </div>
+            </div>
+          </div>
+          <div class="pain-item reveal d3" style="border-bottom:none;">
+            <div class="pain-inner">
+              <div class="pain-index">03</div>
+              <div>
+                <div class="pain-title">Toll Road Mentality</div>
+                <p class="pain-body">Individual playoff games are now paywalled behind specific streaming tiers. The 2024 Wild Card game on Peacock required a paid upgrade, a game once available on free broadcast now has a cover charge. The public good of live sport is becoming a private toll road.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bill card -->
+        <div class="label reveal" style="margin-bottom:1.25rem;">The True Cost: An NFL Fan's Monthly Bill</div>
+        <div class="glass-glow bill-card reveal d2">
+          <div class="bill-header">
+            <div class="bill-header-label">Monthly subscription breakdown</div>
+            <div class="bill-header-title">Full NFL Season Access 2024/25</div>
+          </div>
+          <div class="bill-body">
+            <div class="bill-row"><span class="bill-service">YouTube TV (base package)</span><span class="bill-price">$82.99</span></div>
+            <div class="bill-row"><span class="bill-service">YouTube Sunday Ticket</span><span class="bill-price">$23.00</span></div>
+            <div class="bill-row"><span class="bill-service">Amazon Prime</span><span class="bill-price">$11.58</span></div>
+            <div class="bill-row"><span class="bill-service">Peacock Premium</span><span class="bill-price">$10.99</span></div>
+            <div class="bill-row" style="border-bottom:none;"><span class="bill-service">Netflix (Standard)</span><span class="bill-price">$7.99</span></div>
+          </div>
+          <div class="bill-footer">
+            <div class="bill-total-label">Total Monthly</div>
+            <div class="bill-total-num">$136.55</div>
+          </div>
+        </div>
+        <p style="font-size:0.75rem;color:var(--text-dim);margin-top:1rem;max-width:460px;">vs. $50–60/month for the cable bundle that included all of the above a decade ago.</p>
+      </div>
+    </section>
+
+    <div class="glow-divider"></div>
+
+    <!-- ═══════════════════════════ TRADEOFF -->
+    <section style="background:var(--bg-2);">
+      <div class="section-inner">
+        <div class="chapter-label reveal">
+          <div class="chapter-line"></div>
+          <span class="label">The Calculus</span>
+        </div>
+        <h2 class="h-section section-title reveal d1">Innovation vs.<br/><span class="serif" style="font-size:0.9em;color:var(--text-muted);">Accessibility</span></h2>
+
+        <div class="tradeoff-grid" style="margin-top:3rem;">
+          <div class="tradeoff-card positive reveal reveal-l d2">
+            <div class="tradeoff-head">
+              <div class="tradeoff-dot" style="background:var(--cyan);box-shadow:0 0 8px var(--cyan);"></div>
+              <span class="tradeoff-head-label" style="color:var(--cyan);">What You Get</span>
+            </div>
+            <ul class="tradeoff-list">
+              <li class="tradeoff-item"><span class="tradeoff-sign" style="color:var(--cyan);">+</span><div><div class="tradeoff-item-title">Multi-angle cameras</div><div class="tradeoff-item-desc">Choose your view. Watch replays from any angle instantly.</div></div></li>
+              <li class="tradeoff-item"><span class="tradeoff-sign" style="color:var(--cyan);">+</span><div><div class="tradeoff-item-title">Personalized stats overlays</div><div class="tradeoff-item-desc">Real-time player tracking, fantasy data, predictive analytics.</div></div></li>
+              <li class="tradeoff-item"><span class="tradeoff-sign" style="color:var(--cyan);">+</span><div><div class="tradeoff-item-title">Integrated betting</div><div class="tradeoff-item-desc">Live odds in-stream. Place bets without leaving the feed.</div></div></li>
+              <li class="tradeoff-item"><span class="tradeoff-sign" style="color:var(--cyan);">+</span><div><div class="tradeoff-item-title">Global access</div><div class="tradeoff-item-desc">Any device, anywhere. Games no longer geography-locked.</div></div></li>
+            </ul>
+          </div>
+          <div class="tradeoff-card negative reveal reveal-r d2">
+            <div class="tradeoff-head">
+              <div class="tradeoff-dot" style="background:var(--red);box-shadow:0 0 8px var(--red);"></div>
+              <span class="tradeoff-head-label" style="color:var(--red);">What It Costs</span>
+            </div>
+            <ul class="tradeoff-list">
+              <li class="tradeoff-item"><span class="tradeoff-sign" style="color:var(--red);">−</span><div><div class="tradeoff-item-title">Financial burden</div><div class="tradeoff-item-desc">$137/month for one sport. This excludes all other entertainment.</div></div></li>
+              <li class="tradeoff-item"><span class="tradeoff-sign" style="color:var(--red);">−</span><div><div class="tradeoff-item-title">Navigational complexity</div><div class="tradeoff-item-desc">Six apps to manage. Different UIs, passwords, and billing cycles.</div></div></li>
+              <li class="tradeoff-item"><span class="tradeoff-sign" style="color:var(--red);">−</span><div><div class="tradeoff-item-title">Reduced accessibility</div><div class="tradeoff-item-desc">Lower-income households priced out. Sport becomes a luxury, not a right.</div></div></li>
+              <li class="tradeoff-item"><span class="tradeoff-sign" style="color:var(--red);">−</span><div><div class="tradeoff-item-title">Privacy erosion</div><div class="tradeoff-item-desc">The price of personalization is behavioral surveillance at scale.</div></div></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="glow-divider"></div>
+
+    <!-- ═══════════════════════════ RECKONING -->
+    <section id="reckoning">
+      <div class="section-inner">
+        <div class="chapter-label reveal">
+          <div class="chapter-line"></div>
+          <span class="label">Chapter VII</span>
+        </div>
+        <h2 class="h-section section-title reveal d1">
+          The<br/>
+          <span class="serif" style="font-size:0.9em;color:var(--text-muted);">Reckoning</span>
+        </h2>
+        <p class="section-lead reveal d2">Consumer tolerance for fragmented access and escalating costs has limits. Two distinct futures are emerging. The industry must choose.</p>
+
+        <!-- Venu Sports -->
+        <div class="glass reveal d2" style="padding:2.5rem;margin-bottom:3rem;border-color:rgba(255,64,96,0.15);">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;">
+            <div class="label">Cautionary Tale: Venu Sports</div>
+            <span class="blocked-badge"><span class="blocked-dot"></span>BLOCKED: Antitrust</span>
+          </div>
+          <div class="venu-grid">
+            <div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1rem;color:var(--text);margin-bottom:0.75rem;">The Proposed Solution</div>
+              <p style="font-size:0.875rem;color:var(--text-muted);line-height:1.75;margin-bottom:1rem;">ESPN, Fox, and Warner Bros. Discovery proposed a joint streaming venture, "Venu Sports", to offer all major sports on a single platform. A genuine re-aggregation attempt. Industry collaboration over competition.</p>
+              <div style="font-family:'Newsreader',serif;font-style:italic;font-size:2rem;color:var(--cyan);">$42.99/mo</div>
+              <div style="font-size:0.75rem;color:var(--text-dim);">Proposed price point</div>
+            </div>
+            <div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1rem;color:var(--text);margin-bottom:0.75rem;">The Regulatory Block</div>
+              <p style="font-size:0.875rem;color:var(--text-muted);line-height:1.75;">A federal judge issued a preliminary injunction, ruling that three of the largest sports content owners creating a single bundle raised serious antitrust concerns. Venu Sports was shelved indefinitely.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Two paths -->
+        <div class="label reveal" style="margin-bottom:1.25rem;">Two Futures</div>
+        <div class="path-grid reveal d2">
+          <div class="path-card">
+            <div class="path-num">Path 01</div>
+            <div class="path-title">Re-Aggregation</div>
+            <p class="path-body">The industry consolidates. A single super-bundle emerges through regulatory approval or acquisition. The fan gets one bill, one interface. Convenient, but historically monopolistic.</p>
+            <ul class="path-points">
+              <li class="path-point">Precedent: Cable TV bundle (pre-2015)</li>
+              <li class="path-point">Risk: monopolistic pricing without competition</li>
+              <li class="path-point">Blocker: antitrust regulators (see Venu Sports)</li>
+            </ul>
+          </div>
+          <div class="path-card">
+            <div class="path-num">Path 02</div>
+            <div class="path-title">Commerce-First</div>
+            <p class="path-body">Streaming becomes the wrapper around a commerce experience. Subscription fees are subsidized by purchase commissions and targeted advertising. The cost drops, and the data cost rises.</p>
+            <ul class="path-points">
+              <li class="path-point">Precedent: Amazon Black Friday game</li>
+              <li class="path-point">58% higher engagement for shoppable content</li>
+              <li class="path-point">Privacy trade-off: data for reduced cost</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Commerce stat -->
+        <div class="glass-glow reveal" style="margin-top:2rem;">
+          <div class="big-stat-block">
+            <div class="big-num">58%</div>
+            <p class="big-stat-text">higher viewer engagement with shoppable streaming content versus standard ad formats, the number that makes the commerce-first model commercially irresistible.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="glow-divider"></div>
+
+    <!-- ═══════════════════════════ CLOSING -->
+    <section id="closing" style="background:var(--bg-2);">
+      <div class="section-inner" style="text-align:left;">
+        <div class="closing-body reveal d1">
+          <p>The transformation of sports media is, on its surface, a story of progress. Better technology, broader access, richer content, global audiences. And those things are real.</p>
+          <p>But progress for whom? The leagues secured generational wealth through rights fees that no cable network could match. The platforms secured subscriber growth, brand legitimacy, and, most valuably, data at a scale previously unimaginable.</p>
+          <p>The fan, the person whose passion made all of this possible, who filled the stadium and bought the jersey and tuned in for fifty years, was the last consideration in every deal room. Their loyalty was assumed. Their tolerance was tested. Their wallet was the variable everyone planned around.</p>
+          <p>The reckoning will come, as it always does, when the audience decides it's had enough. What form that reckoning takes, whether re-aggregation, regulation, or a new commerce compact, will define the next era of sports media. But one thing is certain: <strong style="color:var(--text);">whoever controls the access, controls the audience. And whoever controls the audience, controls the game.</strong></p>
+        </div>
+        <div class="closing-byline reveal d3">
+          <div class="byline-divider"></div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:0.72rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.35rem;">Mo NC</div>
+          <div style="font-family:'Newsreader',serif;font-style:italic;font-size:0.9rem;color:var(--text-dim);">The Future of Sports Media · 2025</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="footer-series">
+      <a href="#">The Future of FinTech</a>
+      <a href="#">Sports &amp; Media</a>
+      <a href="#">Technology &amp; Society</a>
+    </div>
+    <span class="footer-copy">© 2025 Mo NC</span>
+  </footer>
+
+  <script>
+  /* ══════════════════════════════════════════════════════
+     PROGRESS BAR
+  ══════════════════════════════════════════════════════ */
+  const progressEl = document.getElementById('progress');
+  window.addEventListener('scroll', () => {
+    const p = window.scrollY / (document.documentElement.scrollHeight - innerHeight);
+    progressEl.style.width = Math.min(p * 100, 100) + '%';
+  }, { passive: true });
+
+  /* ══════════════════════════════════════════════════════
+     SCROLL REVEAL
+  ══════════════════════════════════════════════════════ */
+  const revObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('up'); revObs.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal, .reveal-l, .reveal-r').forEach(el => revObs.observe(el));
+
+  /* ══════════════════════════════════════════════════════
+     SIDE NAV ACTIVE
+  ══════════════════════════════════════════════════════ */
+  const sections = document.querySelectorAll('section[id]');
+  const dots     = document.querySelectorAll('.side-dot');
+  const sNavObs  = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        dots.forEach(d => d.classList.remove('active'));
+        const hit = document.querySelector(`.side-dot[data-s="${e.target.id}"]`);
+        if (hit) hit.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  sections.forEach(s => sNavObs.observe(s));
+
+  /* ══════════════════════════════════════════════════════
+     ANIMATED COUNTERS (hero stats)
+  ══════════════════════════════════════════════════════ */
+  function animateCounter(el) {
+    const target = parseFloat(el.dataset.count || el.dataset.countBig);
+    const prefix = el.dataset.prefix || '';
+    const suffix = el.dataset.suffix || '';
+    const dur = 1600;
+    const start = performance.now();
+    function tick(now) {
+      const t = Math.min((now - start) / dur, 1);
+      const ease = 1 - Math.pow(1 - t, 3);
+      const val = ease * target;
+      el.textContent = prefix + (Number.isInteger(target) ? Math.round(val) : val.toFixed(1)) + suffix;
+      if (t < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  const counterObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting && (e.target.dataset.count || e.target.dataset.countBig)) {
+        animateCounter(e.target); counterObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.6 });
+  document.querySelectorAll('[data-count],[data-count-big]').forEach(el => counterObs.observe(el));
+
+  /* ══════════════════════════════════════════════════════
+     STAT BARS
+  ══════════════════════════════════════════════════════ */
+  const barObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('.bar-fill').forEach(f => { f.style.width = f.dataset.w + '%'; });
+        barObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.4 });
+  const dataBars = document.getElementById('data-bars');
+  if (dataBars) barObs.observe(dataBars);
+
+  /* ══════════════════════════════════════════════════════
+     HERO CANVAS: PARTICLE NETWORK
+  ══════════════════════════════════════════════════════ */
+  (function() {
+    const canvas = document.getElementById('hero-canvas');
+    const ctx = canvas.getContext('2d');
+    let W, H, particles, animId;
+
+    function resize() {
+      W = canvas.width  = canvas.offsetWidth;
+      H = canvas.height = canvas.offsetHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize, { passive: true });
+
+    const COUNT = 60;
+    particles = Array.from({ length: COUNT }, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      vx: (Math.random() - 0.5) * 0.35,
+      vy: (Math.random() - 0.5) * 0.35,
+      r: Math.random() * 1.5 + 0.5,
+      a: Math.random() * 0.5 + 0.1,
+    }));
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+
+      // subtle radial glow
+      const grad = ctx.createRadialGradient(W * 0.5, H * 0.35, 0, W * 0.5, H * 0.35, H * 0.6);
+      grad.addColorStop(0, 'rgba(0,200,255,0.04)');
+      grad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, W, H);
+
+      // draw connections
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 140) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(0,200,255,${0.04 * (1 - dist / 140)})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+
+      // draw dots
+      particles.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+        if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(0,200,255,${p.a})`;
+        ctx.fill();
+      });
+
+      animId = requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+
+  /* ══════════════════════════════════════════════════════
+     S-CURVE CHART
+  ══════════════════════════════════════════════════════ */
+  (function() {
+    const canvas = document.getElementById('scurve');
+    const ctx    = canvas.getContext('2d');
+    const years      = [2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025];
+    const streaming  = [8, 12, 18, 26, 36, 55, 67, 76, 84, 90, 95];
+    const traditional= [95, 90, 84, 78, 70, 60, 52, 46, 40, 36, 32];
+
+    function drawChart() {
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width  = rect.width  * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+      const W = rect.width, H = rect.height;
+      const pL = 40, pR = 20, pT = 20, pB = 36;
+      const cW = W - pL - pR, cH = H - pT - pB;
+      const xP = i => pL + (i / (years.length - 1)) * cW;
+      const yP = v => pT + cH - (v / 100) * cH;
+
+      // subtle grid
+      ctx.strokeStyle = 'rgba(255,255,255,0.04)'; ctx.lineWidth = 1;
+      [0,25,50,75,100].forEach(v => {
+        const y = yP(v);
+        ctx.beginPath(); ctx.moveTo(pL, y); ctx.lineTo(W - pR, y); ctx.stroke();
+      });
+
+      // COVID highlight
+      const cx = xP(5);
+      ctx.fillStyle = 'rgba(0,200,255,0.04)';
+      ctx.fillRect(cx - 16, pT, 32, cH);
+      ctx.strokeStyle = 'rgba(0,200,255,0.2)';
+      ctx.setLineDash([3,5]); ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(cx, pT); ctx.lineTo(cx, pT + cH); ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Year labels
+      ctx.fillStyle = 'rgba(106,143,171,0.6)';
+      ctx.font = `11px Inter, sans-serif`;
+      ctx.textAlign = 'center';
+      years.forEach((y, i) => { if (i % 2 === 0 || i === years.length - 1) ctx.fillText(y, xP(i), H - 8); });
+
+      // Traditional (dim)
+      ctx.strokeStyle = 'rgba(58,85,112,0.8)'; ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      traditional.forEach((v, i) => i === 0 ? ctx.moveTo(xP(i), yP(v)) : ctx.lineTo(xP(i), yP(v)));
+      ctx.stroke();
+
+      // Streaming: glow effect (draw 3 times with decreasing opacity/width)
+      [[4,'rgba(0,200,255,0.08)'],[2,'rgba(0,200,255,0.2)'],[1.5,'rgba(0,200,255,0.9)']].forEach(([lw, color]) => {
+        ctx.strokeStyle = color; ctx.lineWidth = lw;
+        ctx.beginPath();
+        streaming.forEach((v, i) => i === 0 ? ctx.moveTo(xP(i), yP(v)) : ctx.lineTo(xP(i), yP(v)));
+        ctx.stroke();
+      });
+
+      // Crossover dot
+      ctx.fillStyle = 'rgba(0,200,255,0.2)'; ctx.strokeStyle = 'rgba(0,200,255,0.9)'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(cx, yP(55), 5, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      // glow ring
+      ctx.strokeStyle = 'rgba(0,200,255,0.3)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(cx, yP(55), 9, 0, Math.PI * 2); ctx.stroke();
+
+      // labels
+      ctx.font = 'italic 11px Newsreader, serif'; ctx.textAlign = 'left';
+      ctx.fillStyle = 'rgba(0,200,255,0.7)'; ctx.fillText('Streaming', xP(10) + 6, yP(95) + 4);
+      ctx.fillStyle = 'rgba(58,85,112,0.9)'; ctx.fillText('Linear TV', xP(10) + 6, yP(32) + 4);
+    }
+
+    const chartObs = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) { drawChart(); chartObs.disconnect(); }
+    }, { threshold: 0.3 });
+    chartObs.observe(canvas);
+    window.addEventListener('resize', () => {
+      if (canvas.width > 0) drawChart();
+    });
+  })();
+
+  /* ══════════════════════════════════════════════════════
+     ERA TRACK: DRAG + WHEEL
+  ══════════════════════════════════════════════════════ */
+  (function() {
+    const track = document.querySelector('.era-track');
+    if (!track) return;
+    let down = false, startX, scrollLeft;
+    track.addEventListener('mousedown', e => { down = true; startX = e.pageX - track.offsetLeft; scrollLeft = track.scrollLeft; });
+    track.addEventListener('mouseleave', () => down = false);
+    track.addEventListener('mouseup', () => down = false);
+    track.addEventListener('mousemove', e => { if (!down) return; e.preventDefault(); track.scrollLeft = scrollLeft - (e.pageX - track.offsetLeft - startX); });
+    track.addEventListener('wheel', e => { e.preventDefault(); track.scrollLeft += e.deltaY * 0.8; }, { passive: false });
+  })();
+
+  /* ══════════════════════════════════════════════════════
+     COLOSSEUM → CLOUD LINE-ART ANIMATION
+  ══════════════════════════════════════════════════════ */
+  (function() {
+    const canvas = document.getElementById('morph-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    let W, H, dpr;
+    let startTime = null, rafId = null;
+
+    // Total loop: 8 s
+    // Phase 0 (0–2600):   Colosseum hold
+    // Phase 1 (2600–4000): Fade col → cloud
+    // Phase 2 (4000–6600): Cloud hold
+    // Phase 3 (6600–8000): Fade cloud → col
+    const PH = [0, 2600, 4000, 6600];
+    const PH_DUR = [2600, 1400, 2600, 1400];
+    const TOTAL = 8000;
+
+    function eio(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
+
+    // ── Colosseum ─────────────────────────────────────────
+    function drawColosseum(alpha, scale) {
+      const cx = W * 0.5, cy = H * 0.5;
+      const w = Math.min(W * 0.86, 370) * scale;
+      const h = Math.min(H * 0.74, 280) * scale;
+      const left = cx - w/2, right = cx + w/2;
+      const top  = cy - h/2, bot   = cy + h/2;
+
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.strokeStyle = '#00c8ff';
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      // Helper stroke
+      const stroke = (fn, lw = 1.2) => {
+        ctx.lineWidth = lw;
+        ctx.beginPath(); fn(); ctx.stroke();
+      };
+
+      // Outer silhouette: left wall → top arch → right wall
+      stroke(() => {
+        ctx.moveTo(left, bot);
+        ctx.lineTo(left, top + h * 0.17);
+        ctx.bezierCurveTo(
+          left + w * 0.08, top,
+          right - w * 0.08, top,
+          right, top + h * 0.17
+        );
+        ctx.lineTo(right, bot);
+      }, 1.5);
+
+      // Base line
+      stroke(() => {
+        ctx.moveTo(left  - w*0.015, bot);
+        ctx.lineTo(right + w*0.015, bot);
+      }, 1.5);
+
+      // 4 horizontal cornices (including attic top)
+      for (let i = 0; i < 4; i++) {
+        const y  = bot  - h * (i * 0.228);
+        const rw = w * (0.92 - i * 0.015);
+        stroke(() => {
+          ctx.moveTo(cx - rw/2, y);
+          ctx.lineTo(cx + rw/2, y);
+        }, i === 3 ? 1.0 : 0.9);
+      }
+
+      // 3 rows of arched openings
+      const nArches = 6;
+      for (let row = 0; row < 3; row++) {
+        const rBot = bot  - h * (row * 0.228);
+        const rTop = rBot - h * 0.195;
+        const rW   = w   * (0.88 - row * 0.015);
+        const aW   = rW  / nArches;
+        const rL   = cx  - rW / 2;
+
+        for (let a = 0; a < nArches; a++) {
+          const ax = rL + a * aW + aW * 0.5;
+          const iw = aW * 0.50;               // arch inner width
+          const archCY = rTop + iw * 0.5;     // centre of arch semi-circle
+
+          stroke(() => {
+            ctx.moveTo(ax - iw/2, rBot);
+            ctx.lineTo(ax - iw/2, archCY);
+            ctx.arc(ax, archCY, iw/2, Math.PI, 0, false);
+            ctx.lineTo(ax + iw/2, rBot);
+          }, 0.85);
+        }
+      }
+
+      // Attic: small rectangular windows in top band
+      const atticBot = bot - h * 0.228 * 3;
+      const atticTop = atticBot - h * 0.085;
+      const atticW   = w * 0.84;
+      const nAttic   = 7;
+      const awW      = atticW / nAttic;
+      for (let a = 0; a < nAttic; a++) {
+        const ax = (cx - atticW/2) + a * awW + awW/2;
+        const ww = awW * 0.38, wh = atticBot - atticTop - h*0.01;
+        stroke(() => { ctx.rect(ax - ww/2, atticTop, ww, wh); }, 0.75);
+      }
+
+      ctx.restore();
+    }
+
+    // ── Cloud ──────────────────────────────────────────────
+    function drawCloud(alpha, scale) {
+      const cx = W * 0.5, cy = H * 0.49;
+      const s  = Math.min(W * 0.24, H * 0.24, 92) * scale;
+
+      ctx.save();
+      ctx.globalAlpha = alpha;
+
+      // Reusable path definition for the cloud
+      function cloudPath() {
+        ctx.beginPath();
+        ctx.moveTo(cx - s, cy + s * 0.5);          // bottom-left
+
+        // Left rounded wall
+        ctx.bezierCurveTo(
+          cx - s*1.30, cy + s*0.50,
+          cx - s*1.30, cy - s*0.10,
+          cx - s*0.85, cy - s*0.10   // left inflection
+        );
+        // Left dome arch
+        ctx.bezierCurveTo(
+          cx - s*0.85, cy - s*0.88,
+          cx - s*0.05, cy - s*0.88,
+          cx,          cy - s*0.42   // centre saddle
+        );
+        // Right dome arch
+        ctx.bezierCurveTo(
+          cx,          cy - s*0.92,
+          cx + s*0.85, cy - s*0.92,
+          cx + s*0.85, cy - s*0.10   // right inflection
+        );
+        // Right rounded wall
+        ctx.bezierCurveTo(
+          cx + s*1.30, cy - s*0.10,
+          cx + s*1.30, cy + s*0.50,
+          cx + s,      cy + s*0.50   // bottom-right
+        );
+        ctx.lineTo(cx - s, cy + s*0.50); // flat base
+        ctx.closePath();
+      }
+
+      // Subtle filled glow interior
+      cloudPath();
+      ctx.fillStyle = 'rgba(0,200,255,0.05)';
+      ctx.fill();
+
+      // Outer glow pass (wider, very faint)
+      cloudPath();
+      ctx.shadowColor = 'rgba(0,200,255,0.45)';
+      ctx.shadowBlur  = 10;
+      ctx.strokeStyle = 'rgba(0,200,255,0.25)';
+      ctx.lineWidth   = 4;
+      ctx.lineCap     = 'round';
+      ctx.lineJoin    = 'round';
+      ctx.stroke();
+
+      // Crisp main stroke
+      ctx.shadowBlur  = 0;
+      cloudPath();
+      ctx.strokeStyle = '#00c8ff';
+      ctx.lineWidth   = 1.6;
+      ctx.stroke();
+
+      // Inner depth arc (subtle highlight between the two domes)
+      ctx.globalAlpha = alpha * 0.18;
+      ctx.strokeStyle = '#00c8ff';
+      ctx.lineWidth   = 1.0;
+      ctx.beginPath();
+      ctx.bezierCurveTo(
+        cx - s*0.35, cy - s*0.55,
+        cx + s*0.35, cy - s*0.55,
+        cx + s*0.55, cy - s*0.05
+      );
+      ctx.moveTo(cx - s*0.55, cy - s*0.05);
+      ctx.bezierCurveTo(
+        cx - s*0.35, cy - s*0.55,
+        cx + s*0.35, cy - s*0.55,
+        cx + s*0.55, cy - s*0.05
+      );
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
+    // ── Label ──────────────────────────────────────────────
+    function drawLabel(text, alpha) {
+      if (alpha <= 0) return;
+      ctx.save();
+      ctx.globalAlpha = alpha * 0.45;
+      ctx.fillStyle   = '#00c8ff';
+      ctx.font        = `${Math.max(9, W * 0.024)}px "Space Grotesk", sans-serif`;
+      ctx.textAlign   = 'center';
+      ctx.fillText(text, W * 0.5, H * 0.92);
+      ctx.restore();
+    }
+
+    // ── Main loop ─────────────────────────────────────────
+    function draw(ts) {
+      if (!startTime) startTime = ts;
+      const elapsed = (ts - startTime) % TOTAL;
+      ctx.clearRect(0, 0, W, H);
+
+      let phase = 0;
+      for (let i = PH.length - 1; i >= 0; i--) {
+        if (elapsed >= PH[i]) { phase = i; break; }
+      }
+      const phT = (elapsed - PH[phase]) / PH_DUR[phase];
+      const et  = eio(phT);
+
+      let colA = 0, cloudA = 0, colS = 1, cloudS = 1;
+      let colLabel = '', cloudLabel = '';
+
+      if (phase === 0) {
+        colA = 0.82; colS = 1;
+        colLabel = 'CIRCA 80 AD  ·  80,000 SPECTATORS';
+      } else if (phase === 1) {
+        colA   = (1 - et) * 0.82; colS   = 1 + et * 0.04;
+        cloudA = et * 0.82;       cloudS = 0.96 + et * 0.04;
+      } else if (phase === 2) {
+        cloudA = 0.82; cloudS = 1;
+        cloudLabel = '2025  ·  UNLIMITED VIEWERS';
+      } else {
+        cloudA = (1 - et) * 0.82; cloudS = 1 + et * 0.04;
+        colA   = et * 0.82;       colS   = 0.96 + et * 0.04;
+      }
+
+      if (colA   > 0.01) drawColosseum(colA,   colS);
+      if (cloudA > 0.01) drawCloud    (cloudA, cloudS);
+
+
+      rafId = requestAnimationFrame(draw);
+    }
+
+    function resize() {
+      dpr = window.devicePixelRatio || 1;
+      W   = canvas.offsetWidth;
+      H   = canvas.offsetHeight;
+      canvas.width  = W * dpr;
+      canvas.height = H * dpr;
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(dpr, dpr);
+    }
+
+    resize();
+    startTime = null;
+    window.addEventListener('resize', () => { resize(); startTime = null; }, { passive: true });
+    rafId = requestAnimationFrame(draw);
+  })();
+
+  </script>
+</body>
+</html>

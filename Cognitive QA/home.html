@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cognitive QA</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+
+    :root {
+      --w-bg:       #0b0804;
+      --w-surface:  #110d07;
+      --w-surface2: #181108;
+      --amber:      #f5a623;
+      --amber-dim:  rgba(245,166,35,0.10);
+      --amber-glow: rgba(245,166,35,0.22);
+      --orange:     #e8682a;
+      --orange-dim: rgba(232,104,42,0.10);
+      --muted-w:    #a8845a;
+      --text-w:     #f0dfc0;
+      --border-w:   rgba(245,166,35,0.22);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--w-bg);
+      color: var(--text-w);
+      font-family: var(--font);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* TOP BAR */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      height: 48px;
+      background: var(--w-surface);
+      border-bottom: 1px solid var(--border-w);
+      flex-shrink: 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--amber);
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      text-decoration: none;
+    }
+
+    .brand-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 10px var(--amber);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.4; }
+    }
+
+    .top-bar-tag {
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      color: var(--muted-w);
+    }
+
+    /* BACKGROUND LAYERS */
+    .scene {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .scene-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(245,166,35,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(245,166,35,0.04) 1px, transparent 1px);
+      background-size: 52px 52px;
+    }
+
+    .scene-glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 55% 50% at 50% 52%, rgba(232,104,42,0.08) 0%, transparent 65%);
+    }
+
+    .scene-vignette {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, rgba(11,8,4,0.8) 100%);
+    }
+
+    .scene-scan {
+      position: absolute;
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(245,166,35,0.08) 20%,
+        rgba(245,166,35,0.2) 50%,
+        rgba(245,166,35,0.08) 80%,
+        transparent 100%);
+      animation: scan 6s ease-in-out infinite;
+    }
+
+    @keyframes scan {
+      0%   { top: 5%;  opacity: 0; }
+      8%   { opacity: 1; }
+      92%  { opacity: 1; }
+      100% { top: 92%; opacity: 0; }
+    }
+
+    /* MAIN */
+    .home-wrap {
+      flex: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .home-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* eyebrow */
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.88rem;
+      letter-spacing: 0.32em;
+      color: var(--muted-w);
+      margin-bottom: 22px;
+    }
+
+    .eyebrow-line {
+      width: 36px; height: 1px;
+      background: var(--border-w);
+    }
+
+    /* title */
+    .home-title {
+      font-size: clamp(3.8rem, 10vw, 7.5rem);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      line-height: 0.95;
+      text-align: center;
+      margin-bottom: 14px;
+      color: var(--text-w);
+    }
+
+    .home-title .accent {
+      display: block;
+      color: var(--amber);
+      text-shadow:
+        0 0 30px rgba(245,166,35,0.35),
+        0 0 80px rgba(245,166,35,0.12);
+    }
+
+    /* descriptor */
+    .home-desc {
+      font-size: 1.6rem;
+      letter-spacing: 0.24em;
+      color: var(--muted-w);
+      margin-bottom: 64px;
+    }
+
+    /* BUTTONS */
+    .btn-row {
+      display: flex;
+      gap: 16px;
+    }
+
+    .nav-btn {
+      position: relative;
+      width: 260px;
+      height: 178px;
+      background: var(--w-surface);
+      border: 1px solid var(--border-w);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-end;
+      padding: 24px 26px;
+      text-decoration: none;
+      color: var(--text-w);
+      font-family: var(--font);
+      cursor: pointer;
+      transition: border-color 0.18s, background 0.18s, transform 0.14s;
+      overflow: hidden;
+    }
+
+    .nav-btn-num {
+      position: absolute;
+      top: 14px; left: 22px;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      color: var(--muted-w);
+      transition: color 0.18s;
+    }
+
+    .nav-btn-label {
+      font-size: 1.4rem;
+      letter-spacing: 0.22em;
+      transition: color 0.18s;
+    }
+
+    .nav-btn-arrow {
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      color: var(--muted-w);
+      margin-top: 10px;
+      transition: color 0.18s, transform 0.18s;
+    }
+
+    .nav-btn-bar {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--amber), transparent);
+      opacity: 0;
+      transition: opacity 0.18s;
+    }
+
+    .nav-btn::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 12px; height: 12px;
+      border-top: 1px solid var(--border-w);
+      border-right: 1px solid var(--border-w);
+      transition: border-color 0.18s;
+    }
+
+    .nav-btn:hover {
+      border-color: var(--amber);
+      background: var(--w-surface2);
+      transform: translateY(-3px);
+    }
+
+    .nav-btn:hover::after         { border-color: var(--amber); }
+    .nav-btn:hover .nav-btn-bar   { opacity: 1; }
+    .nav-btn:hover .nav-btn-label { color: var(--amber); }
+    .nav-btn:hover .nav-btn-arrow { color: var(--amber); transform: translateX(4px); }
+    .nav-btn:hover .nav-btn-num   { color: var(--amber); opacity: 0.6; }
+
+    .nav-btn.cta {
+      border-color: rgba(232,104,42,0.35);
+      background: linear-gradient(145deg, rgba(232,104,42,0.07) 0%, rgba(245,166,35,0.04) 100%);
+    }
+
+    .nav-btn.cta .nav-btn-label { color: var(--amber); }
+
+    .nav-btn.cta .nav-btn-bar {
+      opacity: 0.5;
+      background: linear-gradient(90deg, transparent, var(--orange), transparent);
+    }
+
+    .nav-btn.cta:hover                  { border-color: var(--orange); }
+    .nav-btn.cta:hover .nav-btn-label   { color: var(--orange); }
+    .nav-btn.cta:hover .nav-btn-arrow   { color: var(--orange); }
+    .nav-btn.cta:hover .nav-btn-bar     { opacity: 1; background: linear-gradient(90deg, transparent, var(--orange), transparent); }
+
+    /* BUTTON SHIMMER */
+    .nav-btn-shimmer {
+      position: absolute;
+      top: 0; left: -100%;
+      width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(245,166,35,0.07), transparent);
+      transform: skewX(-15deg);
+      pointer-events: none;
+    }
+
+    .nav-btn:hover .nav-btn-shimmer {
+      left: 160%;
+      transition: left 0.45s ease-in-out;
+    }
+
+    /* STATUS BAR */
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 9px 22px;
+      background: var(--w-surface);
+      border-top: 1px solid var(--border-w);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      color: var(--muted-w);
+      flex-shrink: 0;
+    }
+
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 6px var(--amber);
+      animation: pulse 2s infinite;
+    }
+
+    .status-online { color: var(--amber); }
+    .status-right  { margin-left: auto; }
+
+    /* ENTRANCE ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes glowBreathe {
+      0%, 100% { text-shadow: 0 0 30px rgba(245,166,35,0.35), 0 0 80px rgba(245,166,35,0.12); }
+      50%       { text-shadow: 0 0 50px rgba(245,166,35,0.65), 0 0 120px rgba(245,166,35,0.25); }
+    }
+
+    .home-inner .eyebrow    { opacity: 0; animation: fadeUp 0.6s ease-out 0.1s  forwards; }
+    .home-inner .home-title { opacity: 0; animation: fadeUp 0.7s ease-out 0.3s  forwards; }
+    .home-inner .home-desc  { opacity: 0; animation: fadeUp 0.6s ease-out 0.55s forwards; }
+    .home-inner .btn-row    { opacity: 0; animation: fadeUp 0.6s ease-out 0.75s forwards; }
+    .home-title .accent     { animation: glowBreathe 3s ease-in-out 1.4s infinite; }
+
+    /* FLOATING PARTICLES */
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--amber);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    @keyframes floatParticle {
+      0%   { transform: translateY(0) translateX(0); opacity: 0; }
+      15%  { opacity: 0.35; }
+      85%  { opacity: 0.2; }
+      100% { transform: translateY(-120px) translateX(20px); opacity: 0; }
+    }
+    @keyframes floatParticle2 {
+      0%   { transform: translateY(0) translateX(0); opacity: 0; }
+      15%  { opacity: 0.25; }
+      85%  { opacity: 0.15; }
+      100% { transform: translateY(-90px) translateX(-30px); opacity: 0; }
+    }
+    @keyframes floatParticle3 {
+      0%   { transform: translateY(0) translateX(0); opacity: 0; }
+      20%  { opacity: 0.3; }
+      80%  { opacity: 0.15; }
+      100% { transform: translateY(-140px) translateX(10px); opacity: 0; }
+    }
+
+    /* PLANE */
+    .plane-wrap {
+      position: absolute;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0;
+    }
+
+    .plane-wrap svg {
+      width: 160px; height: auto;
+      filter: drop-shadow(0 0 10px rgba(245,166,35,0.45));
+    }
+
+    .vapor-trail {
+      position: absolute;
+      top: 50%; right: 100%;
+      transform: translateY(-50%);
+      height: 1px; width: 0;
+      background: linear-gradient(90deg, transparent, rgba(245,166,35,0.18), rgba(245,166,35,0.08));
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .home-inner .eyebrow,
+      .home-inner .home-title,
+      .home-inner .home-desc,
+      .home-inner .btn-row { animation: none; opacity: 1; }
+      .home-title .accent  { animation: none; }
+      .particle, .plane-wrap { display: none; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <a href="home.html" class="brand">
+      <div class="brand-dot"></div>
+      COGNITIVE QA
+    </a>
+    <span class="top-bar-tag">INSPECTION INTELLIGENCE PLATFORM</span>
+  </div>
+
+  <div class="home-wrap">
+
+    <div class="scene" aria-hidden="true">
+      <div class="scene-grid"></div>
+      <div class="scene-glow"></div>
+      <div class="scene-vignette"></div>
+      <div class="scene-scan"></div>
+
+      <div class="plane-wrap" id="plane">
+        <div class="vapor-trail" id="vapor"></div>
+        <svg viewBox="0 0 80 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 14 Q20 10 72 13 Q76 13.5 78 14 Q76 14.5 72 15 Q20 18 8 14Z" fill="rgba(245,166,35,0.7)" stroke="rgba(245,166,35,0.9)" stroke-width="0.4"/>
+          <path d="M72 13 Q80 14 72 15Z" fill="rgba(245,166,35,0.9)"/>
+          <path d="M38 14 L28 4 L22 4 L32 14 L22 24 L28 24 Z" fill="rgba(245,166,35,0.5)" stroke="rgba(245,166,35,0.7)" stroke-width="0.3"/>
+          <path d="M12 14 L8 6 L14 6 L16 14Z" fill="rgba(245,166,35,0.5)" stroke="rgba(245,166,35,0.7)" stroke-width="0.3"/>
+          <path d="M16 14 L10 9 L8 9 L14 14 L8 19 L10 19 Z" fill="rgba(245,166,35,0.45)" stroke="rgba(245,166,35,0.6)" stroke-width="0.3"/>
+          <ellipse cx="36" cy="17.5" rx="6" ry="2.5" fill="rgba(245,166,35,0.35)" stroke="rgba(245,166,35,0.5)" stroke-width="0.3"/>
+          <circle cx="52" cy="13.5" r="1" fill="rgba(245,166,35,0.5)"/>
+          <circle cx="58" cy="13.2" r="1" fill="rgba(245,166,35,0.5)"/>
+          <circle cx="64" cy="13.2" r="1" fill="rgba(245,166,35,0.5)"/>
+        </svg>
+      </div>
+
+      <div class="particle" style="width:3px;height:3px;left:22%;bottom:35%;animation:floatParticle 7s ease-in-out 1s infinite;"></div>
+      <div class="particle" style="width:2px;height:2px;left:55%;bottom:28%;animation:floatParticle2 9s ease-in-out 2.5s infinite;"></div>
+      <div class="particle" style="width:4px;height:4px;left:75%;bottom:40%;animation:floatParticle3 8s ease-in-out 0.5s infinite;"></div>
+      <div class="particle" style="width:2px;height:2px;left:38%;bottom:22%;animation:floatParticle 10s ease-in-out 4s infinite;"></div>
+    </div>
+
+    <div class="home-inner">
+      <div class="eyebrow">
+        <div class="eyebrow-line"></div>
+        SYSTEM READY
+        <div class="eyebrow-line"></div>
+      </div>
+
+      <h1 class="home-title">
+        COGNITIVE
+        <span class="accent">QA</span>
+      </h1>
+
+      <p class="home-desc">WHERE AI MEETS THE GOLD STANDARD OF SAFETY</p>
+
+      <div class="btn-row">
+        <a href="vision.html" class="nav-btn">
+          <div class="nav-btn-shimmer"></div>
+          <span class="nav-btn-num">01</span>
+          <span class="nav-btn-label">VISION</span>
+          <span class="nav-btn-arrow">ENTER &rarr;</span>
+          <div class="nav-btn-bar"></div>
+        </a>
+
+        <a href="strategy.html" class="nav-btn">
+          <div class="nav-btn-shimmer"></div>
+          <span class="nav-btn-num">02</span>
+          <span class="nav-btn-label">STRATEGY</span>
+          <span class="nav-btn-arrow">ENTER &rarr;</span>
+          <div class="nav-btn-bar"></div>
+        </a>
+
+        <a href="demo.html" class="nav-btn cta">
+          <div class="nav-btn-shimmer"></div>
+          <span class="nav-btn-num">03</span>
+          <span class="nav-btn-label">DEMO</span>
+          <span class="nav-btn-arrow">ENTER &rarr;</span>
+          <div class="nav-btn-bar"></div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="status-bar">
+    <div class="status-dot"></div>
+    <span class="status-online">PLATFORM ONLINE</span>
+    <span>v2.4.1</span>
+    <span class="status-right">COGNITIVE QA SYSTEMS</span>
+  </div>
+
+  <script>
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const plane = document.getElementById('plane');
+      const vapor = document.getElementById('vapor');
+      const scene = plane.closest('.scene');
+
+      const trajectories = [
+        { sx: -0.05, sy: 0.88, ex: 1.05, ey: 0.08 },
+        { sx: 1.05,  sy: 0.88, ex: -0.05, ey: 0.08 },
+        { sx: -0.05, sy: 0.08, ex: 1.05,  ey: 0.88 },
+        { sx: 1.05,  sy: 0.08, ex: -0.05, ey: 0.88 },
+        { sx: -0.05, sy: 0.55, ex: 1.05,  ey: 0.10 },
+        { sx: 1.05,  sy: 0.55, ex: -0.05, ey: 0.10 },
+      ];
+      let idx = 0;
+
+      function fly() {
+        const vw = scene.offsetWidth, vh = scene.offsetHeight;
+        const tr = trajectories[idx++ % trajectories.length];
+        const p0 = { x: tr.sx * vw, y: tr.sy * vh };
+        const p1 = { x: tr.ex * vw, y: tr.ey * vh };
+        const ang = Math.atan2(p1.y - p0.y, p1.x - p0.x) * 180 / Math.PI;
+        const dur = 5500;
+        plane.style.opacity = '0';
+        vapor.style.width   = '0px';
+        const t0 = performance.now();
+        function step(now) {
+          const p = Math.min((now - t0) / dur, 1);
+          const t = p < 0.5 ? 2*p*p : 1 - Math.pow(-2*p+2, 2)/2;
+          let op = 1;
+          if (p < 0.08) op = p/0.08;
+          else if (p > 0.9) op = 1-(p-0.9)/0.1;
+          plane.style.transform = `translate(${p0.x+(p1.x-p0.x)*t}px,${p0.y+(p1.y-p0.y)*t}px) rotate(${ang}deg)`;
+          plane.style.opacity   = String(op);
+          vapor.style.width     = Math.min(t*300, 180) + 'px';
+          if (p < 1) requestAnimationFrame(step);
+          else { plane.style.opacity='0'; vapor.style.width='0px'; }
+        }
+        requestAnimationFrame(step);
+      }
+
+      function schedule() { fly(); setTimeout(schedule, 10500); }
+      setTimeout(schedule, 2500);
+    }
+  </script>
+
+</body>
+</html>
